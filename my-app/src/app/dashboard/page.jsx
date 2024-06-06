@@ -8,7 +8,7 @@ import axios from "axios";
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation";
 
-const page = () => {
+const Page = () => {
 
   const [company, setCompany] = useState([]);
   const [isAuth, setIsAuth] = useState(null);
@@ -84,4 +84,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page;

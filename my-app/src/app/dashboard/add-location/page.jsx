@@ -2,7 +2,7 @@ import styles from "@/app/ui/dashboard/users/users.module.css"
 import Search from "@/app/ui/dashboard/search/Search"
 import Link from "next/link"
 
-const page = () => {
+const Page = () => {
   return (
     <div className={styles.container}>
        <div className={styles.top}>
@@ -18,4 +18,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

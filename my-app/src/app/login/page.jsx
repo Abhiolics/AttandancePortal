@@ -1,10 +1,10 @@
 "use client"
 import axios from 'axios';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 
-const page = () => {
+const Page = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -43,6 +43,8 @@ const page = () => {
       router.push('/login');
     }
   }, [isAuth]);
+
+  
 
   function getData(e) {
     e.preventDefault();
@@ -85,18 +87,18 @@ const page = () => {
                   <span className='label-text'> Email
                   </span>
                 </label>
-                <input type="email" className="input input-bordered" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <input required type="email" className="input input-bordered" value={email} onChange={(e) => setEmail(e.target.value)} />
               </div>
               <div className='form-control'>
                 <label className='label'>
                   <span className='label-text'> Password</span>
                 </label>
-                <input type="password" className="input input-bordered" value={password} onChange={(e) => setPassword(e.target.value)} />
+                <input required type="password" className="input input-bordered" value={password} onChange={(e) => setPassword(e.target.value)} />
               </div>
 <div className='form-control mt-6'>
-  <Link href="/dashboard">
-<button className='btn btn-primary' type="submit" >Submit</button>
-</Link>
+
+<button  className='btn btn-primary' type="submit" >Submit</button>
+
 </div>
           </form>
           <div className='alert input w-80  ml-3 mb-4' role='alert'>
@@ -131,4 +133,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page
