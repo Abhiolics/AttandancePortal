@@ -17,7 +17,7 @@ import { LuLogOut } from "react-icons/lu";
 
 const menuItems = [
     {
-        title: "Attendance",
+        title: "Menu",
         list: [
             {
                 title: "Dashboard",
@@ -31,41 +31,36 @@ const menuItems = [
             },
             {
                 title: "Admin",
-                path: "/admin/get-admin",
+                path: "dashboard/admin",
                 icon: <MdOutlineAdminPanelSettings />
             },
+            {
+              title: "Add company",
+              path: "/dashboard/add-company",
+              icon: <CgOrganisation />
+          },
+          {
+              title: "Add Department",
+              path: "/dashboard/add-department",
+              icon: <AiOutlineAppstoreAdd />
+          },
+          {
+              title: "Add Designation",
+              path: "/dashboard/add-designation",
+              icon: <TfiIdBadge />
+          },
+          {
+              title: "Add Employee",
+              path: "/dashboard/add-employee",
+              icon: <IoPersonAddOutline />
+          },
+          {
+              title: "Add Location",
+              path: "/dashboard/add-location",
+              icon: <MdOutlineAddLocationAlt />
+          },
         ]
     },
-    {
-        title: "Other Features",
-        list: [
-            {
-                title: "Add company",
-                path: "/add-company",
-                icon: <CgOrganisation />
-            },
-            {
-                title: "Add Department",
-                path: "/add-department",
-                icon: <AiOutlineAppstoreAdd />
-            },
-            {
-                title: "Add Designation",
-                path: "/add-designation",
-                icon: <TfiIdBadge />
-            },
-            {
-                title: "Add Employee",
-                path: "/add-employee",
-                icon: <IoPersonAddOutline />
-            },
-            {
-                title: "Add Location",
-                path: "/dashboard/add-location",
-                icon: <MdOutlineAddLocationAlt />
-            },
-        ]
-    }
 ]
 
 const Sidebar = () => {

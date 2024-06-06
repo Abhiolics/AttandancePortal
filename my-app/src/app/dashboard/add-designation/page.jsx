@@ -1,12 +1,12 @@
-
+import React from 'react'
 
 const Page = () => {
   return (
     <div>
     <div className='flex gap-5 justify-center items-center'>
-          <input type="number" placeholder='Company ID' className='px-2 py-2 text-center rounded-md mt-4' required  />
+          <input type="number" placeholder='Designation ID' className='px-2 py-2 text-center rounded-md mt-4' required  />
+          <input type="text" placeholder='Designation Name' className='px-2 py-2 text-center rounded-md mt-4' required  />
           <input type="text" placeholder='Company Name' className='px-2 py-2 text-center rounded-md mt-4' required  />
-          <input type="text" placeholder='Company Description' className='px-2 py-2 text-center rounded-md mt-4' required  />
           <input type="text" placeholder='Status of Company' className='px-2 py-2 text-center rounded-md mt-4' required  />
           <button className='btn w-32 btn-success items-center mt-4'>Add</button>
       </div>
@@ -16,9 +16,9 @@ const Page = () => {
   <thead>
     <tr>
       <th></th>
-      <th>Company ID</th>
-      <th>CompanyName</th>
-      <th>Company Description</th>
+      <th>Designation ID</th>
+      <th>DesignationName</th>
+      <th>Company Name</th>
       <th>Status</th>
     </tr>
   </thead>

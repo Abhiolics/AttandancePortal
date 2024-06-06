@@ -4,10 +4,12 @@ import Link from 'next/link';
 import { redirect, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 
+
 const Page = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [effect, setEffect] = useState(false);
 
   const [isAuth, setIsAuth] = useState(null);
   const [token, setToken] = useState("");
@@ -15,11 +17,11 @@ const Page = () => {
   const router = useRouter();
 
   const checkAdmin = () => {
-      const checkAuth = localStorage.getItem("auth");
-      console.log("LocalStorage auth value:", checkAuth);
-      const isAuthenticated = checkAuth === "true";
-      setIsAuth(isAuthenticated);
-      console.log("isAuthenticated", isAuthenticated);
+    const checkAuth = localStorage.getItem("auth");
+    console.log("LocalStorage auth value:", checkAuth);
+    const isAuthenticated = checkAuth === "true";
+    setIsAuth(isAuthenticated);
+    console.log("isAuthenticated", isAuthenticated);
   }
 
   const checkToken = () => {
@@ -44,7 +46,7 @@ const Page = () => {
     }
   }, [isAuth]);
 
-  
+
 
   function getData(e) {
     e.preventDefault();
@@ -66,13 +68,17 @@ const Page = () => {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("auth", response.data.auth);
         setMessage(response.data.message);
+        router.push('/dashboard');
       })
       .catch((error) => console.log(error))
   }
 
+
+
+
   return (
-    
-     <div className='flex flex-col overflow-hidden'>
+
+    <div className='flex flex-col overflow-hidden'>
       <div className="hero min-h-screen bg-base-200 flex flex-col gap-3 lg:flex-row-reverse justify-center sm:justify-center  lg:justify-between sm:flex-col items-center overflow-hidden">
         <div className="hero-content mr-4 lg:mr-48 justify-center items-center ">
           <div className="text-center lg:text-left">
@@ -80,8 +86,8 @@ const Page = () => {
           </div>
           <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100  flex items-center justify-center">
             <form onSubmit={getData} className='card-body'>
-            <h1 className="text-5xl font-bold">Login now!</h1>
-            <p className="py-6">Login to access all the features without any delay, just by entering your email & password.</p>
+              <h1 className="text-5xl font-bold">Login now!</h1>
+              <p className="py-6">Login to access all the features without any delay, just by entering your email & password.</p>
               <div className='form-control'>
                 <label htmlFor="" className='label'>
                   <span className='label-text'> Email
@@ -95,40 +101,48 @@ const Page = () => {
                 </label>
                 <input required type="password" className="input input-bordered" value={password} onChange={(e) => setPassword(e.target.value)} />
               </div>
-<div className='form-control mt-6'>
+              <div className='form-control mt-6'>
 
-<button  className='btn btn-primary' type="submit" >Submit</button>
+                <button onClick={() => {
+                  setEffect(true);
+                }} className={` btn btn-primary text-[20px] text-white rounded hover:bg-blue-700 hover:shadow-xl`} >
+                  {/* <div className='inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-[#332d2d] motion-reduce:animate-[spin_1.5s_linear_infinite] mr-2'></div> */}
+                  <div className={`${effect && "animate-spin"
+                    } inline-block h-6 w-6   rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-[#332d2d] motion-reduce:animate-[spin_1.5s_linear_infinite]`} > </div>
 
-</div>
-          </form>
-          <div className='alert input w-80  ml-3 mb-4' role='alert'>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-info shrink-0 w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-          {message && <span>{message}</span>}
+
+                  Submit </button>
+
+              </div>
+            </form>
+            <div className='alert input w-80  ml-3 mb-4' role='alert'>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-info shrink-0 w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              {message && <span>{message}</span>}
+            </div>
           </div>
         </div>
+
+        <div className="card ml-64 lg:card bg-base-100 shadow-xl invisible lg:visible sm:invisible">
+          <figure><img className='w-80 h-80' src="https://www.camattendance.com/assets/images/login-images/slider_img04.png" alt="Album" /></figure>
+          {/* <p className='p-5  flex flex-col'> <span className='text-3xl font-semibold'>Attendance System </span>
+  Safe & Secure  with 100% accuracy.</p> */}
+
+          <div className="card-body">
+            <h2 className="card-title">Attendance System is released!</h2>
+            <p>Click the button to view in detail.</p>
+            <div className="card-actions justify-center">
+              <button className="btn btn-outline rounded-full w-32 mt-5 text-white  ">View</button>
+            </div>
+          </div>
+        </div>
+
+
+
       </div>
 
-    <div className="card ml-64 lg:card bg-base-100 shadow-xl invisible lg:visible sm:invisible">
-  <figure><img className='w-80 h-80' src="https://www.camattendance.com/assets/images/login-images/slider_img04.png" alt="Album"/></figure>
-  {/* <p className='p-5  flex flex-col'> <span className='text-3xl font-semibold'>Attendance System </span>
-  Safe & Secure  with 100% accuracy.</p> */}
-  
-  <div className="card-body">
-    <h2 className="card-title">Attendance System is released!</h2>
-    <p>Click the button to view in detail.</p>
-    <div className="card-actions justify-center">
-      <button className="btn btn-outline rounded-full w-32 mt-5 text-white  ">View</button>
-    </div>
-  </div>
-</div>
-
-
-
     </div>
 
-    </div>
 
-    
 
   )
 }
