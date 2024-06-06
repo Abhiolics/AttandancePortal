@@ -70,7 +70,7 @@ const page = () => {
 
   return (
     
-     <div className='flex flex-col '>
+     <div className='flex flex-col overflow-hidden'>
       <div className="hero min-h-screen bg-base-200 flex flex-col gap-3 lg:flex-row-reverse justify-center sm:justify-center  lg:justify-between sm:flex-col items-center overflow-hidden">
         <div className="hero-content mr-4 lg:mr-48 justify-center items-center ">
           <div className="text-center lg:text-left">

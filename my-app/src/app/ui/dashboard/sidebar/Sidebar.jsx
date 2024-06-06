@@ -61,7 +61,7 @@ const menuItems = [
             },
             {
                 title: "Add Location",
-                path: "/add-location",
+                path: "/dashboard/add-location",
                 icon: <MdOutlineAddLocationAlt />
             },
         ]
