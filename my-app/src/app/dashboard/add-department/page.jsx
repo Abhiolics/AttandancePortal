@@ -79,6 +79,54 @@ const Page = () => {
         <td>Vaibhav Hosting Services</td>
         <td>Active</td>
       </tr>
+      {/* row */}
+      <tr>
+        <th>7</th>
+        <td>72000</td>
+        <td>Hosting Department</td>
+        <td>Vaibhav Hosting Services</td>
+        <td>Active</td>
+      </tr>
+      {/* row  */}
+      <tr>
+        <th>7</th>
+        <td>72000</td>
+        <td>Hosting Department</td>
+        <td>Vaibhav Hosting Services</td>
+        <td>Active</td>
+      </tr>
+      {/* row */}
+      <tr>
+        <th>7</th>
+        <td>72000</td>
+        <td>Hosting Department</td>
+        <td>Vaibhav Hosting Services</td>
+        <td>Active</td>
+      </tr>
+      {/* row */}
+      <tr>
+        <th>7</th>
+        <td>72000</td>
+        <td>Hosting Department</td>
+        <td>Vaibhav Hosting Services</td>
+        <td>Active</td>
+      </tr>
+      {/* row */}
+      <tr>
+        <th>7</th>
+        <td>72000</td>
+        <td>Hosting Department</td>
+        <td>Vaibhav Hosting Services</td>
+        <td>Active</td>
+      </tr>
+      {/* row */}
+      <tr>
+        <th>7</th>
+        <td>72000</td>
+        <td>Hosting Department</td>
+        <td>Vaibhav Hosting Services</td>
+        <td>Active</td>
+      </tr>
     </tbody>
   </table>
 </div>

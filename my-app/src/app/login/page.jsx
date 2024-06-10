@@ -58,7 +58,7 @@ const Page = () => {
 
     let config = {
       method: 'post',
-      url: 'https://attendence-api-px8b.onrender.com/admin/login',
+      url: 'https://attend.anujdwivedi.in/admin/login',
       data: data,
     }
 

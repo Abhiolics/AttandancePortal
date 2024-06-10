@@ -1,6 +1,7 @@
 .container{
     position: sticky;
     top: 40px;
+    
 }
 
 .user{
@@ -48,14 +49,14 @@ gap: 5px;
 
 .logout{
     padding: 20px;
-    margin: 5px 0px;
+    margin: px 0px;
     display: flex;
     align-items: center;
     gap: 10px;
     cursor: pointer;
     border-radius: 10px;
     background-color: none;
-    margin-top: 70vh;
+    margin-top: vh;
     /* border: 1px solid; */
     width: 100%;
 }

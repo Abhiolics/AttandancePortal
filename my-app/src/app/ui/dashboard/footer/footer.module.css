@@ -3,6 +3,9 @@
     align-items: center;
     justify-content: space-between;
     margin-top: 4rem;
+    position: relative;
+    position: sticky;
+    background-color: var(--bgSoft);
 }
 
 .logo{
@@ -11,4 +14,5 @@
 
 .text{
     font-size: 20px;
+    margin-right: 20px;
 }

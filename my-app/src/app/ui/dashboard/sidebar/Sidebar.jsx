@@ -14,7 +14,11 @@ import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import { LuLogOut } from "react-icons/lu";
 import Link from "next/link";
-
+import { RiLockPasswordLine } from "react-icons/ri";
+// import { MdOutlineAdminPanelSettings } from "react-icons/md";
+import { AiOutlineSchedule } from "react-icons/ai";
+import { MdDevices } from "react-icons/md";
+import { RiVoiceRecognitionLine } from "react-icons/ri";
 
 const menuItems = [
   {
@@ -62,8 +66,24 @@ const menuItems = [
         path: "/dashboard/add-location",
         icon: <MdOutlineAddLocationAlt />
       },
+      {
+        title: "Add Schedule",
+        path: "/dashboard/add-schedule",
+        icon: <MdOutlineAddLocationAlt />
+      },
     ]
   },
+]
+
+
+const subMenuItems = [
+  
+    {
+      title: "Add Location",
+      path: "/dashboard/add-location",
+      icon: <MdOutlineAddLocationAlt />
+    },
+  
 ]
 
 const Sidebar = () => {
@@ -138,7 +158,7 @@ const Sidebar = () => {
       </div>
 
       {/* NEW TOGGLE MENU */}
-      <details className="dropdown">
+      {/* <details className="dropdown">
         <summary className="m-1 btn-outline btn bg-base-500">Tap to see more options</summary>
         <ul  className={`"p-2 shadow menu dropdown-content z-[1] bg-base-500 rounded-box w-52 "` }>
         <li className={styles.cat}><Link href="/dashboard/admin"><MdOutlineAdminPanelSettings size={22}/>Admin</Link></li>
@@ -150,22 +170,113 @@ const Sidebar = () => {
           <li className={styles.cat}><Link href="/dashboard/add-company"><CgOrganisation size={22}/>Add company</Link></li>
           
         </ul>
-      </details>
+      </details> */}
+
+
+
+      {/* New Menu */}
+      <ul className="menu bg-[#182237] w-56 rounded-box min-h-screen">
+  <li><Link href="/dashboard/admin"><MdOutlineAdminPanelSettings size={22} /> Admin</Link></li>
+  <li><a><RiLockPasswordLine size={22} /> Password</a></li>
+  <li><a><AiOutlineAppstoreAdd size={22}/> Register</a></li>
+  <li>
+    <details >
+      <summary><CgOrganisation size={22}/>Company</summary>
+      <ul>
+        <li><Link href="/dashboard/add-company">Add Company</Link></li>
+        <li><a>Update Company</a></li>
+       
+      
+      </ul>
+    </details>
+  </li>
+  <li>
+          <details >
+            <summary><TfiIdBadge size={22}/>Designation</summary>
+            <ul>
+              <li><a>Add Designation</a></li>
+              <li><a>Update Designation</a></li>
+            </ul>
+          </details>
+        </li>
+  <li>
+          <details >
+            <summary><AiOutlineAppstoreAdd size={22}/>Department</summary>
+            <ul>
+              <li><Link href="/dashboard/add-department">Add Department</Link></li>
+              <li><a>Update Department</a></li>
+            </ul>
+          </details>
+        </li>
+        <li>
+          <details >
+            <summary><IoPersonAddOutline size={22}/>Employee</summary>
+            <ul>
+              <li><Link href="/dashboard/add-employee">Add Employee</Link></li>
+              <li><a>Update Employee</a></li>
+            </ul>
+          </details>
+        </li>
+        <li>
+          <details >
+            <summary><MdOutlineAddLocationAlt size={22}/>Location</summary>
+            <ul>
+              <li><Link href="/dashboard/add-location">Add Location</Link></li>
+              <li><Link href="/dashboard/add-location">Update Location</Link></li>
+            </ul>
+          </details>
+        </li>
+        <li>
+          <details >
+            <summary><AiOutlineSchedule size={22} />Schedule</summary>
+            <ul>
+              <li><Link href="/dashboard/add-schedule">Add Schedule</Link></li>
+              <li><a>Update Schedule</a></li>
+            </ul>
+          </details>
+        </li>
+        <li>
+          <details >
+            <summary><MdDevices size={22} />Device</summary>
+            <ul>
+              <li><Link href="/dashboard/add-device">Add Device</Link></li>
+              <li><a>Update Device</a></li>
+              <li><a>Delete Device</a></li>
+            </ul>
+          </details>
+        </li>
+        <li>
+          <details >
+            <summary><RiVoiceRecognitionLine  size={22}/>Recognition</summary>
+            <ul>
+              <li><a>Add Recognition</a></li>
+              <li><a>Update Recognition</a></li>
+            </ul>
+          </details>
+        </li>
+        <button className={styles.logout} onClick={() => logOut()}> <LuLogOut /> Logout</button>
+        <img className="rounded-lg p-2 flex items-center justify-end  " src="/download.png" alt="" />
+</ul>
 
 
 
       {/* <ul className={styles.list}>
         {menuItems.map((cat) => (
             <li key={cat.title}>
-                <span className={styles.cat}>{cat.title}</span>
+                <span className={styles.cat}>{cat.title}
+                
+                
+                </span>
+                
                 {cat.list.map((item) => (
                     <MenuLink item={item} key={item.title} />
                 ))}
+
                 </li>
         ))}
      </ul> */}
 
-      <button className={styles.logout} onClick={() => logOut()}> <LuLogOut /> Logout</button>
+
     </div>
   )
 }
