@@ -50,7 +50,7 @@ const Page = () => {
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: 'https://attendence-api-px8b.onrender.com/admin/logout',
+      url: 'https://attend.anujdwivedi.in//admin/logout',
       headers: { 
         'Authorization': `Bearer ${token}`
       }

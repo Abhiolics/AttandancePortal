@@ -1,180 +1,97 @@
-"use client"
-import { useState } from "react";
+"use client";
 
+import axios from 'axios';
+import React, { useState } from 'react';
 
-const Page = () => {
+export default function UpdateCompanyPage() {
+  const [companyName, setCompanyName] = useState('');
+  const [companyId, setCompanyId] = useState('');
+  const [status, setStatus] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [responseMessage, setResponseMessage] = useState('');
 
-{/* <script>
-  const id1 = document.getElementById('cid');
-  const cn = document.getElementById('cn');
-  const cd = document.getElementById('cd');
-  const cs = document.getElementById('cs');
-  const cb = document.getElementById('cb');
-  const out1 = document.getElementById('o1');
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    setLoading(true);
 
-  function fun1(){
-    out1.innerHTML = {id1, cn, cd, cs}
-  }
+    const data = JSON.stringify({
+      companyName,
+      companyId,
+      status,
+    });
 
-  cb.addEventListener('click', fun1);
-</script> */}
+    const config = {
+      method: 'put',
+      maxBodyLength: Infinity,
+      url: 'https://attend.anujdwivedi.in/company/update-company/1', // Adjust the URL with the appropriate company ID
+      headers: { 
+        'Content-Type': 'application/json', 
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3OTk5MzE1fQ.pnsgXqSyIYysmmWeB9B4TZBrgZy7OwKvvFZIkV6cEYg'
+      },
+      data : data
+    };
 
-//   const [company, setCompany] = useState([]);
-//   const [state, setState] = useState({
-//       title: "",
-//       note: "",
-      
-//   })
-//   const handleChange = (e) => {
-//       setState({ ...state, [e.target.name]: e.target.value })
-//   }
-  
-//   const handleDelete = (id) => {
-//  const leftCompany = company.filter((company,i)=> company.id !== id);
-//  setCompany(leftCompany)
-      
-
-//   }
-
-//   const handleSubmit = (e) => {
-//       e.preventDefault();
-//       // console.log(state);
-
-//       setCompany([...company, state]);
-//       setState({
-//           title:"",
-//           note:""
-//       })
-//   }
+    try {
+      const response = await axios.request(config);
+      setResponseMessage(response.data.message);
+    } catch (error) {
+      console.error(error);
+      setResponseMessage('An error occurred while updating the company.');
+    }
+    setLoading(false);
+  };
 
   return (
-    <div>
-      <form action="" >
-    <div className='flex gap-5 justify-center items-center'>
-          <input  id="cid" type="number" placeholder='Company ID' className='px-2 py-2 text-center rounded-md mt-4' required  />
-          <input id="cn"  type="text" placeholder='Company Name' className='px-2 py-2 text-center rounded-md mt-4' required  />
-          <input id="cd" type="text" placeholder='Company Description' className='px-2 py-2 text-center rounded-md mt-4' required  />
-          <input  id="cs" type="text" placeholder='Status of Company' className='px-2 py-2 text-center rounded-md mt-4' required  />
-          <button id="cb" className='btn w-32 btn-success items-center mt-4'>Add</button>
-      </div>
+    <div className="p-4 max-w-lg mx-auto">
+      <h1 className="text-2xl font-bold mb-4">Update Company</h1>
+      <form onSubmit={handleUpdate} className="space-y-4">
+        <div>
+          <label className="block text-gray-700">Company Name</label>
+          <input
+            type="text"
+            value={companyName}
+            onChange={(e) => setCompanyName(e.target.value)}
+            placeholder="Company Name"
+            className="w-full px-3 py-2 border rounded-md mt-1"
+            required
+          />
+        </div>
+        <div>
+          <label className="block text-gray-700">Company ID</label>
+          <input
+            type="text"
+            value={companyId}
+            onChange={(e) => setCompanyId(e.target.value)}
+            placeholder="Company ID"
+            className="w-full px-3 py-2 border rounded-md mt-1"
+            required
+          />
+        </div>
+        <div>
+          <label className="block text-gray-700">Status</label>
+          <select
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            className="w-full px-3 py-2 border rounded-md mt-1"
+            required
+          >
+            <option value={0}>Inactive</option>
+            <option value={1}>Active</option>
+          </select>
+        </div>
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            className="btn w-32 bg-blue-500 text-white py-2 px-4 rounded"
+          >
+            {loading ? 'Updating...' : 'Update'}
+          </button>
+        </div>
       </form>
-  <div className="overflow-x-auto">
-<table className="table" id="o1">
-  {/* head */}
-  <thead>
-    <tr>
-      <th></th>
-      <th>Company ID</th>
-      <th>CompanyName</th>
-      <th>Company Description</th>
-      <th>Status</th>
-    </tr>
-  </thead>
-  <tbody>
-    {/* row 1 */}
-    <tr>
-      <th>1</th>
-      <td>03432</td>
-      <td>Quality Control Specialist</td>
-      <td>RO Enterprises</td>
-      <td>Active</td>
-    </tr>
-    {/* row 2 */}
-    <tr className="hover">
-      <th>2</th>
-      <td>50018</td>
-      <td>Desktop Support Technician</td>
-      <td>Papaya Coders Pvt. Ltd.</td>
-      <td>Active</td>
-    </tr>
-    {/* row 3 */}
-    <tr>
-      <th>3</th>
-      <td>72008</td>
-      <td>Tax Accountant</td>
-      <td>Alok Consultancies</td>
-      <td>Unactive</td>
-    </tr>
-    {/* row 4 */}
-    <tr>
-      <th>4</th>
-      <td>67779</td>
-      <td>Tax Analysis</td>
-      <td>Alok Consultancies</td>
-      <td>Unactive</td>
-    </tr>
-    {/* row 5 */}
-    <tr>
-      <th>5</th>
-      <td>71222</td>
-      <td>Software Development</td>
-      <td>Alok Consultancies</td>
-      <td>Unactive</td>
-    </tr>
-    {/* row6 */}
-    <tr>
-      <th>6</th>
-      <td>90087</td>
-      <td>Mongoose Design</td>
-      <td>Alok Consultancies</td>
-      <td>Unactive</td>
-    </tr>
-    {/* row */}
-    <tr>
-      <th>7</th>
-      <td>72000</td>
-      <td>Hosting Department</td>
-      <td>Vaibhav Hosting Services</td>
-      <td>Active</td>
-    </tr>
-    {/*  */}
-    <tr>
-      <th>7</th>
-      <td>72000</td>
-      <td>Hosting Department</td>
-      <td>Vaibhav Hosting Services</td>
-      <td>Active</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>72000</td>
-      <td>Hosting Department</td>
-      <td>Vaibhav Hosting Services</td>
-      <td>Active</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>72000</td>
-      <td>Hosting Department</td>
-      <td>Vaibhav Hosting Services</td>
-      <td>Active</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>72000</td>
-      <td>Hosting Department</td>
-      <td>Vaibhav Hosting Services</td>
-      <td>Active</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>72000</td>
-      <td>Hosting Department</td>
-      <td>Vaibhav Hosting Services</td>
-      <td>Active</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>72000</td>
-      <td>Hosting Department</td>
-      <td>Vaibhav Hosting Services</td>
-      <td>Active</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-  )
+      {responseMessage && (
+        <p className="mt-4 text-center text-green-500">{responseMessage}</p>
+      )}
+    </div>
+  );
 }
 
-export default Page

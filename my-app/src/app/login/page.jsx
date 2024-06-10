@@ -107,7 +107,7 @@ const Page = () => {
                   setEffect(true);
                 }} className={` btn btn-primary text-[20px] text-white rounded hover:bg-blue-700 hover:shadow-xl`} >
                   {/* <div className='inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-[#332d2d] motion-reduce:animate-[spin_1.5s_linear_infinite] mr-2'></div> */}
-                  <div className={`${effect && "animate-spin h-6 w-6  rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-[#332d2d] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                  <div className={`${effect && "loading loading-ring loading-xs"
                     } inline-block `} > </div>
 
 

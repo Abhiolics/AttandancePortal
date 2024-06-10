@@ -67,8 +67,8 @@ const menuItems = [
         icon: <MdOutlineAddLocationAlt />
       },
       {
-        title: "Add Schedule",
-        path: "/dashboard/add-schedule",
+        title: "View Schedule",
+        path: "/dashboard/view-schedule",
         icon: <MdOutlineAddLocationAlt />
       },
     ]
@@ -152,8 +152,8 @@ const Sidebar = () => {
       <div className={styles.user}>
         <img src="https://tse3.mm.bing.net/th/id/OIP.IGNf7GuQaCqz_RPq5wCkPgAAAA?rs=1&pid=ImgDetMain" alt="" className={styles.userImage} />
         <div className={styles.userDetail}>
-          <span className={styles.username}> Abhay Sharma</span>
-          <span className={styles.userTitle}> <MdDashboard/>Dashboard</span>
+          <span className={styles.username}>Welcome back,</span>
+          <span className={styles.userTitle}>Abhay Sharma </span>
         </div>
       </div>
 
@@ -177,14 +177,15 @@ const Sidebar = () => {
       {/* New Menu */}
       <ul className="menu bg-[#182237] w-56 rounded-box min-h-screen">
   <li><Link href="/dashboard/admin"><MdOutlineAdminPanelSettings size={22} /> Admin</Link></li>
-  <li><a><RiLockPasswordLine size={22} /> Password</a></li>
+  <li><Link href="/dashboard/password"><RiLockPasswordLine size={22} /> Password</Link></li>
   <li><a><AiOutlineAppstoreAdd size={22}/> Register</a></li>
   <li>
     <details >
       <summary><CgOrganisation size={22}/>Company</summary>
       <ul>
         <li><Link href="/dashboard/add-company">Add Company</Link></li>
-        <li><a>Update Company</a></li>
+        <li><Link href="/dashboard/add">Update Company</Link></li>
+        <li><Link href="/dashboard/view-company">View Company</Link></li>
        
       
       </ul>
@@ -194,8 +195,8 @@ const Sidebar = () => {
           <details >
             <summary><TfiIdBadge size={22}/>Designation</summary>
             <ul>
-              <li><a>Add Designation</a></li>
-              <li><a>Update Designation</a></li>
+              <li><Link href="/dashboard/add-designation">Add Designation</Link></li>
+              <li><Link href="/dashboard/update-designation">Update Designation</Link></li>
             </ul>
           </details>
         </li>
@@ -204,7 +205,7 @@ const Sidebar = () => {
             <summary><AiOutlineAppstoreAdd size={22}/>Department</summary>
             <ul>
               <li><Link href="/dashboard/add-department">Add Department</Link></li>
-              <li><a>Update Department</a></li>
+              <li><Link href="/dashboard/update-department">Update Department</Link></li>
             </ul>
           </details>
         </li>
@@ -230,7 +231,7 @@ const Sidebar = () => {
           <details >
             <summary><AiOutlineSchedule size={22} />Schedule</summary>
             <ul>
-              <li><Link href="/dashboard/add-schedule">Add Schedule</Link></li>
+              <li><Link href="/dashboard/view-schedule">View Schedule</Link></li>
               <li><a>Update Schedule</a></li>
             </ul>
           </details>
@@ -239,7 +240,7 @@ const Sidebar = () => {
           <details >
             <summary><MdDevices size={22} />Device</summary>
             <ul>
-              <li><Link href="/dashboard/add-device">Add Device</Link></li>
+              <li><Link href="/dashboard/view-device">Add Device</Link></li>
               <li><a>Update Device</a></li>
               <li><a>Delete Device</a></li>
             </ul>
@@ -249,7 +250,7 @@ const Sidebar = () => {
           <details >
             <summary><RiVoiceRecognitionLine  size={22}/>Recognition</summary>
             <ul>
-              <li><a>Add Recognition</a></li>
+              <li><Link href="/dashboard/add-recognition">Add Recognition</Link></li>
               <li><a>Update Recognition</a></li>
             </ul>
           </details>
