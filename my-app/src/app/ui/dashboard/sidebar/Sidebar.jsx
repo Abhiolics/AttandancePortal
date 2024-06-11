@@ -184,7 +184,7 @@ const Sidebar = () => {
       <summary><CgOrganisation size={22}/>Company</summary>
       <ul>
         <li><Link href="/dashboard/add-company">Add Company</Link></li>
-        <li><Link href="/dashboard/add">Update Company</Link></li>
+        <li><Link href="/dashboard/update-company">Update Company</Link></li>
         <li><Link href="/dashboard/view-company">View Company</Link></li>
        
       
@@ -222,6 +222,7 @@ const Sidebar = () => {
           <details >
             <summary><MdOutlineAddLocationAlt size={22}/>Location</summary>
             <ul>
+            <li><Link href="/dashboard/view-location">View Location</Link></li>
               <li><Link href="/dashboard/add-location">Add Location</Link></li>
               <li><Link href="/dashboard/add-location">Update Location</Link></li>
             </ul>
@@ -232,7 +233,7 @@ const Sidebar = () => {
             <summary><AiOutlineSchedule size={22} />Schedule</summary>
             <ul>
               <li><Link href="/dashboard/view-schedule">View Schedule</Link></li>
-              <li><a>Update Schedule</a></li>
+              <li><Link href="/dashboard/update-schedule">Update Schedule</Link></li>
             </ul>
           </details>
         </li>

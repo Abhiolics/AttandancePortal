@@ -1,38 +1,41 @@
 "use client";
 
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function Page() {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const fetchData = async () => {
-    setLoading(true);
-    const config = {
-      method: 'get',
-      maxBodyLength: Infinity,
-      url: 'https://attend.anujdwivedi.in/schedule/get-schedules',
-      headers: { 
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3ODI5NDIwfQ.G3TcytnSlxO3ACTFuqyjfghfy3Lq8y-LkBHctpRGiMY'
+  useEffect(() => {
+    const fetchData = async () => {
+      const config = {
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: 'https://attend.anujdwivedi.in/schedule/get-schedules',
+        headers: { 
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE3ODI5NDIwfQ.G3TcytnSlxO3ACTFuqyjfghfy3Lq8y-LkBHctpRGiMY'
+        }
+      };
+      
+      try {
+        const response = await axios.request(config);
+        setData(response.data.data);
+      } catch (error) {
+        console.error(error);
       }
+      setLoading(false);
     };
-    
-    try {
-      const response = await axios.request(config);
-      setData(response.data.data);
-    } catch (error) {
-      console.error(error);
-    }
-    setLoading(false);
-  };
+
+    fetchData();
+  }, []);
 
   return (
-    <div className="p-4">
-      <button className='btn w-32 btn-primary mt-4 bg-blue-500 text-white py-2 px-4 rounded flex justify-end mt-4 ' onClick={fetchData}>View Schedule</button>
-
+    <div className="p-4 ">
       {loading ? (
-        <p className='text-center mt-4'>Loading...</p>
+        <div className='flex mt-32 items-center justify-center w-full h-full'>
+          <p className='loading loading-ring loading-lg'>Loading...</p>
+        </div>
       ) : (
         data.length > 0 && (
           <div className="overflow-x-auto mt-4">
@@ -66,6 +69,9 @@ export default function Page() {
     </div>
   );
 }
+
+
+
 
 
 
