@@ -13,11 +13,16 @@
   margin: 0;
   padding:  0;
   box-sizing: border-box;
+  height: fit-content;
+  
+  /* scrollbar-color: blue; */
+
 }
 
 body{
   background-color: var(--bg);
   color: var(--text);
+  
 }
 
 a{

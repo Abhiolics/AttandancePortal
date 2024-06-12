@@ -55,10 +55,10 @@ const AddLocationPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4">
-      <div className="w-full max-w-md bg-[#182237] rounded-lg shadow-md p-6 mb-8">
+    <div className="flex flex-col items-center justify-center  p-4">
+      <div className="w-full bg-[#182237] rounded-lg shadow-md p-6 mb-8 ">
         <h2 className="text-2xl font-bold mb-4">Add Location</h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className='grid grid-cols-3 gap-10 w-full'>
           <div className="mb-4">
             <label htmlFor="locationName" className="block text-white">Location Name</label>
             <input

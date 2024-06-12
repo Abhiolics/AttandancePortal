@@ -1,79 +1,154 @@
-import React from 'react'
+"use client"
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import './admin.module.css'; // Import CSS for flip animation
 
-const Page = () => {
+const AdminPage = () => {
+  const [adminData, setAdminData] = useState({});
+  const [email, setEmail] = useState('');
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+  const [showChangePassword, setShowChangePassword] = useState(false);
+
+  useEffect(() => {
+    const fetchAdminData = async () => {
+      const config = {
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: 'https://attend.anujdwivedi.in/admin/get-admin',
+        headers: {
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE'
+        }
+      };
+
+      try {
+        const response = await axios.request(config);
+        setAdminData(response.data);
+        setEmail(response.data.email); // Set email for password change
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchAdminData();
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const data = JSON.stringify({
+      email,
+      oldPassword,
+      newPassword,
+    });
+
+    const config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'https://attend.anujdwivedi.in/admin/change-password',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: data
+    };
+
+    try {
+      const response = await axios.request(config);
+      setMessage(response.data.message);
+      setError('');
+      setShowChangePassword(false); // Hide the password change form
+    } catch (error) {
+      setMessage('');
+      setError('Error changing password');
+    }
+  };
+
   return (
-    <div>
-      <div className="stat">
-    <div className="stat-figure text-secondary">
-      <div className="avatar online">
-        <div className="w-16 rounded-full">
-          <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+    <div className="flex flex-col items-center justify-center mt-4 p-4 ">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-full">
+        <div className="bg-[#182237] rounded-lg  shadow-md p-6">
+        <div className="flex flex-col items-center">
+          <img className="w-32 h-40 rounded-lg" src="https://tse3.mm.bing.net/th/id/OIP.IGNf7GuQaCqz_RPq5wCkPgAAAA?rs=1&pid=ImgDetMain" alt="Admin Profile" />
+        </div>
+          {!showChangePassword ? (
+            <>
+            <div className='flex flex-col items-center justify-center'>
+              <h2 className="text-2xl font-bold mb-2 mt-2">Admin Details</h2>
+              <p className="text-white"><strong>Name:</strong> {adminData.name}</p>
+              <p className="text-white"><strong>Email:</strong> {adminData.email}</p>
+              <p className="text-white"><strong>Role:</strong> {adminData.role}</p>
+              <p className="text-white"><strong>Status:</strong> {adminData.status === 1 ? 'Active' : 'Inactive'}</p>
+              <button
+                onClick={() => setShowChangePassword(true)}
+                className="mt-4 bg-blue-500 text-white p-2 rounded"
+              >
+                Change Password
+              </button></div>
+              
+            </>
+          ) : (
+            <>
+              <h2 className="text-2xl font-bold mb-4 ">Update Password</h2>
+              <form onSubmit={handleSubmit}>
+                <div className="mb-4">
+                  <label htmlFor="email" className="block text-white ">Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded mt-1"
+                    required
+                    disabled
+                  />
+                </div>
+                <div className="mb-4">
+                  <label htmlFor="oldPassword" className="block text-white">Old Password</label>
+                  <input
+                    type="password"
+                    id="oldPassword"
+                    value={oldPassword}
+                    onChange={(e) => setOldPassword(e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded mt-1"
+                    required
+                  />
+                </div>
+                <div className="mb-4">
+                  <label htmlFor="newPassword" className="block text-white">New Password</label>
+                  <input
+                    type="password"
+                    id="newPassword"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded mt-1"
+                    required
+                  />
+                </div>
+                {message && <p className="text-green-500">{message}</p>}
+                {error && <p className="text-red-500">{error}</p>}
+                <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded mt-4">
+                  Update Password
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowChangePassword(false)}
+                  className="w-full bg-gray-500 text-white p-2 rounded mt-4"
+                >
+                  Cancel
+                </button>
+              </form>
+            </>
+          )}
         </div>
       </div>
     </div>
-    <div className="stat-value">800015</div>
-    <div className="stat-title">Abhay Sharma</div>
-    <div className="stat-desc text-secondary">Hosting Services Pvt. Ltd.</div>
-  </div>
+  );
+};
 
-<div className='flex flex-col w-56 gap-3'>
-<label className="input input-bordered flex items-center gap-2">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 opacity-70"><path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" /><path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" /></svg>
-  <input type="text" className="grow" placeholder="admin@gmail.com" />
-</label>
-<label className="input input-bordered flex items-center gap-2">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 opacity-70"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" /></svg>
-  <input type="text" className="grow" placeholder="Abhay Sharma" />
-</label>
-<label className="input input-bordered flex items-center gap-2">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 opacity-70"><path fillRule="evenodd" d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z" clipRule="evenodd" /></svg>
-  <input type="password" className="grow" value="password" />
-</label>
-</div>
-{/* The button to open modal */}
-<label htmlFor="my_modal_6" className="btn btn-outline text-white mt-5">View Status</label>
-
-{/* Put this part before </body> tag */}
-<input type="checkbox" id="my_modal_6" className="modal-toggle" />
-<div className="modal" role="dialog">
-  <div className="modal-box ">
-    <h3 className="font-bold text-lg">Hello!</h3>
-    <p className="py-4">This modal works with a hidden checkbox!</p>
-    <div className="modal-action">
-      <label htmlFor="my_modal_6" className="btn btn-outline">Close!</label>
-    </div>
-  </div>
-</div>
-
-
-<div className='flex mt-4 gap-5'>
-  <div className="stats bg-primary text-primary-content">
-  
-  <div className="stat">
-    <div className="stat-title">Account balance</div>
-    <div className="stat-value">$89,400</div>
-    <div className="stat-actions">
-      <button className="btn btn-sm btn-success">Add funds</button>
-    </div>
-  </div>
-  
-  <div className="stat">
-    <div className="stat-title">Current balance</div>
-    <div className="stat-value">$89,400</div>
-    <div className="stat-actions gap-2 flex ">
-      <button className="btn btn-sm">Withdrawal</button> 
-      <button className="btn btn-sm">Deposit</button>
-    </div>
-  </div>
-  
-</div>
+export default AdminPage;
 
 
 
 
-</div>
-    </div>
-  )
-}
-
-export default Page

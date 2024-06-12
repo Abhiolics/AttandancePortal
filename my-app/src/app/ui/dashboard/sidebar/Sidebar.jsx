@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation";
 import MenuLink from './menuLink/MenuLink';
 import styles from './sidebar.module.css'
-import { MdDashboard } from "react-icons/md";
+import { MdDashboard, MdViewComfy } from "react-icons/md";
 import { CgOrganisation } from "react-icons/cg";
 import { AiOutlineAppstoreAdd } from "react-icons/ai";
 import { TfiIdBadge } from "react-icons/tfi";
@@ -150,7 +150,9 @@ const Sidebar = () => {
   return (
     <div className={styles.container}>
       <div className={styles.user}>
+        <Link href="/dashboard/admin">
         <img src="https://tse3.mm.bing.net/th/id/OIP.IGNf7GuQaCqz_RPq5wCkPgAAAA?rs=1&pid=ImgDetMain" alt="" className={styles.userImage} />
+        </Link>
         <div className={styles.userDetail}>
           <span className={styles.username}>Welcome back,</span>
           <span className={styles.userTitle}>Abhay Sharma </span>
@@ -176,21 +178,10 @@ const Sidebar = () => {
 
       {/* New Menu */}
       <ul className="menu bg-[#182237] w-56 rounded-box min-h-screen">
-  <li><Link href="/dashboard/admin"><MdOutlineAdminPanelSettings size={22} /> Admin</Link></li>
-  <li><Link href="/dashboard/password"><RiLockPasswordLine size={22} /> Password</Link></li>
-  <li><a><AiOutlineAppstoreAdd size={22}/> Register</a></li>
-  <li>
-    <details >
-      <summary><CgOrganisation size={22}/>Company</summary>
-      <ul>
-        <li><Link href="/dashboard/add-company">Add Company</Link></li>
-        <li><Link href="/dashboard/update-company">Update Company</Link></li>
-        <li><Link href="/dashboard/view-company">View Company</Link></li>
-       
-      
-      </ul>
-    </details>
-  </li>
+      <li><Link href="/dashboard"><MdDashboard size={20}/>Dashboard</Link></li>
+ 
+    <li><Link href="/dashboard/view-company"><CgOrganisation size={20}/>View Company</Link></li>
+     
   <li>
           <details >
             <summary><TfiIdBadge size={22}/>Designation</summary>
