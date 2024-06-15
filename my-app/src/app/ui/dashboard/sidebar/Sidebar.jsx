@@ -15,10 +15,15 @@ import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import { LuLogOut } from "react-icons/lu";
 import Link from "next/link";
 import { RiLockPasswordLine } from "react-icons/ri";
-// import { MdOutlineAdminPanelSettings } from "react-icons/md";
+import { SiTripadvisor } from "react-icons/si";
 import { AiOutlineSchedule } from "react-icons/ai";
 import { MdDevices } from "react-icons/md";
 import { RiVoiceRecognitionLine } from "react-icons/ri";
+import { BsClipboardData } from "react-icons/bs";
+import { SlCalender } from "react-icons/sl";
+import { TbHealthRecognition } from "react-icons/tb";
+import { MdGroups } from "react-icons/md";
+import { IoFastFoodOutline } from "react-icons/io5";
 
 const menuItems = [
   {
@@ -181,69 +186,28 @@ const Sidebar = () => {
       <li><Link href="/dashboard"><MdDashboard size={20}/>Dashboard</Link></li>
  
     <li><Link href="/dashboard/view-company"><CgOrganisation size={20}/>View Company</Link></li>
-     
-  <li>
-          <details >
-            <summary><TfiIdBadge size={22}/>Designation</summary>
-            <ul>
-              <li><Link href="/dashboard/add-designation">Add Designation</Link></li>
-              <li><Link href="/dashboard/update-designation">Update Designation</Link></li>
-            </ul>
-          </details>
+        <li><Link href="/dashboard/schedule"><AiOutlineSchedule size={22} /> Schedule </Link></li>
+        <li><Link href="/dashboard/items"><IoFastFoodOutline size={22}/> Items</Link></li>
+        <li><Link href="/dashboard/devices"><MdDevices size={22} />Devices</Link>
         </li>
-  <li>
+        <li>
           <details >
-            <summary><AiOutlineAppstoreAdd size={22}/>Department</summary>
+            <summary><RiVoiceRecognitionLine  size={22}/>Recognitions</summary>
             <ul>
-              <li><Link href="/dashboard/add-department">Add Department</Link></li>
-              <li><Link href="/dashboard/update-department">Update Department</Link></li>
+              <li><Link href="/dashboard/employees"><MdGroups size={22} />Employees</Link></li>
+              <li><Link href="/dashboard/visitors"><SiTripadvisor size={22}/> Visitors</Link></li>
+              <li><Link href="/dashboard/visitors"><TbHealthRecognition  size={22}/>Recognition</Link></li>
             </ul>
           </details>
         </li>
         <li>
           <details >
-            <summary><IoPersonAddOutline size={22}/>Employee</summary>
+            <summary><BsClipboardData  size={20}/>Master Data</summary>
             <ul>
-              <li><Link href="/dashboard/add-employee">Add Employee</Link></li>
-              <li><a>Update Employee</a></li>
-            </ul>
-          </details>
-        </li>
-        <li>
-          <details >
-            <summary><MdOutlineAddLocationAlt size={22}/>Location</summary>
-            <ul>
-            <li><Link href="/dashboard/view-location">View Location</Link></li>
-              <li><Link href="/dashboard/add-location">Add Location</Link></li>
-              <li><Link href="/dashboard/add-location">Update Location</Link></li>
-            </ul>
-          </details>
-        </li>
-        <li>
-          <details >
-            <summary><AiOutlineSchedule size={22} />Schedule</summary>
-            <ul>
-              <li><Link href="/dashboard/view-schedule">View Schedule</Link></li>
-              <li><Link href="/dashboard/update-schedule">Update Schedule</Link></li>
-            </ul>
-          </details>
-        </li>
-        <li>
-          <details >
-            <summary><MdDevices size={22} />Device</summary>
-            <ul>
-              <li><Link href="/dashboard/view-device">Add Device</Link></li>
-              <li><a>Update Device</a></li>
-              <li><a>Delete Device</a></li>
-            </ul>
-          </details>
-        </li>
-        <li>
-          <details >
-            <summary><RiVoiceRecognitionLine  size={22}/>Recognition</summary>
-            <ul>
-              <li><Link href="/dashboard/add-recognition">Add Recognition</Link></li>
-              <li><a>Update Recognition</a></li>
+              <li><Link href="/dashboard/designation"><TfiIdBadge size={22}/> Designation</Link></li>
+              <li><Link href="/dashboard/department"><AiOutlineAppstoreAdd size={22}/>Department</Link></li>
+              <li><Link href="/dashboard/holiday"><SlCalender  size={22}/>Holiday</Link></li>
+              <li><Link href="/dashboard/view-location"><MdOutlineAddLocationAlt size={22}/> Location</Link></li>
             </ul>
           </details>
         </li>

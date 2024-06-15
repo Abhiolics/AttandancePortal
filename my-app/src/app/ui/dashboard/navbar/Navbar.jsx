@@ -30,7 +30,7 @@ const Navbar = () => {
 </dialog>
 
               {/* Open the modal using document.getElementById('ID').showModal() method */}
-              <button className="btn" onClick={()=>document.getElementById('my_modal_5').showModal()}> <IoSettingsOutline size={20} /></button>
+              <button className="btn" > <IoSettingsOutline size={20} /></button>
 
                     
                     </div>
