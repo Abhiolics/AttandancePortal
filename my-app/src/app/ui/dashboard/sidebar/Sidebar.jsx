@@ -186,21 +186,7 @@ const Sidebar = () => {
       <li><Link href="/dashboard"><MdDashboard size={20}/>Dashboard</Link></li>
  
     <li><Link href="/dashboard/view-company"><CgOrganisation size={20}/>View Company</Link></li>
-        <li><Link href="/dashboard/schedule"><AiOutlineSchedule size={22} /> Schedule </Link></li>
-        <li><Link href="/dashboard/items"><IoFastFoodOutline size={22}/> Items</Link></li>
-        <li><Link href="/dashboard/devices"><MdDevices size={22} />Devices</Link>
-        </li>
-        <li>
-          <details >
-            <summary><RiVoiceRecognitionLine  size={22}/>Recognitions</summary>
-            <ul>
-              <li><Link href="/dashboard/employees"><MdGroups size={22} />Employees</Link></li>
-              <li><Link href="/dashboard/visitors"><SiTripadvisor size={22}/> Visitors</Link></li>
-              <li><Link href="/dashboard/visitors"><TbHealthRecognition  size={22}/>Recognition</Link></li>
-            </ul>
-          </details>
-        </li>
-        <li>
+    <li>
           <details >
             <summary><BsClipboardData  size={20}/>Master Data</summary>
             <ul>
@@ -211,6 +197,22 @@ const Sidebar = () => {
             </ul>
           </details>
         </li>
+        <li><Link href="/dashboard/schedule"><AiOutlineSchedule size={22} /> Schedule </Link></li>
+        <li><Link href="/dashboard/items"><IoFastFoodOutline size={22}/> Items</Link></li>
+        <li><Link href="/dashboard/devices"><MdDevices size={22} />Devices</Link>
+        </li>
+        
+        <li>
+          <details >
+            <summary><RiVoiceRecognitionLine  size={22}/>Recognitions</summary>
+            <ul>
+              <li><Link href="/dashboard/employees"><MdGroups size={22} />Employees</Link></li>
+              <li><Link href="/dashboard/visitors"><SiTripadvisor size={22}/> Visitors</Link></li>
+              <li><Link href="/dashboard/recognition"><TbHealthRecognition  size={22}/>Recognition</Link></li>
+            </ul>
+          </details>
+        </li>
+       
         <button className={styles.logout} onClick={() => logOut()}> <LuLogOut /> Logout</button>
         <img className="rounded-lg p-2 flex items-center justify-end  " src="/download.png" alt="" />
 </ul>

@@ -35,8 +35,6 @@ const EmployeePage = () => {
     status: 0,
   });
 
-  const [expandedEmployeeId, setExpandedEmployeeId] = useState(null);
-
   useEffect(() => {
     fetchEmployees();
   }, []);
@@ -140,12 +138,8 @@ const EmployeePage = () => {
     setIsAdding(false);
   };
 
-  const toggleExpand = (employeeId) => {
-    setExpandedEmployeeId(expandedEmployeeId === employeeId ? null : employeeId);
-  };
-
   const EmployeeForm = ({ currentEmployee, handleChange, handleSubmit, handleCancel, isUpdating }) => {
-    const fields = Object.keys(currentEmployee).filter(key => key !== 'id' && key !== 'status');
+    const fields = Object.keys(currentEmployee).filter(key => key !== 'id');
 
     return (
       <form onSubmit={handleSubmit} className="mt-4 bg-gray-100 p-4 rounded">
@@ -156,7 +150,7 @@ const EmployeePage = () => {
                 {key.charAt(0).toUpperCase() + key.slice(1)}
               </label>
               <input
-                type="text"
+                type={key === 'dob' ? 'date' : 'text'}
                 name={key}
                 value={currentEmployee[key]}
                 onChange={handleChange}
@@ -165,21 +159,6 @@ const EmployeePage = () => {
               />
             </div>
           ))}
-          <div className="mb-4 col-span-3">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              Status
-            </label>
-            <select
-              name="status"
-              value={currentEmployee.status}
-              onChange={handleChange}
-              className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-              required
-            >
-              <option value={0}>Inactive</option>
-              <option value={1}>Active</option>
-            </select>
-          </div>
         </div>
         <div className="flex items-center gap-4">
           <button
@@ -221,79 +200,35 @@ const EmployeePage = () => {
               Add Employee
             </button>
           </div>
-          <table className="min-w-full bg-white border text-black">
-            <thead className="bg-gray-800 text-white">
-              <tr>
-                {/* <th className="py-2 px-4 border text-center">S.No</th> */}
-                <th className="py-2 px-4 border">First Name</th>
-                <th className="py-2 px-4 border">Last Name</th>
-                <th className="py-2 px-4 border">Email</th>
-                <th className="py-2 px-4 border">Phone Number</th>
-                <th className="py-2 px-4 border">Employee ID</th>
-                <th className="py-2 px-4 border">Location</th>
-                <th className="py-2 px-4 border">Company</th>
-                <th className="py-2 px-4 border">Department</th>
-                <th className="py-2 px-4 border">Designation</th>
-                <th className="py-2 px-4 border">Status</th>
-                <th className="py-2 px-4 border">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {employees.map((employee, index) => (
-                <React.Fragment key={employee.id}>
-                  <tr onClick={() => toggleExpand(employee.id)}>
-                    {/* <td className="py-2 px-4 border text-center">{index + 1}</td> */}
-                    <td className="py-2 px-4 border">{employee.firstName}</td>
-                    <td className="py-2 px-4 border">{employee.lastname}</td>
-                    <td className="py-2 px-4 border">{employee.email}</td>
-                    <td className="py-2 px-4 border">{employee.phoneNumber}</td>
-                    <td className="py-2 px-4 border">{employee.employeeId}</td>
-                    <td className="py-2 px-4 border">{employee.location}</td>
-                    <td className="py-2 px-4 border">{employee.company}</td>
-                    <td className="py-2 px-4 border">{employee.department}</td>
-                    <td className="py-2 px-4 border">{employee.designation}</td>
-                    <td className="py-2 px-4 border">
-                      {employee.status === 1 ? 'Active' : 'Inactive'}
-                    </td>
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white border text-black">
+              <thead className="bg-gray-800 text-white">
+                <tr>
+                  {Object.keys(currentEmployee).filter(key => key !== 'id').map((key) => (
+                    <th key={key} className="py-2 px-4 border">{key.charAt(0).toUpperCase() + key.slice(1)}</th>
+                  ))}
+                  <th className="py-2 px-4 border">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {employees.map((employee, index) => (
+                  <tr key={employee.id}>
+                    {Object.keys(currentEmployee).filter(key => key !== 'id').map((key) => (
+                      <td key={key} className="py-2 px-4 border">{employee[key]}</td>
+                    ))}
                     <td className="py-2 px-4 border">
                       <button
-                        className="bg-yellow-500 text-white py-2 w-28 rounded mr-2 "
+                        className="bg-yellow-500 text-white py-2 w-28 rounded mr-2"
                         onClick={() => handleUpdate(employee)}
                       >
                         Update
                       </button>
-                      <button
-                        className="bg-green-500 text-white py-2 w-28 rounded mt-3"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleExpand(employee.id);
-                        }}
-                      >
-                        More Details
-                      </button>
                     </td>
                   </tr>
-                  {expandedEmployeeId === employee.id && (
-                    <tr>
-                      <td colSpan="12" className="p-4">
-                        <div className="bg-gray-100 p-4 rounded">
-                          <h2 className="text-xl font-bold mb-2">Employee Details</h2>
-                          <div className="grid grid-cols-2 gap-4">
-                            {Object.keys(employee).map(key => (
-                              <div key={key}>
-                                <strong>{key.charAt(0).toUpperCase() + key.slice(1)}: </strong>
-                                {employee[key]}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  )}
-                </React.Fragment>
-              ))}
-            </tbody>
-          </table>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </>
       )}
     </div>
@@ -301,6 +236,8 @@ const EmployeePage = () => {
 };
 
 export default EmployeePage;
+
+
 
 
 

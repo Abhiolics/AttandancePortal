@@ -1,3 +1,4 @@
+
 "use client"
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -26,7 +27,6 @@ const VisitorPage = () => {
     try {
       const config = {
         method: 'get',
-        maxBodyLength: Infinity,
         url: 'https://attend.anujdwivedi.in/recognition/get-visitors',
         headers: {
           'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE'
@@ -56,10 +56,10 @@ const VisitorPage = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setCurrentVisitor({
-      ...currentVisitor,
+    setCurrentVisitor(prevState => ({
+      ...prevState,
       [name]: value,
-    });
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -67,7 +67,6 @@ const VisitorPage = () => {
     try {
       const config = {
         method: 'post',
-        maxBodyLength: Infinity,
         url: 'https://attend.anujdwivedi.in/recognition/add-visitor',
         headers: {
           'Content-Type': 'application/json',
@@ -112,7 +111,7 @@ const VisitorPage = () => {
             </div>
           ))}
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 mt-4">
           <button
             type="submit"
             className="bg-blue-500 w-28 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -143,9 +142,9 @@ const VisitorPage = () => {
         />
       ) : (
         <>
-          <div className="flex justify-end">
+          <div className="flex justify-end mb-4">
             <button
-              className="bg-blue-500 text-white py-2 px-4 rounded mb-4"
+              className="bg-blue-500 text-white py-2 px-4 rounded"
               onClick={handleAdd}
             >
               Add Visitor
@@ -188,3 +187,4 @@ const VisitorPage = () => {
 };
 
 export default VisitorPage;
+
