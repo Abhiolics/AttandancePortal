@@ -6,8 +6,10 @@
 
 .menu{
     flex: 1;
-    /* background-color: var(--bgSoft); */
-    padding: 20px;
+    background-color: var(--bgSoft);
+    padding: 15px;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
     
 }
 
@@ -15,7 +17,7 @@
     flex: 4;
     padding: 20px;
     
-    /* background-color: var(--textSoft); */
+    background-color: var(--gSoft);
 }
 
 .wrapper{
@@ -39,4 +41,5 @@
 
 .side{
     flex: 1;
+    
 }

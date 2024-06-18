@@ -1,10 +1,28 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import citiesData from './cities.json'; 
 
 const LocationForm = ({ currentLocation, handleChange, handleSubmit, handleCancel, isUpdating }) => {
+  const [states, setStates] = useState([]);
+  const [cities, setCities] = useState([]);
+
+  useEffect(() => {
+    // Extract unique states from cities data
+    const uniqueStates = [...new Set(citiesData.map(city => city.state))];
+    setStates(uniqueStates);
+  }, []);
+
+  useEffect(() => {
+    // Update cities dropdown based on selected state
+    if (currentLocation.state) {
+      const filteredCities = citiesData.filter(city => city.state === currentLocation.state);
+      setCities(filteredCities);
+    }
+  }, [currentLocation.state]);
+
   const fields = Object.keys(currentLocation).filter(key => key !== 'id' && key !== 'status');
 
   return (
@@ -15,17 +33,43 @@ const LocationForm = ({ currentLocation, handleChange, handleSubmit, handleCance
             <label className="block text-gray-700 text-sm font-bold mb-2">
               {key.charAt(0).toUpperCase() + key.slice(1)}
             </label>
-            <input
-              type="text"
-              name={key}
-              value={currentLocation[key]}
-              onChange={handleChange}
-              className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-              required
-            />
+            {key === 'state' ? (
+              <select
+                name={key}
+                value={currentLocation[key]}
+                onChange={handleChange}
+                className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
+                required
+              >
+                <option value="">Select State</option>
+                {states.map(state => (
+                  <option key={state} value={state}>{state}</option>
+                ))}
+              </select>
+            ) : key === 'city' ? (
+              <input type="text" required className='shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline' />
+            ) : key === 'country' ? (
+              <input
+                type="text"
+                name={key}
+                value={currentLocation[key] || 'India'}
+                onChange={handleChange}
+                className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
+                required
+              />
+            ) : (
+              <input
+                type="text"
+                name={key}
+                value={currentLocation[key]}
+                onChange={handleChange}
+                className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
+                required
+              />
+            )}
           </div>
         ))}
-        <div className="mb-4 col-span-3">
+        <div className="mb-4 col-span-1">
           <label className="block text-gray-700 text-sm font-bold mb-2">
             Status
           </label>
@@ -71,7 +115,7 @@ export default function LocationPage() {
     postalCode: '',
     city: '',
     state: '',
-    country: '',
+    country: 'India',
     latitude: '',
     longitude: '',
     status: 0,
@@ -109,7 +153,7 @@ export default function LocationPage() {
       postalCode: '',
       city: '',
       state: '',
-      country: '',
+      country: 'India',
       latitude: '',
       longitude: '',
       status: 0,
@@ -180,40 +224,36 @@ export default function LocationPage() {
           <table className="min-w-full bg-white border text-black">
             <thead className="bg-gray-800 text-white">
               <tr>
-                <th className="py-2 px-4 border text-center">S.No</th>
-                <th className="py-2 px-4 border">Location Name</th>
-                <th className="py-2 px-4 border">Address</th>
-                <th className="py-2 px-4 border">Postal Code</th>
-                <th className="py-2 px-4 border">City</th>
-                <th className="py-2 px-4 border">State</th>
-                <th className="py-2 px-4 border">Country</th>
-                <th className="py-2 px-4 border">Latitude</th>
-                <th className="py-2 px-4 border">Longitude</th>
-                <th className="py-2 px-4 border">Status</th>
-                <th className="py-2 px-4 border">Actions</th>
+                <th className="py-2 border text-center px-4">Location Name</th>
+                <th className="py-2 px-4 border ">Address Line</th>
+                <th className="py-2 px-4 border ">Postal Code</th>
+                <th className="py-2 px-4 border ">City</th>
+                <th className="py-2 px-4 border ">State</th>
+                <th className="py-2 px-4 border ">Country</th>
+                <th className="py-2 px-4 border ">Latitude</th>
+                <th className="py-2 px-4 border ">Longitude</th>
+                <th className="py-2 px-4 border ">Status</th>
+                <th className="py-2 px-4 border ">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {locations.map((location, index) => (
-                <tr key={location.id}>
-                  <td className="py-2 px-4 border text-center">{index + 1}</td>
-                  <td className="py-2 px-4 border text-center">{location.locationName}</td>
-                  <td className="py-2 px-4 border text-center">{location.addressLine}</td>
-                  <td className="py-2 px-4 border text-center">{location.postalCode}</td>
-                  <td className="py-2 px-4 border text-center">{location.city}</td>
-                  <td className="py-2 px-4 border text-center">{location.state}</td>
-                  <td className="py-2 px-4 border text-center">{location.country}</td>
-                  <td className="py-2 px-4 border text-center">{location.latitute}</td>
-                  <td className="py-2 px-4 border text-center">{location.longitute}</td>
-                  <td className="py-2 px-4 border text-center">
-                    {location.status === 1 ? 'Active' : 'Inactive'}
-                  </td>
-                  <td className="py-2 px-4 border text-center">
+              {locations.map((location) => (
+                <tr key={location.id} className="border-t">
+                  <td className="py-2 px-4 border  text-center">{location.locationName}</td>
+                  <td className="py-2 px-4 border  text-center">{location.addressLine}</td>
+                  <td className="py-2 px-4 border  text-center">{location.postalCode}</td>
+                  <td className="py-2 px-4 border  text-center">{location.city}</td>
+                  <td className="py-2 px-4 border  text-center">{location.state}</td>
+                  <td className="py-2 px-4 border  text-center">{location.country}</td>
+                  <td className="py-2 px-4 border  text-center">{location.latitute}</td>
+                  <td className="py-2 px-4 border  text-center">{location.longitute}</td>
+                  <td className="py-2 px-4 border  text-center">{location.status === 1 ? 'Active' : 'Inactive'}</td>
+                  <td className="py-2 px-4 border  text-center">
                     <button
-                      className="bg-yellow-500 text-white w-28 h-9 rounded mr-2"
+                      className="bg-yellow-500 text-white py-1 w-28 rounded mr-2"
                       onClick={() => handleUpdate(location)}
                     >
-                     Update
+                      Update
                     </button>
                   </td>
                 </tr>
@@ -224,7 +264,8 @@ export default function LocationPage() {
       )}
     </div>
   );
-}
+};
+
 
 
 

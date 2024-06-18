@@ -6,6 +6,7 @@
     position: relative;
     position: sticky;
     background-color: var(--bgSoft);
+    border-radius: 20px;
 }
 
 .logo{

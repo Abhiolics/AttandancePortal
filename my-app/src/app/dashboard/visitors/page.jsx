@@ -1,4 +1,3 @@
-
 "use client"
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -8,16 +7,14 @@ import 'react-toastify/dist/ReactToastify.css';
 const VisitorPage = () => {
   const [visitors, setVisitors] = useState([]);
   const [isAdding, setIsAdding] = useState(false);
-  const [currentVisitor, setCurrentVisitor] = useState({
-    name: '',
-    phoneNumber: '',
-    email: '',
-    company: '',
-    meetingPurpose: '',
-    contactPerson: '',
-    remarks: '',
-    status: 1,
-  });
+  const [name, setName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [email, setEmail] = useState('');
+  const [company, setCompany] = useState('');
+  const [meetingPurpose, setMeetingPurpose] = useState('');
+  const [contactPerson, setContactPerson] = useState('');
+  const [remarks, setRemarks] = useState('');
+  const [status, setStatus] = useState(1);
 
   useEffect(() => {
     fetchVisitors();
@@ -27,8 +24,9 @@ const VisitorPage = () => {
     try {
       const config = {
         method: 'get',
+        maxBodyLength: Infinity,
         url: 'https://attend.anujdwivedi.in/recognition/get-visitors',
-        headers: {
+        headers: { 
           'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE'
         }
       };
@@ -41,38 +39,39 @@ const VisitorPage = () => {
   };
 
   const handleAdd = () => {
-    setCurrentVisitor({
-      name: '',
-      phoneNumber: '',
-      email: '',
-      company: '',
-      meetingPurpose: '',
-      contactPerson: '',
-      remarks: '',
-      status: 1,
-    });
+    setName('');
+    setPhoneNumber('');
+    setEmail('');
+    setCompany('');
+    setMeetingPurpose('');
+    setContactPerson('');
+    setRemarks('');
+    setStatus(1);
     setIsAdding(true);
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setCurrentVisitor(prevState => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e) => {
+  const handleAddSubmit = async (e) => {
     e.preventDefault();
+    const newVisitor = {
+      name,
+      phoneNumber,
+      email,
+      company,
+      meetingPurpose,
+      contactPerson,
+      remarks,
+      status,
+    };
     try {
       const config = {
         method: 'post',
+        maxBodyLength: Infinity,
         url: 'https://attend.anujdwivedi.in/recognition/add-visitor',
-        headers: {
-          'Content-Type': 'application/json',
+        headers: { 
+          'Content-Type': 'application/json', 
           'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE'
         },
-        data: JSON.stringify(currentVisitor)
+        data: JSON.stringify(newVisitor)
       };
 
       const response = await axios.request(config);
@@ -89,27 +88,94 @@ const VisitorPage = () => {
     setIsAdding(false);
   };
 
-  const VisitorForm = ({ currentVisitor, handleChange, handleSubmit, handleCancel }) => {
-    const fields = Object.keys(currentVisitor).filter(key => key !== 'status');
-
+  const VisitorForm = ({ handleSubmit, handleCancel }) => {
     return (
       <form onSubmit={handleSubmit} className="mt-4 bg-gray-100 p-4 rounded">
-        <div className="grid grid-cols-3 gap-4">
-          {fields.map((key) => (
-            <div className="mb-4" key={key}>
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                {key.charAt(0).toUpperCase() + key.slice(1)}
-              </label>
-              <input
-                type="text"
-                name={key}
-                value={currentVisitor[key]}
-                onChange={handleChange}
-                className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-                required
-              />
-            </div>
-          ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              Name
+            </label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              Phone Number
+            </label>
+            <input
+              type="text"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+              className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              Email
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              Company
+            </label>
+            <input
+              type="text"
+              value={company}
+              onChange={(e) => setCompany(e.target.value)}
+              className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              Meeting Purpose
+            </label>
+            <input
+              type="text"
+              value={meetingPurpose}
+              onChange={(e) => setMeetingPurpose(e.target.value)}
+              className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              Contact Person
+            </label>
+            <input
+              type="text"
+              value={contactPerson}
+              onChange={(e) => setContactPerson(e.target.value)}
+              className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              Remarks
+            </label>
+            <input
+              type="text"
+              value={remarks}
+              onChange={(e) => setRemarks(e.target.value)}
+              className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
+              required
+            />
+          </div>
         </div>
         <div className="flex items-center gap-4 mt-4">
           <button
@@ -135,9 +201,7 @@ const VisitorPage = () => {
       <ToastContainer />
       {isAdding ? (
         <VisitorForm
-          currentVisitor={currentVisitor}
-          handleChange={handleChange}
-          handleSubmit={handleSubmit}
+          handleSubmit={handleAddSubmit}
           handleCancel={handleCancel}
         />
       ) : (
@@ -187,4 +251,7 @@ const VisitorPage = () => {
 };
 
 export default VisitorPage;
+
+
+
 

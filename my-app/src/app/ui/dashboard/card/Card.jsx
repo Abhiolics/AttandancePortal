@@ -4,7 +4,7 @@ import styles from './card.module.css'
 
 const card = () => {
   return (
-    <div className={styles.container}>
+    <div className="bg-[#151c2c]">
       <MdSupervisedUserCircle size={24} />
       <div className={styles.texts}>
         <span className={styles.title}> Total Employees</span>

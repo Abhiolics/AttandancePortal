@@ -182,7 +182,7 @@ const Sidebar = () => {
 
 
       {/* New Menu */}
-      <ul className="menu bg-[#182237] w-56 rounded-box min-h-screen">
+      <ul className="menu bg-[#1a294f] w-56 rounded-box min-h-screen">
       <li><Link href="/dashboard"><MdDashboard size={20}/>Dashboard</Link></li>
  
     <li><Link href="/dashboard/view-company"><CgOrganisation size={20}/>View Company</Link></li>
@@ -216,26 +216,6 @@ const Sidebar = () => {
         <button className={styles.logout} onClick={() => logOut()}> <LuLogOut /> Logout</button>
         <img className="rounded-lg p-2 flex items-center justify-end  " src="/download.png" alt="" />
 </ul>
-
-
-
-      {/* <ul className={styles.list}>
-        {menuItems.map((cat) => (
-            <li key={cat.title}>
-                <span className={styles.cat}>{cat.title}
-                
-                
-                </span>
-                
-                {cat.list.map((item) => (
-                    <MenuLink item={item} key={item.title} />
-                ))}
-
-                </li>
-        ))}
-     </ul> */}
-
-
     </div>
   )
 }
