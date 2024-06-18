@@ -108,7 +108,7 @@ export default function Designations() {
               name="companyId"
               value={currentDesignation.companyId}
               onChange={handleChange}
-              className="shadow appearance-none border bg-white rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border bg-gray-500 text=white  rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline"
             >
               <option value="">Select Company ID</option>
               {companyIds.map((companyId, index) => (
@@ -125,7 +125,7 @@ export default function Designations() {
               name="designationName"
               value={currentDesignation.designationName}
               onChange={handleChange}
-              className="shadow appearance-none border bg-white rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border bg-gray-500 text=white rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>
           <div className="mb-4">
@@ -135,7 +135,7 @@ export default function Designations() {
               name="designationId"
               value={currentDesignation.designationId}
               onChange={handleChange}
-              className="shadow appearance-none border bg-white rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border bg-gray-500 text=white  rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>
           <div className="mb-4">
@@ -144,7 +144,7 @@ export default function Designations() {
               name="status"
               value={currentDesignation.status}
               onChange={handleChange}
-              className="shadow appearance-none border bg-white rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border bg-gray-500 text=white  rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline"
             >
               <option value="1">Active</option>
               <option value="0">Inactive</option>

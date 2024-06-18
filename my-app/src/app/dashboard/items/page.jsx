@@ -146,7 +146,7 @@ export default function ItemsPage() {
                   type="text"
                   value={formData.itemCode}
                   onChange={(e) => setFormData({ ...formData, itemCode: e.target.value })}
-                  className="w-full px-4 py-2 border rounded"
+                  className="w-full px-4 py-2 border rounded bg-gray-500"
                 />
               </div>
               <div>
@@ -155,7 +155,7 @@ export default function ItemsPage() {
                   type="text"
                   value={formData.itemName}
                   onChange={(e) => setFormData({ ...formData, itemName: e.target.value })}
-                  className="w-full px-4 py-2 border rounded"
+                  className="w-full px-4 py-2 border rounded bg-gray-500"
                 />
               </div>
               <div>
@@ -164,7 +164,7 @@ export default function ItemsPage() {
                   type="text"
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full px-4 py-2 border rounded"
+                  className="w-full px-4 py-2 border rounded bg-gray-500"
                 />
               </div>
               <div>
@@ -173,7 +173,7 @@ export default function ItemsPage() {
                   type="text"
                   value={formData.price}
                   onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                  className="w-full px-4 py-2 border rounded"
+                  className="w-full px-4 py-2 border rounded bg-gray-500"
                 />
               </div>
               <div>
@@ -182,7 +182,7 @@ export default function ItemsPage() {
                   type="text"
                   value={formData.mode}
                   onChange={(e) => setFormData({ ...formData, mode: e.target.value })}
-                  className="w-full px-4 py-2 border rounded"
+                  className="w-full px-4 py-2 border rounded bg-gray-500"
                 />
               </div>
               <div>
@@ -191,7 +191,7 @@ export default function ItemsPage() {
                   type="text"
                   value={formData.schedule}
                   onChange={(e) => setFormData({ ...formData, schedule: e.target.value })}
-                  className="w-full px-4 py-2 border rounded"
+                  className="w-full px-4 py-2 border rounded bg-gray-500"
                 />
               </div>
               <div>
@@ -200,7 +200,7 @@ export default function ItemsPage() {
                   type="text"
                   value={formData.subsidized}
                   onChange={(e) => setFormData({ ...formData, subsidized: e.target.value })}
-                  className="w-full px-4 py-2 border rounded"
+                  className="w-full px-4 py-2 border rounded bg-gray-500"
                 />
               </div>
               <div>
@@ -209,13 +209,13 @@ export default function ItemsPage() {
                   type="text"
                   value={formData.tags}
                   onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
-                  className="w-full px-4 py-2 border rounded"
+                  className="w-full px-4 py-2 border rounded bg-gray-500"
                 />
               </div>
             </div>
             <div className="flex gap-5">
-            <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">{isAdding ? 'Add' : 'Update'}</button>
-              <button type="button" onClick={() => { setIsEditing(false); setIsAdding(false); }} className="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+            <button type="submit" className="bg-blue-500 text-white w-28 py-2 rounded">{isAdding ? 'Add' : 'Update'}</button>
+              <button type="button" onClick={() => { setIsEditing(false); setIsAdding(false); }} className="bg-red-500 text-white w-28 py-2 rounded">Cancel</button>
      
             </div>
           </form>
