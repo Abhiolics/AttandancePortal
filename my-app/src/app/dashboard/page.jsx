@@ -11,7 +11,7 @@ import styles from '../ui/dashboard/dashboard.module.css';
 const Card = ({ title, count }) => (
   <div className="flex items-center p-4 bg-[#182237] text-white  rounded shadow-lg">
     <div className="ml-4">
-      <span className="block text-gray-300 font-bold">{title}</span>
+      <span className="block text-gray-300 text-sm font-bold">{title}</span>
       <span className="block text-green-500 font-bold text-xl">{count}</span>
     </div>
   </div>
