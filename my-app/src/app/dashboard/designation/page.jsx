@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
@@ -15,11 +15,11 @@ export default function Designations() {
     designationId: '',
     status: 1,
   });
-  const [companyIds, setCompanyIds] = useState([]);
+  const [companies, setCompanies] = useState([]);
 
   useEffect(() => {
     fetchDesignations();
-    fetchCompanyIds();
+    fetchCompanies();
   }, []);
 
   const fetchDesignations = async () => {
@@ -35,14 +35,14 @@ export default function Designations() {
     }
   };
 
-  const fetchCompanyIds = async () => {
+  const fetchCompanies = async () => {
     try {
       const response = await axios.get('https://attend.anujdwivedi.in/company/get-companies', {
         headers: {
           Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
         },
       });
-      setCompanyIds(response.data.data.map(company => company.companyId));
+      setCompanies(response.data.data);
     } catch (error) {
       console.error(error);
     }
@@ -103,17 +103,17 @@ export default function Designations() {
       {isAdding || isUpdating ? (
         <form onSubmit={handleSubmit} className="mt-4 bg-gray-100 p-4 rounded">
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">Company ID</label>
+            <label className="block text-gray-700 text-sm font-bold mb-2">Company Name</label>
             <select
               name="companyId"
               value={currentDesignation.companyId}
               onChange={handleChange}
-              className="shadow appearance-none border bg-gray-500 text=white  rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border bg-gray-600  rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
             >
-              <option value="">Select Company ID</option>
-              {companyIds.map((companyId, index) => (
-                <option key={index} value={companyId}>
-                  {companyId}
+              <option value="">Select Company</option>
+              {companies.map((company) => (
+                <option key={company.companyId} value={company.companyId}>
+                  {company.companyName}
                 </option>
               ))}
             </select>
@@ -125,7 +125,7 @@ export default function Designations() {
               name="designationName"
               value={currentDesignation.designationName}
               onChange={handleChange}
-              className="shadow appearance-none border bg-gray-500 text=white rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border bg-gray-600  rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>
           <div className="mb-4">
@@ -135,7 +135,7 @@ export default function Designations() {
               name="designationId"
               value={currentDesignation.designationId}
               onChange={handleChange}
-              className="shadow appearance-none border bg-gray-500 text=white  rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border bg-gray-600  rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>
           <div className="mb-4">
@@ -144,7 +144,7 @@ export default function Designations() {
               name="status"
               value={currentDesignation.status}
               onChange={handleChange}
-              className="shadow appearance-none border bg-gray-500 text=white  rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none bg-gray-600 border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
             >
               <option value="1">Active</option>
               <option value="0">Inactive</option>
@@ -153,13 +153,13 @@ export default function Designations() {
           <div className="flex items-center gap-4">
             <button
               type="submit"
-              className="bg-blue-500 w-28 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="bg-blue-500 text-white py-2 w-28 rounded focus:outline-none focus:shadow-outline"
             >
               {isUpdating ? 'Update' : 'Add'}
             </button>
             <button
               type="button"
-              className="bg-red-500 text-white py-2 w-28 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="bg-red-500 text-white py-2 w-28 rounded focus:outline-none focus:shadow-outline"
               onClick={() => {
                 setIsUpdating(false);
                 setIsAdding(false);
@@ -171,32 +171,37 @@ export default function Designations() {
         </form>
       ) : (
         <>
-        <div className='flex justify-end items center'>
-          <button
-            className="bg-blue-500 text-white py-2 px-4 rounded mb-4"
-            onClick={handleAdd}
-          >
-            Add Designation
-          </button></div>
-          <table className="min-w-full bg-white border ">
-            <thead className='bg-gray-800 text-white'>
+          <div className="flex justify-end items-center mb-4">
+            <button
+              className="bg-blue-500 text-white py-2 px-4 rounded"
+              onClick={handleAdd}
+            >
+              Add Designation
+            </button>
+          </div>
+          <table className="min-w-full bg-white border">
+            <thead className="bg-gray-800 text-white">
               <tr>
-                <th className="py-2 px-4 border  text-center">S.No</th>
-                <th className="py-2 px-4 border ">Company ID</th>
-                <th className="py-2 px-4 border ">Designation Name</th>
-                <th className="py-2 px-4 border ">Designation ID</th>
-                <th className="py-2 px-4 border ">Status</th>
-                <th className="py-2 px-4 border t">Actions</th>
+                <th className="py-2 px-4 border text-center">S.No</th>
+                <th className="py-2 px-4 border">Company Name</th>
+                <th className="py-2 px-4 border">Designation Name</th>
+                <th className="py-2 px-4 border">Designation ID</th>
+                <th className="py-2 px-4 border">Status</th>
+                <th className="py-2 px-4 border">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {designations.map((designation) => (
+              {designations.map((designation, index) => (
                 <tr key={designation.id}>
-                  <td className="py-2 px-4 border text-black text-center">{designation.id}</td>
-                  <td className="py-2 px-4 border text-black text-center">{designation.companyId}</td>
+                  <td className="py-2 px-4 border text-black text-center">{index + 1}</td>
+                  <td className="py-2 px-4 border text-black text-center">
+                    {companies.find(company => company.companyId === designation.companyId)?.companyName}
+                  </td>
                   <td className="py-2 px-4 border text-black text-center">{designation.designationName}</td>
                   <td className="py-2 px-4 border text-black text-center">{designation.designationId}</td>
-                  <td className="py-2 px-4 border text-black text-center">{designation.status}</td>
+                  <td className="py-2 px-4 border text-black text-center">
+                    {designation.status === 1 ? 'Active' : 'Inactive'}
+                  </td>
                   <td className="py-2 px-4 border text-black text-center">
                     <button
                       className="bg-yellow-500 text-white py-1 px-2 rounded"
@@ -214,6 +219,8 @@ export default function Designations() {
     </div>
   );
 }
+
+
 
 
 

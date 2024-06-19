@@ -52,7 +52,7 @@ export default function DepartmentPage() {
     const { name, value } = e.target;
     setCurrentDepartment({
       ...currentDepartment,
-      [name]: name === 'status' ? value.toLowerCase() : value // Ensure status is lowercase
+      [name]: value // No need to convert to lowercase
     });
   };
 
@@ -123,13 +123,15 @@ export default function DepartmentPage() {
               </tr>
             </thead>
             <tbody>
-              {departments.map(department => (
+              {departments.map((department, index) => (
                 <tr key={department.id} className="border-t">
-                  <td className="py-2 text-black border text-center">{department.id}</td>
+                  <td className="py-2 text-black border text-center">{index + 1}</td>
                   <td className="py-2 text-black border text-center">{department.companyId}</td>
                   <td className="py-2 text-black border text-center">{department.departmentName}</td>
-                  <td className="py-2 text-black  border text-center">{department.departmentId}</td>
-                  <td className="py-2 text-black  border text-center">{department.status}</td>
+                  <td className="py-2 text-black border text-center">{department.departmentId}</td>
+                  <td className="py-2 text-black border text-center">
+                    {department.status === 'active' ? 'Active' : 'Inactive'}
+                  </td>
                   <td className="py-2 text-black text-center">
                     <button
                       className="bg-yellow-500 text-white px-2 py-1 rounded"
@@ -155,12 +157,12 @@ export default function DepartmentPage() {
                 name="companyId"
                 value={currentDepartment.companyId}
                 onChange={handleInputChange}
-                className="border  p-2 w-full bg-gray-600"
+                className="border p-2 w-full bg-gray-600"
                 required
               >
                 <option value="">Select Company</option>
                 {companies.map(company => (
-                  <option key={company.id} value={company.id}>{company.companyName}</option>
+                  <option key={company.id} value={company.id}>{company.companyId}</option>
                 ))}
               </select>
             </div>
@@ -192,14 +194,14 @@ export default function DepartmentPage() {
                 name="status"
                 value={currentDepartment.status}
                 onChange={handleInputChange}
-                className="border  p-2 w-full bg-gray-600"
+                className="border p-2 w-full bg-gray-600"
                 required
               >
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>
               </select>
             </div>
-            <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
+            <button type="submit" className="bg-red-500 text-white px-4 py-2 rounded">
               Submit
             </button>
             <button

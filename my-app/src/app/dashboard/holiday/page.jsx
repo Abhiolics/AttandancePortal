@@ -1,25 +1,27 @@
-"use client"
+'use client';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 export default function HolidayPage() {
   const [holidays, setHolidays] = useState([]);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [currentHoliday, setCurrentHoliday] = useState({
-    id: '',
+
     accessType: '',
     calendarId: '',
     calendarName: '',
-    effectiveDate: '', // Date string from API
+    effectiveDate: null, // Use null to handle date object
     holidayDetails: {
       srNo: '',
       holidayName: '',
-      Date: '', // Date string from API
+      Date: null, // Use null to handle date object
     },
-    status: '',
+    status: '"',
   });
 
   useEffect(() => {
@@ -36,26 +38,16 @@ export default function HolidayPage() {
       // Process holidays to format dates and set in state
       const formattedHolidays = response.data.data.map(holiday => ({
         ...holiday,
-        effectiveDate: formatDate(holiday.effectiveDate),
+        effectiveDate: new Date(holiday.effectiveDate),
         holidayDetails: {
           ...holiday.holidayDetails,
-          Date: formatDate(holiday.holidayDetails.Date),
+          Date: new Date(holiday.holidayDetails.Date),
         },
       }));
       setHolidays(formattedHolidays);
     } catch (error) {
       console.error(error);
     }
-  };
-
-  const formatDate = (dateString) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-    });
   };
 
   const handleUpdate = (holiday) => {
@@ -69,11 +61,11 @@ export default function HolidayPage() {
       accessType: '',
       calendarId: '',
       calendarName: '',
-      effectiveDate: '',
+      effectiveDate: null,
       holidayDetails: {
         srNo: '',
         holidayName: '',
-        Date: '',
+        Date: null,
       },
       status: '',
     });
@@ -98,6 +90,23 @@ export default function HolidayPage() {
     }
   };
 
+  const handleDateChange = (date, field) => {
+    if (field === 'effectiveDate') {
+      setCurrentHoliday({
+        ...currentHoliday,
+        effectiveDate: date,
+      });
+    } else {
+      setCurrentHoliday((prevState) => ({
+        ...prevState,
+        holidayDetails: {
+          ...prevState.holidayDetails,
+          [field]: date,
+        },
+      }));
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -110,7 +119,14 @@ export default function HolidayPage() {
           'Content-Type': 'application/json',
           Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
         },
-        data: JSON.stringify(currentHoliday),
+        data: {
+          ...currentHoliday,
+          effectiveDate: currentHoliday.effectiveDate.toISOString(),
+          holidayDetails: {
+            ...currentHoliday.holidayDetails,
+            Date: currentHoliday.holidayDetails.Date.toISOString(),
+          },
+        },
       };
       const response = await axios(config);
       toast.success(response.data.message);
@@ -169,12 +185,11 @@ export default function HolidayPage() {
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Effective Date
             </label>
-            <input
-              type="text" // Change type to text for effectiveDate to display properly
-              name="effectiveDate"
-              value={currentHoliday.effectiveDate}
-              readOnly // Readonly to prevent editing
+            <DatePicker
+              selected={currentHoliday.effectiveDate}
+              onChange={(date) => handleDateChange(date, 'effectiveDate')}
               className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
+              dateFormat="MM/dd/yyyy"
             />
           </div>
           <div className="mb-4">
@@ -203,12 +218,11 @@ export default function HolidayPage() {
             </div>
             <div className="mb-2">
               <label className="block text-gray-500">Date</label>
-              <input
-                type="text" // Change type to text for Date to display properly
-                name="Date"
-                value={currentHoliday.holidayDetails.Date}
-                readOnly // Readonly to prevent editing
+              <DatePicker
+                selected={currentHoliday.holidayDetails.Date}
+                onChange={(date) => handleDateChange(date, 'Date')}
                 className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
+                dateFormat="MM/dd/yyyy"
               />
             </div>
           </div>
@@ -220,7 +234,7 @@ export default function HolidayPage() {
               name="status"
               value={currentHoliday.status}
               onChange={handleChange}
-              className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border bg-slate-600 rounded w-64 py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
             >
               <option value="Active">Active</option>
               <option value="Inactive">Inactive</option>
@@ -272,18 +286,17 @@ export default function HolidayPage() {
               {holidays.map((holiday, index) => (
                 <tr key={holiday.id}>
                   <td className="py-2 px-4 border text-black text-center">{index + 1}</td>
-                  {/* <td className="py-2 px-4 border text-black text-center">{holiday.id}</td> */}
                   <td className="py-2 px-4 border text-black text-center">{holiday.accessType}</td>
                   <td className="py-2 px-4 border text-black text-center">{holiday.calendarId}</td>
                   <td className="py-2 px-4 border text-black text-center">{holiday.calendarName}</td>
-                  <td className="py-2 px-4 border text-black text-center">{holiday.effectiveDate}</td>
+                  <td className="py-2 px-4 border text-black text-center">{new Date(holiday.effectiveDate).toLocaleDateString('en-US')}</td>
                   <td className="py-2 px-4 border text-black text-center">
-                    {`Sr No: ${holiday.holidayDetails.srNo}, Name: ${holiday.holidayDetails.holidayName}, Date: ${holiday.holidayDetails.Date}`}
+                    {`Sr No: ${holiday.holidayDetails.srNo}, Name: ${holiday.holidayDetails.holidayName}, Date: ${new Date(holiday.holidayDetails.Date).toLocaleDateString('en-US')}`}
                   </td>
                   <td className="py-2 px-4 border text-black text-center">{holiday.status}</td>
                   <td className="py-2 px-4 border text-black text-center">
                     <button
-                      className="bg-yellow-500 text-white py-1 px-2 rounded"
+                      className="bg-yellow-500 text-white py-2 w-28 rounded"
                       onClick={() => handleUpdate(holiday)}
                     >
                       Update
@@ -298,6 +311,7 @@ export default function HolidayPage() {
     </div>
   );
 }
+
 
 
 

@@ -336,7 +336,7 @@ const EmployeePage = () => {
                 Aadhar Number
               </label>
               <input
-                type="text"
+                type="number"
                 name="aadharNumber"
                 value={aadharNumber}
                 onChange={(e) => setAadharNumber(e.target.value)}

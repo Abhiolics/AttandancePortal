@@ -109,7 +109,6 @@ export default function LocationPage() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [currentLocation, setCurrentLocation] = useState({
-    id: '',
     locationName: '',
     addressLine: '',
     postalCode: '',
@@ -118,7 +117,7 @@ export default function LocationPage() {
     country: 'India',
     latitude: '',
     longitude: '',
-    status: 0,
+    status: "0",
   });
 
   useEffect(() => {
@@ -147,7 +146,6 @@ export default function LocationPage() {
 
   const handleAdd = () => {
     setCurrentLocation({
-      id: '',
       locationName: '',
       addressLine: '',
       postalCode: '',
@@ -156,7 +154,7 @@ export default function LocationPage() {
       country: 'India',
       latitude: '',
       longitude: '',
-      status: 0,
+      status: "0",
     });
     setIsAdding(true);
     setIsUpdating(false);

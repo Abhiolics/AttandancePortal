@@ -1,6 +1,8 @@
-"use client"
+'use client'
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './admin.module.css'; // Import CSS for flip animation
 
 const AdminPage = () => {
@@ -8,8 +10,6 @@ const AdminPage = () => {
   const [email, setEmail] = useState('');
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
-  const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
   const [showChangePassword, setShowChangePassword] = useState(false);
 
   useEffect(() => {
@@ -56,44 +56,45 @@ const AdminPage = () => {
 
     try {
       const response = await axios.request(config);
-      setMessage(response.data.message);
-      setError('');
+      toast.success(response.data.message);
       setShowChangePassword(false); // Hide the password change form
     } catch (error) {
-      setMessage('');
-      setError('Error changing password');
+      toast.error('Error changing password');
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center mt-4 p-4 ">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-full">
-        <div className="bg-[#182237] rounded-lg  shadow-md p-6">
-        <div className="flex flex-col items-center">
-          <img className="w-32 h-40 rounded-lg" src="https://tse3.mm.bing.net/th/id/OIP.IGNf7GuQaCqz_RPq5wCkPgAAAA?rs=1&pid=ImgDetMain" alt="Admin Profile" />
-        </div>
+    <div className="flex flex-col items-center justify-center mt-4 p-4">
+      <ToastContainer />
+      <div className="grid grid-cols-1 gap-4 w-full max-w-full">
+        <div className="bg-[#182237] rounded-lg shadow-md p-6">
           {!showChangePassword ? (
             <>
-            <div className='flex flex-col items-center justify-center'>
-              <h2 className="text-2xl font-bold mb-2 mt-2">Admin Details</h2>
-              <p className="text-white"><strong>Name:</strong> {adminData.name}</p>
-              <p className="text-white"><strong>Email:</strong> {adminData.email}</p>
-              <p className="text-white"><strong>Role:</strong> {adminData.role}</p>
-              <p className="text-white"><strong>Status:</strong> {adminData.status === 1 ? 'Active' : 'Inactive'}</p>
-              <button
-                onClick={() => setShowChangePassword(true)}
-                className="mt-4 bg-blue-500 text-white p-2 rounded"
-              >
-                Change Password
-              </button></div>
-              
+              <div className="flex flex-col items-center">
+                <img
+                  className="w-32 rounded-lg mb-4"
+                  src="https://tse3.mm.bing.net/th/id/OIP.IGNf7GuQaCqz_RPq5wCkPgAAAA?rs=1&pid=ImgDetMain"
+                  alt="Admin Profile"
+                />
+                <h2 className="text-2xl font-bold mb-2 mt-2 text-white">Admin Details</h2>
+                <p className="text-white"><strong>Name:</strong> {adminData.name}</p>
+                <p className="text-white"><strong>Email:</strong> {adminData.email}</p>
+                <p className="text-white"><strong>Role:</strong> {adminData.role}</p>
+                <p className="text-white"><strong>Status:</strong> {adminData.status === 1 ? 'Active' : 'Inactive'}</p>
+                <button
+                  onClick={() => setShowChangePassword(true)}
+                  className="mt-4 bg-blue-500 text-white p-2 rounded"
+                >
+                  Change Password
+                </button>
+              </div>
             </>
           ) : (
             <>
-              <h2 className="text-2xl font-bold mb-4 ">Update Password</h2>
+              <h2 className="text-2xl font-bold mb-4 text-white">Update Password</h2>
               <form onSubmit={handleSubmit}>
                 <div className="mb-4">
-                  <label htmlFor="email" className="block text-white ">Email</label>
+                  <label htmlFor="email" className="block text-white">Email</label>
                   <input
                     type="email"
                     id="email"
@@ -126,15 +127,13 @@ const AdminPage = () => {
                     required
                   />
                 </div>
-                {message && <p className="text-green-500">{message}</p>}
-                {error && <p className="text-red-500">{error}</p>}
-                <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded mt-4">
-                  Update Password
+                <button type="submit" className="w-32 bg-blue-500 text-white p-2 rounded mt-4 mr-4">
+                  Update
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowChangePassword(false)}
-                  className="w-full bg-gray-500 text-white p-2 rounded mt-4"
+                  className="w-32 bg-gray-500 text-white p-2 rounded mt-4"
                 >
                   Cancel
                 </button>
@@ -148,6 +147,7 @@ const AdminPage = () => {
 };
 
 export default AdminPage;
+
 
 
 
