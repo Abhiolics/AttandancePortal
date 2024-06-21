@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
@@ -71,6 +71,14 @@ export default function Designations() {
     });
   };
 
+  const handleCompanyChange = (e) => {
+    const selectedCompany = companies.find(company => company.companyId === e.target.value);
+    setCurrentDesignation({
+      ...currentDesignation,
+      companyId: selectedCompany ? selectedCompany.companyId : '',
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -107,13 +115,13 @@ export default function Designations() {
             <select
               name="companyId"
               value={currentDesignation.companyId}
-              onChange={handleChange}
+              onChange={handleCompanyChange}
               className="shadow appearance-none border bg-gray-600  rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
             >
               <option value="">Select Company</option>
               {companies.map((company) => (
-                <option key={company.companyId} value={company.companyId}>
-                  {company.companyName}
+                <option key={company.id} value={company.companyId}>
+                  {company.companyName} - {company.companyId}
                 </option>
               ))}
             </select>
@@ -195,7 +203,7 @@ export default function Designations() {
                 <tr key={designation.id}>
                   <td className="py-2 px-4 border text-black text-center">{index + 1}</td>
                   <td className="py-2 px-4 border text-black text-center">
-                    {companies.find(company => company.companyId === designation.companyId)?.companyName}
+                    {companies.find(company => company.companyId === designation.companyId)?.companyName} - {designation.companyId}
                   </td>
                   <td className="py-2 px-4 border text-black text-center">{designation.designationName}</td>
                   <td className="py-2 px-4 border text-black text-center">{designation.designationId}</td>
@@ -204,7 +212,7 @@ export default function Designations() {
                   </td>
                   <td className="py-2 px-4 border text-black text-center">
                     <button
-                      className="bg-yellow-500 text-white py-1 px-2 rounded"
+                      className="bg-yellow-500 text-white py-1 w-28 rounded"
                       onClick={() => handleUpdate(designation)}
                     >
                       Update
@@ -219,6 +227,7 @@ export default function Designations() {
     </div>
   );
 }
+
 
 
 

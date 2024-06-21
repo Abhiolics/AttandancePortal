@@ -1,5 +1,4 @@
-"use client";
-
+"use client"
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
@@ -8,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 export default function CompanyManagement() {
   const [companies, setCompanies] = useState([]);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isAdding, setIsAdding] = useState(false);
   const [currentCompany, setCurrentCompany] = useState({
     id: '',
@@ -22,6 +22,7 @@ export default function CompanyManagement() {
 
   const fetchCompanies = async () => {
     try {
+      setIsLoading(true); 
       const response = await axios.get('https://attend.anujdwivedi.in/company/get-companies', {
         headers: {
           Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
@@ -30,6 +31,9 @@ export default function CompanyManagement() {
       setCompanies(response.data.data);
     } catch (error) {
       console.error(error);
+      toast.error('Failed to fetch companies');
+    } finally {
+      setIsLoading(false); 
     }
   };
 
@@ -95,7 +99,7 @@ export default function CompanyManagement() {
               name="companyName"
               value={currentCompany.companyName}
               onChange={handleChange}
-              className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border bg-gray-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>
           <div className="mb-4">
@@ -107,7 +111,7 @@ export default function CompanyManagement() {
               name="companyId"
               value={currentCompany.companyId}
               onChange={handleChange}
-              className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border bg-gray-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>
           <div className="mb-4">
@@ -118,7 +122,7 @@ export default function CompanyManagement() {
               name="status"
               value={currentCompany.status}
               onChange={handleChange}
-              className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border bg-gray-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
             >
               <option value="1">Active</option>
               <option value="0">Inactive</option>
@@ -153,41 +157,61 @@ export default function CompanyManagement() {
               Add Company
             </button>
           </div>
-          <table className="min-w-full bg-white border">
-            <thead className='bg-gray-800 text-white'>
-              <tr>
-                <th className="py-2 px-4 border  text-center">S.No</th>
-                
-                <th className="py-2 px-4 border ">Company Name</th>
-                <th className="py-2 px-4 border ">Company ID</th>
-                <th className="py-2 px-4 border ">Status</th>
-                <th className="py-2 px-4 border ">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {companies.map((company, index) => (
-                <tr key={company.id}>
-                  <td className="py-2 px-4 border text-black text-center">{index + 1}</td>
-                
-                  <td className="py-2 px-4 border text-black text-center">{company.companyName}</td>
-                  <td className="py-2 px-4 border text-black text-center">{company.companyId}</td>
-                  <td className="py-2 px-4 border text-black text-center">{company.status === 1 ? 'Active' : 'Inactive'}</td>
-                  <td className="py-2 px-4 border text-black text-center">
-                    <button
-                      className="bg-yellow-500 text-white py-1 px-2 rounded"
-                      onClick={() => handleUpdate(company)}
-                    >
-                      Update
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="relative min-h-screen flex items-center justify-center">
+            {isLoading ? (
+              <div className="absolute  inset-0 flex flex-col items-center justify-center  bg-transparent bg-opacity-50">
+                <div role='status' className="loa  rounded-full border-e-transparent align-[-0.125em] border-8 border-t-8 animate-[spin_1.5s_linear_infinite] border-purple-500 h-24 w-24 mb-4"></div>
+                <h2 className="text-center text-white text-xl font-semibold">
+                  Loading... Please wait!
+                </h2>
+              </div>
+            ) : (
+              <table className="min-w-full bg-white border">
+                <thead className="bg-gray-800 text-white">
+                  <tr>
+                    <th className="py-2 px-4 border text-center">S.No</th>
+                    <th className="py-2 px-4 border">Company Name</th>
+                    <th className="py-2 px-4 border">Company ID</th>
+                    <th className="py-2 px-4 border">Status</th>
+                    <th className="py-2 px-4 border">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {companies.map((company, index) => (
+                    <tr key={company.id}>
+                      <td className="py-2 px-4 border text-black text-center">
+                        {index + 1}
+                      </td>
+                      <td className="py-2 px-4 border text-black text-center">
+                        {company.companyName}
+                      </td>
+                      <td className="py-2 px-4 border text-black text-center">
+                        {company.companyId}
+                      </td>
+                      <td className="py-2 px-4 border text-black text-center">
+                        {company.status === 1 ? 'Active' : 'Inactive'}
+                      </td>
+                      <td className="py-2 px-4 border text-black text-center">
+                        <button
+                          className="bg-yellow-500 text-white py-1 px-2 rounded"
+                          onClick={() => handleUpdate(company)}
+                        >
+                          Update
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
         </>
       )}
     </div>
   );
 }
+
+
+
 
 

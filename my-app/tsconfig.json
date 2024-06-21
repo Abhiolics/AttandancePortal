@@ -28,7 +28,7 @@
     "**/*.ts",
     "**/*.tsx",
     "./src/**/*.ts"
-  ],
+, "src/app/dashboard/view-location/page.jsx"  ],
   "exclude": [
     "node_modules"
   ]

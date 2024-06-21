@@ -4,10 +4,12 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const EmployeePage = () => {
+export default function EmployeePage (){
   const [employees, setEmployees] = useState([]);
   const [isAdding, setIsAdding] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+
+  const [isLoading, setIsLoading] = useState(true);
   
   const [id, setId] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -34,9 +36,31 @@ const EmployeePage = () => {
   const [dateJoining, setDateJoining] = useState('');
   const [status, setStatus] = useState(0);
 
+    // Additional fields for company, department, designation
+    const [companyOptions, setCompanyOptions] = useState([]);
+    const [departmentOptions, setDepartmentOptions] = useState([]);
+    const [designationOptions, setDesignationOptions] = useState([]);
+
+    useEffect(() => {
+      fetchEmployees();
+      fetchCompanyOptions();
+      fetchDepartmentOptions();
+      fetchDesignationOptions();
+    }, []);
+   
+  
+
   useEffect(() => {
     fetchEmployees();
   }, []);
+
+
+  const handleAadharChange = (e) => {
+    const aadhar = e.target.value;
+    if (aadhar.length <= 12) {
+      setAadharNumber(aadhar);
+    }
+  };
 
   const fetchEmployees = async () => {
     try {
@@ -53,6 +77,62 @@ const EmployeePage = () => {
     } catch (error) {
       console.error('Error fetching employees:', error);
       toast.error('Failed to fetch employees');
+    } finally {
+      setIsLoading(false); 
+    }
+  };
+
+  const fetchCompanyOptions = async () => {
+    try {
+      const response = await axios.get(
+        'https://attend.anujdwivedi.in/company/get-companies',
+        {
+          headers: {
+            Authorization:
+              'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzE4ODgxNzc2fQ.wIRnWLnZJqn0Xyb2gBLFooDatqKRx4F0eZjVF3Uc_ac',
+          },
+        }
+      );
+      setCompanyOptions(response.data.data);
+    } catch (error) {
+      console.error('Error fetching companies:', error);
+      toast.error('Failed to fetch companies');
+    }
+  };
+
+  const fetchDepartmentOptions = async () => {
+    try {
+      const response = await axios.get(
+        'https://attend.anujdwivedi.in/department/get-departments',
+        {
+          headers: {
+            Authorization:
+              'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzE4ODgxNzc2fQ.wIRnWLnZJqn0Xyb2gBLFooDatqKRx4F0eZjVF3Uc_ac',
+          },
+        }
+      );
+      setDepartmentOptions(response.data.data);
+    } catch (error) {
+      console.error('Error fetching departments:', error);
+      toast.error('Failed to fetch departments');
+    }
+  };
+
+  const fetchDesignationOptions = async () => {
+    try {
+      const response = await axios.get(
+        'https://attend.anujdwivedi.in/designation/get-designations',
+        {
+          headers: {
+            Authorization:
+              'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzE4ODgxNzc2fQ.wIRnWLnZJqn0Xyb2gBLFooDatqKRx4F0eZjVF3Uc_ac',
+          },
+        }
+      );
+      setDesignationOptions(response.data.data);
+    } catch (error) {
+      console.error('Error fetching designations:', error);
+      toast.error('Failed to fetch designations');
     }
   };
 
@@ -118,6 +198,9 @@ const EmployeePage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (aadharNumber.length !== 12) {
+      toast.error('Aadhar number must be 12 digits');
+      return;
     try {
       const formData = new FormData();
       formData.append('id', id);
@@ -192,10 +275,11 @@ const EmployeePage = () => {
       setDateJoining('');
       setStatus(0);
     }
+    }
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto  p-4 ">
       <ToastContainer />
       {isAdding || isUpdating ? (
         <form
@@ -296,40 +380,58 @@ const EmployeePage = () => {
               <label className="block text-gray-700 text-sm font-bold mb-2">
                 Company
               </label>
-              <input
-                type="text"
-                name="company"
-                value={company}
-                onChange={(e) => setCompany(e.target.value)}
-                className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-                required
-              />
+              <select
+              id="company"
+              className=" border bg-gray-600 rounded w-full py-2 px-3 text-white leading-tight "
+              value={company}
+              onChange={(e) => setCompany(e.target.value)}
+              required
+            >
+              <option className='bg-gray-400' value="">Select Company</option>
+              {companyOptions.map((company) => (
+                <option key={company.id} value={company.companyId}>
+                  {company.companyName}
+                </option>
+              ))}
+            </select>
             </div>
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">
                 Department
               </label>
-              <input
-                type="text"
-                name="department"
-                value={department}
-                onChange={(e) => setDepartment(e.target.value)}
-                className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-                required
-              />
+              <select
+              id="department"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-white bg-gray-600 leading-tight focus:outline-none focus:shadow-outline"
+              value={department}
+              onChange={(e) => setDepartment(e.target.value)}
+              required
+            >
+              <option value="">Select Department</option>
+              {departmentOptions.map((department) => (
+                <option key={department.id} value={department.designationId}>
+                  {department.departmentName}
+                </option>
+              ))}
+            </select>
             </div>
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">
                 Designation
               </label>
-              <input
-                type="text"
-                name="designation"
-                value={designation}
-                onChange={(e) => setDesignation(e.target.value)}
-                className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-                required
-              />
+              <select
+              id="designation"
+              className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-600 leading-tight focus:outline-none focus:shadow-outline"
+              value={designation}
+              onChange={(e) => setDesignation(e.target.value)}
+              required
+            >
+              <option value="">Select Designation</option>
+              {designationOptions.map((designation) => (
+                <option key={designation.id} value={designation.designationId}>
+                  {designation.designationName}
+                </option>
+              ))}
+            </select>
             </div>
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -339,9 +441,10 @@ const EmployeePage = () => {
                 type="number"
                 name="aadharNumber"
                 value={aadharNumber}
-                onChange={(e) => setAadharNumber(e.target.value)}
+                onChange={handleAadharChange}
                 className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
                 required
+                
               />
             </div>
             <div className="mb-4">
@@ -426,14 +529,17 @@ const EmployeePage = () => {
               <label className="block text-gray-700 text-sm font-bold mb-2">
                 Gender
               </label>
-              <input
-                type="text"
+              <select
                 name="gender"
                 value={gender}
                 onChange={(e) => setGender(e.target.value)}
                 className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
                 required
-              />
+              >
+                <option >Male</option>
+                <option >Female</option>
+              </select>
+            
             </div>
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -530,8 +636,21 @@ const EmployeePage = () => {
             className="bg-blue-500 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-4"
           >
             Add Employee
-          </button> </div>
-          <table className="min-w-full bg-white">
+          </button> 
+          </div>
+          {/* <div className="relative min-h-screen flex items-center justify-center">
+            {isLoading ? (
+              <div className="absolute  inset-0 flex flex-col items-center justify-center  bg-transparent bg-opacity-50">
+                <div role='status' className="loa  rounded-full border-e-transparent align-[-0.125em] border-8 border-t-8 animate-[spin_1.5s_linear_infinite] border-purple-500 h-24 w-24 mb-4"></div>
+                <h2 className="text-center text-white text-xl font-semibold">
+                  Loading... Please wait!
+                </h2>
+              </div>
+              ) : ( */}
+          <div class="sm:-mx-6 lg:-mx-8">
+    <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+      <div class="overflow-x-auto">
+          <table className="min-w-full bg-white ">
             <thead className='bg-gray-800 text-white'>
               <tr>
                 <th className="py-2 px-4 border border-gray-2000 ">ID</th>
@@ -572,18 +691,11 @@ const EmployeePage = () => {
               ))}
             </tbody>
           </table>
-        </div>
+          </div>
+          </div>
+          </div>
+          </div>
       )}
-    </div>
-  );
-};
-
-export default EmployeePage;
-
-
-
-
-
-
-
-
+    </div> 
+  )
+  }

@@ -15,7 +15,7 @@ const Navbar = () => {
                     <div className={styles.icon}>
                     
               {/* Open the modal using document.getElementById('ID').showModal() method */}
-<button className="btn" onClick={()=>document.getElementById('my_modal_5').showModal()}><MdNotifications size={20} /></button>
+{/* <button className="btn" onClick={()=>document.getElementById('my_modal_5').showModal()}><MdNotifications size={20} /></button> */}
 <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
   <div className="modal-box">
     <h3 className="font-bold text-lg">Hello!</h3>
@@ -30,8 +30,8 @@ const Navbar = () => {
 </dialog>
 
               {/* Open the modal using document.getElementById('ID').showModal() method */}
-              <button className="btn" > <IoSettingsOutline size={20} /></button>
-
+              {/* <button className="btn" > <IoSettingsOutline size={20} /></button> */}
+<img className='w-28' src="./logotp.png" alt="" />
                     
                     </div>
                 

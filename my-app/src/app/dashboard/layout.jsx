@@ -10,7 +10,7 @@ const Layout = ({ children }) => {
       <div className={`md:w-1/4 lg:w-1/5 ${styles.menu} `}>
         <Sidebar />
       </div>
-      <div className={`flex-1 ${styles.content} `}>
+      <div className={`flex-1 md:w-3/4 lg:w-4/5 ${styles.content} `}>
         <Navbar />
         <main className="flex-grow p-4">
           {children}

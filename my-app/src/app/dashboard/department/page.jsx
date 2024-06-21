@@ -11,10 +11,10 @@ export default function DepartmentPage() {
   const [isAdding, setIsAdding] = useState(false);
   const [currentDepartment, setCurrentDepartment] = useState({
     companyId: '',
+    companyName: '',
     departmentName: '',
     departmentId: '',
-    status: 'active', // Default status as 'active'
-    id: ''
+    status: '1',
   });
 
   useEffect(() => {
@@ -52,7 +52,7 @@ export default function DepartmentPage() {
     const { name, value } = e.target;
     setCurrentDepartment({
       ...currentDepartment,
-      [name]: value // No need to convert to lowercase
+      [name]: value,
     });
   };
 
@@ -86,10 +86,10 @@ export default function DepartmentPage() {
   const handleAddClick = () => {
     setCurrentDepartment({
       companyId: '',
+      companyName: '',
       departmentName: '',
       departmentId: '',
-      status: 'active', // Default status as 'active'
-      id: ''
+      status: '1',
     });
     setIsAdding(true);
   };
@@ -97,6 +97,15 @@ export default function DepartmentPage() {
   const handleUpdateClick = (department) => {
     setCurrentDepartment(department);
     setIsUpdating(true);
+  };
+
+  const handleCompanyChange = (e) => {
+    const selectedCompany = companies.find(company => company.companyId === e.target.value);
+    setCurrentDepartment({
+      ...currentDepartment,
+      companyId: selectedCompany ? selectedCompany.companyId : '',
+      companyName: selectedCompany ? selectedCompany.companyName : '',
+    });
   };
 
   return (
@@ -116,6 +125,7 @@ export default function DepartmentPage() {
               <tr>
                 <th className="py-2 border text-center">S.No</th>
                 <th className="py-2 border text-center">Company ID</th>
+                <th className="py-2 border text-center">Company Name</th>
                 <th className="py-2 border text-center">Department Name</th>
                 <th className="py-2 border text-center">Department ID</th>
                 <th className="py-2 border text-center">Status</th>
@@ -127,6 +137,7 @@ export default function DepartmentPage() {
                 <tr key={department.id} className="border-t">
                   <td className="py-2 text-black border text-center">{index + 1}</td>
                   <td className="py-2 text-black border text-center">{department.companyId}</td>
+                  <td className="py-2 text-black border text-center">{department.companyName}</td>
                   <td className="py-2 text-black border text-center">{department.departmentName}</td>
                   <td className="py-2 text-black border text-center">{department.departmentId}</td>
                   <td className="py-2 text-black border text-center">
@@ -134,7 +145,7 @@ export default function DepartmentPage() {
                   </td>
                   <td className="py-2 text-black text-center">
                     <button
-                      className="bg-yellow-500 text-white px-2 py-1 rounded"
+                      className="bg-yellow-500 text-white w-28 py-1 rounded"
                       onClick={() => handleUpdateClick(department)}
                     >
                       Update
@@ -152,17 +163,19 @@ export default function DepartmentPage() {
           <h2 className="text-xl font-bold mb-2">{isUpdating ? 'Update Department' : 'Add Department'}</h2>
           <form onSubmit={handleSubmit} className="mt-4 bg-gray-100 p-4 rounded">
             <div className="mb-2">
-              <label className="block text-black">Company ID</label>
+              <label className="block text-black">Company</label>
               <select
                 name="companyId"
                 value={currentDepartment.companyId}
-                onChange={handleInputChange}
+                onChange={handleCompanyChange}
                 className="border p-2 w-full bg-gray-600"
                 required
               >
                 <option value="">Select Company</option>
                 {companies.map(company => (
-                  <option key={company.id} value={company.id}>{company.companyId}</option>
+                  <option key={company.id} value={company.companyId}>
+                    {company.companyName} - {company.companyId}
+                  </option>
                 ))}
               </select>
             </div>
@@ -197,8 +210,8 @@ export default function DepartmentPage() {
                 className="border p-2 w-full bg-gray-600"
                 required
               >
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
+                <option value="1">Active</option>
+                <option value="0">Inactive</option>
               </select>
             </div>
             <button type="submit" className="bg-red-500 text-white px-4 py-2 rounded">
@@ -217,8 +230,6 @@ export default function DepartmentPage() {
     </div>
   );
 }
-
-
 
 
 

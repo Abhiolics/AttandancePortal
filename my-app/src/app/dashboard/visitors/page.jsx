@@ -88,114 +88,6 @@ const VisitorPage = () => {
     setIsAdding(false);
   };
 
-  const VisitorForm = ({ handleSubmit, handleCancel }) => {
-    return (
-      <form onSubmit={handleSubmit} className="mt-4 bg-gray-100 p-4 rounded">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              Name
-            </label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              Phone Number
-            </label>
-            <input
-              type="text"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              Email
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              Company
-            </label>
-            <input
-              type="text"
-              value={company}
-              onChange={(e) => setCompany(e.target.value)}
-              className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              Meeting Purpose
-            </label>
-            <input
-              type="text"
-              value={meetingPurpose}
-              onChange={(e) => setMeetingPurpose(e.target.value)}
-              className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              Contact Person
-            </label>
-            <input
-              type="text"
-              value={contactPerson}
-              onChange={(e) => setContactPerson(e.target.value)}
-              className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              Remarks
-            </label>
-            <input
-              type="text"
-              value={remarks}
-              onChange={(e) => setRemarks(e.target.value)}
-              className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-              required
-            />
-          </div>
-        </div>
-        <div className="flex items-center gap-4 mt-4">
-          <button
-            type="submit"
-            className="bg-blue-500 w-28 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          >
-            Add
-          </button>
-          <button
-            type="button"
-            className="bg-red-500 text-white py-2 w-28 px-4 rounded focus:outline-none focus:shadow-outline"
-            onClick={handleCancel}
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
-    );
-  };
-
   return (
     <div className="container mx-auto p-4">
       <ToastContainer />
@@ -203,6 +95,20 @@ const VisitorPage = () => {
         <VisitorForm
           handleSubmit={handleAddSubmit}
           handleCancel={handleCancel}
+          setName={setName}
+          setPhoneNumber={setPhoneNumber}
+          setCompany={setCompany}
+          setEmail={setEmail}
+          setMeetingPurpose={setMeetingPurpose}
+          setContactPerson={setContactPerson}
+          setRemarks={setRemarks}
+          name={name}
+          phoneNumber={phoneNumber}
+          email={email}
+          company={company}
+          meetingPurpose={meetingPurpose}
+          contactPerson={contactPerson}
+          remarks={remarks}
         />
       ) : (
         <>
@@ -214,6 +120,10 @@ const VisitorPage = () => {
               Add Visitor
             </button>
           </div>
+          <div class="flex flex-col overflow-x-auto">
+          <div class="sm:-mx-6 lg:-mx-8">
+    <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+      <div class="overflow-x-auto"></div>
           <table className="min-w-full bg-white border text-black">
             <thead className="bg-gray-800 text-white">
               <tr>
@@ -244,14 +154,139 @@ const VisitorPage = () => {
               ))}
             </tbody>
           </table>
+          </div>
+          </div>
+          </div>
+          
         </>
       )}
     </div>
   );
 };
 
+const VisitorForm = ({ 
+  handleSubmit, 
+  handleCancel,
+  setName,
+  setEmail,
+  setPhoneNumber,
+  setCompany,
+  setContactPerson,
+  setMeetingPurpose,
+  setRemarks,
+  name,
+  phoneNumber,
+  email,
+  company,
+  meetingPurpose,
+  contactPerson,
+  remarks
+ }) => {
+  return (
+    <form onSubmit={handleSubmit} className="mt-4 bg-gray-100 p-4 rounded">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            Name
+          </label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            Phone Number
+          </label>
+          <input
+            type="text"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            Email
+          </label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            Company
+          </label>
+          <input
+            type="text"
+            value={company}
+            onChange={(e) => setCompany(e.target.value)}
+            className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            Meeting Purpose
+          </label>
+          <input
+            type="text"
+            value={meetingPurpose}
+            onChange={(e) => setMeetingPurpose(e.target.value)}
+            className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            Contact Person
+          </label>
+          <input
+            type="text"
+            value={contactPerson}
+            onChange={(e) => setContactPerson(e.target.value)}
+            className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            Remarks
+          </label>
+          <input
+            type="text"
+            value={remarks}
+            onChange={(e) => setRemarks(e.target.value)}
+            className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
+            required
+          />
+        </div>
+      </div>
+      <div className="flex items-center gap-4 mt-4">
+        <button
+          type="submit"
+          className="bg-blue-500 w-28 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        >
+          Add
+        </button>
+        <button
+          type="button"
+          className="bg-red-500 text-white py-2 w-28 px-4 rounded focus:outline-none focus:shadow-outline"
+          onClick={handleCancel}
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  );
+};
+
 export default VisitorPage;
-
-
-
-
