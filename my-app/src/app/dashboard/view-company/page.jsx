@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Footer from '../../ui/dashboard/footer/footer';
 
 export default function CompanyManagement() {
   const [companies, setCompanies] = useState([]);
@@ -191,7 +192,7 @@ export default function CompanyManagement() {
                       <td className="py-2 px-4 border text-black text-center">
                         {company.status === 1 ? 'Active' : 'Inactive'}
                       </td>
-                      <td className="py-2 px-4 border text-black text-center">
+                      <td className="py-2 w-28 border text-black text-center">
                         <button
                           className="bg-yellow-500 text-white py-1 px-2 rounded"
                           onClick={() => handleUpdate(company)}
@@ -207,6 +208,7 @@ export default function CompanyManagement() {
           </div>
         </>
       )}
+         {!isLoading && <Footer />}
     </div>
   );
 }

@@ -5,9 +5,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import moment from 'moment';
 import { format, parseISO } from 'date-fns';
-import { PiCalendarDuotone } from "react-icons/pi";
 
 export default function HolidayPage() {
   const [holidays, setHolidays] = useState([]);
@@ -17,18 +15,17 @@ export default function HolidayPage() {
     accessType: '',
     calendarId: '',
     calendarName: '',
-    effectiveDate: null, // Use null to handle date object
+    effectiveDate: null,
     holidayDetails: {
       srNo: '',
       holidayName: '',
-      Date: null, // Use null to handle date object
+      Date: null, 
     },
-    status: '0',
+    status: 'Inactive',
   });
 
   const formatDate = (date) => {
-    if (!date) return null; // Return null if date is falsy (null or undefined)
-    
+    if (!date) return null; 
     // Ensure date is a Date object
     const formattedDate = new Date(date);
     
@@ -40,18 +37,22 @@ export default function HolidayPage() {
     return `${yyyy}-${mm}-${dd}`;
   };
 
-  // Example usage:
-  const handleDateChange = (newDate) => {
-    // Assuming newDate is a new Date object or a date string
+  const handleDateChange = (newDate, field) => {
     const formattedDate = formatDate(newDate);
-    setCurrentHoliday({
-      ...currentHoliday,
-      effectiveDate: formattedDate,
-      holidayDetails: {
-        ...currentHoliday.holidayDetails,
-        Date: formattedDate,
-      },
-    });
+    if (field === 'effectiveDate') {
+      setCurrentHoliday({
+        ...currentHoliday,
+        effectiveDate: formattedDate,
+      });
+    } else {
+      setCurrentHoliday((prevState) => ({
+        ...prevState,
+        holidayDetails: {
+          ...prevState.holidayDetails,
+          Date: formattedDate,
+        },
+      }));
+    }
   };
 
   useEffect(() => {
@@ -65,15 +66,6 @@ export default function HolidayPage() {
           Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
         },
       });
-      // Process holidays to format dates and set in state
-      // const formattedHolidays = response.data.data.map(holiday => ({
-      //   ...holiday,
-      //   effectiveDate: new Date(holiday.effectiveDate),
-      //   holidayDetails: {
-      //     ...holiday.holidayDetails,
-      //     Date: new Date(holiday.holidayDetails.Date),
-      //   },
-      // }));
       setHolidays(response.data.data);
     } catch (error) {
       console.error(error);
@@ -81,7 +73,15 @@ export default function HolidayPage() {
   };
 
   const handleUpdate = (holiday) => {
-    setCurrentHoliday(holiday);
+    setCurrentHoliday({
+      ...holiday,
+      status: holiday.status === 'Active' ? 'Active' : 'Inactive',
+      effectiveDate: new Date(holiday.effectiveDate),
+      holidayDetails: {
+        ...holiday.holidayDetails,
+        Date: new Date(holiday.holidayDetails.Date),
+      },
+    });
     setIsUpdating(true);
   };
 
@@ -96,7 +96,7 @@ export default function HolidayPage() {
         holidayName: '',
         Date: null,
       },
-      status: '0',
+      status: 'Inactive',
     });
     setIsAdding(true);
   };
@@ -119,23 +119,6 @@ export default function HolidayPage() {
     }
   };
 
-  // const handleDateChange = (date, field) => {
-  //   if (field === 'effectiveDate') {
-  //     setCurrentHoliday({
-  //       ...currentHoliday,
-  //       effectiveDate: date,
-  //     });
-  //   } else {
-  //     setCurrentHoliday((prevState) => ({
-  //       ...prevState,
-  //       holidayDetails: {
-  //         ...prevState.holidayDetails,
-  //         [field]: date,
-  //       },
-  //     }));
-  //   }
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -149,29 +132,22 @@ export default function HolidayPage() {
           Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
         },
         data: JSON.stringify({
-          // ...currentHoliday,
-          // effectiveDate: format(parseISO(currentHoliday.effectiveDate.toISOString()), 'yyyy-MM-dd'),
-          // holidayDetails: {
-          //   ...currentHoliday.holidayDetails,
-          //   Date: format(parseISO(currentHoliday.holidayDetails.Date.toISOString()), 'yyyy-MM-dd'),
-          // },
-          "accessType": currentHoliday.accessType,
-          "calendarId": currentHoliday.calendarId,
-          "calendarName": currentHoliday.calendarName,
-          "effectiveDate": format(parseISO(currentHoliday.effectiveDate), 'yyyy-MM-dd'),
-          "holidayDetails": {
-              "srNo": `${currentHoliday.holidayDetails.srNo}`,
-              "holidayName": currentHoliday.holidayDetails.holidayName,
-              "Date": format(parseISO(currentHoliday.holidayDetails.Date), 'yyyy-MM-dd')
+          accessType: currentHoliday.accessType,
+          calendarId: currentHoliday.calendarId,
+          calendarName: currentHoliday.calendarName,
+          effectiveDate: format(parseISO(currentHoliday.effectiveDate), 'yyyy-MM-dd'),
+          holidayDetails: {
+            srNo: `${currentHoliday.holidayDetails.srNo}`,
+            holidayName: currentHoliday.holidayDetails.holidayName,
+            Date: format(parseISO(currentHoliday.holidayDetails.Date), 'yyyy-MM-dd'),
           },
-          "status": `${currentHoliday.status}`
+          status: currentHoliday.status === 'Active' ? '1' : '0',
         }),
       };
       const response = await axios(config);
       toast.success(response.data.message);
       fetchHolidays();
     } catch (error) {
-      // toast.error(error.response.data.message);
       console.log(error.response);
       console.error(error);
     } finally {
@@ -181,11 +157,8 @@ export default function HolidayPage() {
   };
 
   useEffect(() => {
-    const dates = currentHoliday
-
-    console.log(dates);
-
-  }, [currentHoliday])
+    console.log(currentHoliday);
+  }, [currentHoliday]);
 
   return (
     <div className="container mx-auto p-4">
@@ -231,17 +204,14 @@ export default function HolidayPage() {
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Effective Date
-            </label> 
+            </label>
             <DatePicker
-            showIcon
               selected={currentHoliday.effectiveDate}
               onChange={(date) => handleDateChange(date, 'effectiveDate')}
               className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
               dateFormat="MM/dd/yyyy"
-              icon="date"
-              
+              placeholderText='Choose Date'
             />
-            
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -276,6 +246,7 @@ export default function HolidayPage() {
                 className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
                 dateFormat="MM/dd/yyyy"
                 showIcon
+                placeholderText='Choose '
                 icon={
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

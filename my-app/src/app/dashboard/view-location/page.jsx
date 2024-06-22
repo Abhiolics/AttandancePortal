@@ -4,11 +4,13 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import citiesData from './cities.json';
+import Footer from '../../ui/dashboard/footer/footer';
 
 export default function LocationPage() {
   const [locations, setLocations] = useState([]);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [currentLocation, setCurrentLocation] = useState({
     locationName: '',
     addressLine: '',
@@ -38,6 +40,8 @@ export default function LocationPage() {
     } catch (error) {
       console.error(error);
       toast.error('Failed to fetch locations');
+    }finally {
+      setIsLoading(false); 
     }
   };
 
@@ -71,6 +75,12 @@ export default function LocationPage() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if (name === "postalCode") {
+      if (!/^\d*$/.test(value)) {
+        toast.error("Postal code must be numeric");
+        return;
+      }
+    }
     setCurrentLocation({
       ...currentLocation,
       [name]: value,
@@ -141,7 +151,17 @@ export default function LocationPage() {
               Add Location
             </button>
           </div>
-          <table className="min-w-full bg-white border text-black">
+          <div className="relative  flex items-center justify-center">
+            {isLoading ? (
+              <div className="absolute  inset-0 flex flex-col items-center justify-center  bg-transparent bg-opacity-50">
+                <div role='status' className="loa  rounded-full border-e-transparent align-[-0.125em] border-8 border-t-8 animate-[spin_1.5s_linear_infinite] border-purple-500 h-24 w-24 mb-4"></div>
+                <h2 className="text-center text-white text-xl font-semibold">
+                  Loading... Please wait!
+                </h2>
+              </div>
+            ) : (
+          <div className='!w-[100%] overflow-x-scroll py-2 sm:px-6 lg:px-8 scroll'>
+          <table className="min-w-full  bg-white border text-black">
             <thead className="bg-gray-800 text-white">
               <tr>
                 <th className="py-2 border text-center px-4">Location Name</th>
@@ -180,9 +200,16 @@ export default function LocationPage() {
               ))}
             </tbody>
           </table>
+         
+          </div>
+         )}
+       
+          </div>
         </>
       )}
+         {!isLoading && <Footer />}
     </div>
+    
   );
 };
 
@@ -210,9 +237,9 @@ const LocationForm = ({ currentLocation, handleChange, handleSubmit, handleCance
 
   return (
     <form onSubmit={handleSubmit} className="mt-4 bg-gray-100 p-4 rounded">
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-3 gap-4 w-full">
         {fields.map((key) => (
-          <div className="mb-4" key={key}>
+          <div className={`mb-4 ${key === 'locationName' || key === 'addressLine' ? 'col-span-3' : 'col-span-1'}`} key={key}>
             <label className="block text-gray-700 text-sm font-bold mb-2">
               {key.charAt(0).toUpperCase() + key.slice(1)}
             </label>
@@ -231,7 +258,7 @@ const LocationForm = ({ currentLocation, handleChange, handleSubmit, handleCance
               </select>
             ) : (
               <input
-                type="text"
+                type={key === 'postalCode' ? 'number' : 'text'}
                 name={key}
                 value={currentLocation[key]}
                 onChange={handleChange}

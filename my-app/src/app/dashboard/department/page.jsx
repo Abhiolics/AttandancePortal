@@ -3,10 +3,12 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Footer from '../../ui/dashboard/footer/footer';
 
 export default function DepartmentPage() {
   const [departments, setDepartments] = useState([]);
   const [companies, setCompanies] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [currentDepartment, setCurrentDepartment] = useState({
@@ -32,6 +34,8 @@ export default function DepartmentPage() {
       setDepartments(response.data.data);
     } catch (error) {
       console.error('Error fetching departments:', error);
+    } finally {
+      setIsLoading(false); 
     }
   };
 
@@ -119,13 +123,21 @@ export default function DepartmentPage() {
               Add Department
             </button>
           </div>
-
+          <div className="relative  flex items-center justify-center">
+            {isLoading ? (
+              <div className="absolute  inset-0 flex flex-col items-center justify-center  bg-transparent bg-opacity-50">
+                <div role='status' className="loa  rounded-full border-e-transparent align-[-0.125em] border-8 border-t-8 animate-[spin_1.5s_linear_infinite] border-purple-500 h-24 w-24 mb-4"></div>
+                <h2 className="text-center text-white text-xl font-semibold">
+                  Loading... Please wait!
+                </h2>
+              </div>
+            ) : (
           <table className="min-w-full bg-white border">
             <thead className='bg-gray-800 text-white border'>
               <tr>
                 <th className="py-2 border text-center">S.No</th>
                 <th className="py-2 border text-center">Company ID</th>
-                <th className="py-2 border text-center">Company Name</th>
+                {/* <th className="py-2 border text-center">Company Name</th> */}
                 <th className="py-2 border text-center">Department Name</th>
                 <th className="py-2 border text-center">Department ID</th>
                 <th className="py-2 border text-center">Status</th>
@@ -137,7 +149,7 @@ export default function DepartmentPage() {
                 <tr key={department.id} className="border-t">
                   <td className="py-2 text-black border text-center">{index + 1}</td>
                   <td className="py-2 text-black border text-center">{department.companyId}</td>
-                  <td className="py-2 text-black border text-center">{department.companyName}</td>
+                  {/* <td className="py-2 text-black border text-center">{department.companyName}</td> */}
                   <td className="py-2 text-black border text-center">{department.departmentName}</td>
                   <td className="py-2 text-black border text-center">{department.departmentId}</td>
                   <td className="py-2 text-black border text-center">
@@ -154,7 +166,10 @@ export default function DepartmentPage() {
                 </tr>
               ))}
             </tbody>
+           
           </table>
+           )}
+          </div>
         </>
       )}
 
@@ -227,6 +242,7 @@ export default function DepartmentPage() {
           </form>
         </div>
       )}
+         {!isLoading && <Footer />}
     </div>
   );
 }

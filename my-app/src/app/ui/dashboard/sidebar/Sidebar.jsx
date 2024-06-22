@@ -184,7 +184,7 @@ const Sidebar = () => {
       {/* New Menu */}
       <ul className="menu bg-[#1a294f] w-56 rounded-box min-h-screen">
       <li><Link href="/dashboard"><MdDashboard size={20}/>Dashboard</Link></li>
- 
+      <li><Link href="/dashboard/employees"><MdGroups size={22} />Employees</Link></li>
     <li><Link href="/dashboard/view-company"><CgOrganisation size={20}/>View Company</Link></li>
     <li>
           <details >
@@ -192,8 +192,9 @@ const Sidebar = () => {
             <ul>
               <li><Link href="/dashboard/designation"><TfiIdBadge size={22}/> Designation</Link></li>
               <li><Link href="/dashboard/department"><AiOutlineAppstoreAdd size={22}/>Department</Link></li>
-              <li><Link href="/dashboard/holiday"><SlCalender  size={22}/>Holiday</Link></li>
+
               <li><Link href="/dashboard/view-location"><MdOutlineAddLocationAlt size={22}/> Location</Link></li>
+              <li><Link href="/dashboard/holiday"><SlCalender  size={22}/>Holiday</Link></li>
             </ul>
           </details>
         </li>
@@ -206,7 +207,7 @@ const Sidebar = () => {
           <details >
             <summary><RiVoiceRecognitionLine  size={22}/>Recognitions</summary>
             <ul>
-              <li><Link href="/dashboard/employees"><MdGroups size={22} />Employees</Link></li>
+
               <li><Link href="/dashboard/visitors"><SiTripadvisor size={22}/> Visitors</Link></li>
               <li><Link href="/dashboard/recognition"><TbHealthRecognition  size={22}/>Recognition</Link></li>
             </ul>
