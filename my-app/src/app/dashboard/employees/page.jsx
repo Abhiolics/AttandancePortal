@@ -1,10 +1,9 @@
-"use client"
+
+"use client";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 import FormData from 'form-data';
 import Footer from '../../ui/dashboard/footer/footer';
 
@@ -12,85 +11,30 @@ export default function EmployeePage() {
   const [employees, setEmployees] = useState([]);
   const [isAdding, setIsAdding] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
-
   const [isLoading, setIsLoading] = useState(true);
 
-  const [id, setId] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [image, setImage] = useState('');
-  const [employeeId, setEmployeeId] = useState('');
-  const [location, setLocation] = useState('');
-  const [company, setCompany] = useState('');
-  const [department, setDepartment] = useState('');
-  const [designation, setDesignation] = useState('');
-  const [aadharNumber, setAadharNumber] = useState('');
-  const [EPF, setEPF] = useState('');
-  const [ESIC, setESIC] = useState('');
-  const [device, setDevice] = useState('');
-  const [holidayCalendar, setHolidayCalendar] = useState('');
-  const [otApplicable, setOtApplicable] = useState('');
-  const [mobilePolicy, setMobilePolicy] = useState('');
-  const [gender, setGender] = useState('Male');
-  const [dob, setDob] = useState('');
-  const [personalEmail, setPersonalEmail] = useState('');
-  const [tag, setTag] = useState('');
-  const [dateJoining, setDateJoining] = useState('');
-  const [status, setStatus] = useState(0);
+  const [employee, setEmployee] = useState({
+    id: '', firstName: '', lastName: '', email: '', phoneNumber: '', image: '',
+    employeeId: '', location: '', company: '', department: '', designation: '',
+    aadharNumber: '', EPF: '', ESIC: '', device: '', holidayCalendar: '',
+    otApplicable: '', mobilePolicy: '', gender: 'Male', dob: '', personalEmail: '',
+    tag: '', dateJoining: '', status: 0
+  });
 
-  // Additional fields for company, department, designation
-  const [companyOptions, setCompanyOptions] = useState([]);
-  const [departmentOptions, setDepartmentOptions] = useState([]);
-  const [designationOptions, setDesignationOptions] = useState([]);
+  const [options, setOptions] = useState({
+    company: [], department: [], designation: []
+  });
 
-  const formatDate = (date) => {
-    if (!date) return null; // Return null if date is falsy (null or undefined)
-
-    // Ensure date is a Date object
-    const formattedDate = new Date(date);
-
-    // Format the date to yyyy-mm-dd
-    const yyyy = formattedDate.getFullYear();
-    const mm = String(formattedDate.getMonth() + 1).padStart(2, '0'); // January is 0!
-    const dd = String(formattedDate.getDate()).padStart(2, '0');
-
-    return `${yyyy}-${mm}-${dd}`;
-  };
-
-  const handleDateChange = (newDate, type) => {
-    console.log(newDate)
-    console.log(type)
-    if (type === "dob") {
-      const formattedDate = formatDate(newDate);
-      setDob(formattedDate)
-    } else {
-      const formattedDate = formatDate(newDate);
-      setDateJoining(formattedDate)
-    }
-  };
-
-  useEffect(() => {
-    fetchEmployees();
-    fetchCompanyOptions();
-    fetchDepartmentOptions();
-    fetchDesignationOptions();
-  }, []);
-
-
-
-  useEffect(() => {
-    fetchEmployees();
-  }, []);
-
-
-  const handleAadharChange = (e) => {
-    const aadhar = e.target.value;
-    let regex = /^[0-9\b]+$/;
-
-    if ((aadhar === "" || regex.test(aadhar)) && aadhar.length <= 12) {
-      setAadharNumber(aadhar);
+  const fetchOptions = async (url, key) => {
+    try {
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzE4ODgxNzc2fQ.wIRnWLnZJqn0Xyb2gBLFooDatqKRx4F0eZjVF3Uc_ac',
+        },
+      });
+      setOptions(prev => ({ ...prev, [key]: response.data.data }));
+    } catch (error) {
+      toast.error(`Failed to fetch ${key} options`);
     }
   };
 
@@ -100,701 +44,307 @@ export default function EmployeePage() {
         'https://attend.anujdwivedi.in/employee/get-employees',
         {
           headers: {
-            Authorization:
-              'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
+            Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
           },
         }
       );
       setEmployees(response.data.data);
     } catch (error) {
-      console.error('Error fetching employees:', error);
       toast.error('Failed to fetch employees');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const fetchCompanyOptions = async () => {
-    try {
-      const response = await axios.get(
-        'https://attend.anujdwivedi.in/company/get-companies',
-        {
-          headers: {
-            Authorization:
-              'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzE4ODgxNzc2fQ.wIRnWLnZJqn0Xyb2gBLFooDatqKRx4F0eZjVF3Uc_ac',
-          },
-        }
-      );
-      setCompanyOptions(response.data.data);
-    } catch (error) {
-      console.error('Error fetching companies:', error);
-      toast.error('Failed to fetch companies');
+  useEffect(() => {
+    fetchEmployees();
+    fetchOptions('https://attend.anujdwivedi.in/company/get-companies', 'company');
+  }, []);
+
+  const handleInputChange = async (e) => {
+    const { name, value, files } = e.target;
+    setEmployee(prev => ({ ...prev, [name]: files ? files[0] : value }));
+
+    if (name === 'company') {
+      try {
+        const departmentResponse = await axios.get(
+          `https://attend.anujdwivedi.in/department/get-department/${value}`,
+          {
+            headers: {
+              Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE5MjA4NTg5fQ.dA7GAVbAxL4BORJwcIm9cgfUxN7m_QiU31K4wYZq3oI',
+            },
+          }
+        );
+        const designationResponse = await axios.get(
+          `https://attend.anujdwivedi.in/designation/get-designation/${value}`,
+          {
+            headers: {
+              Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE5MjA4NTg5fQ.dA7GAVbAxL4BORJwcIm9cgfUxN7m_QiU31K4wYZq3oI',
+            },
+          }
+        );
+        setOptions(prev => ({
+          ...prev,
+          department: departmentResponse.data.data,
+          designation: designationResponse.data.data,
+        }));
+      } catch (error) {
+        toast.error('Failed to fetch department or designation options');
+      }
     }
   };
 
-  const fetchDepartmentOptions = async () => {
-    try {
-      const response = await axios.get(
-        'https://attend.anujdwivedi.in/department/get-departments',
-        {
-          headers: {
-            Authorization:
-              'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzE4ODgxNzc2fQ.wIRnWLnZJqn0Xyb2gBLFooDatqKRx4F0eZjVF3Uc_ac',
-          },
-        }
-      );
-      setDepartmentOptions(response.data.data);
-    } catch (error) {
-      console.error('Error fetching departments:', error);
-      toast.error('Failed to fetch departments');
+  const handleDateChange = (e) => {
+    const { name, value } = e.target;
+    setEmployee(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleAadharChange = (e) => {
+    const aadhar = e.target.value;
+    if (/^[0-9\b]{0,12}$/.test(aadhar)) {
+      setEmployee(prev => ({ ...prev, aadharNumber: aadhar }));
     }
   };
 
-  const fetchDesignationOptions = async () => {
-    try {
-      const response = await axios.get(
-        'https://attend.anujdwivedi.in/designation/get-designations',
-        {
-          headers: {
-            Authorization:
-              'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzE4ODgxNzc2fQ.wIRnWLnZJqn0Xyb2gBLFooDatqKRx4F0eZjVF3Uc_ac',
-          },
-        }
-      );
-      setDesignationOptions(response.data.data);
-    } catch (error) {
-      console.error('Error fetching designations:', error);
-      toast.error('Failed to fetch designations');
+  const handleAction = (action, emp = {}) => {
+    if (action === 'update') {
+      setEmployee(emp);
+      setIsUpdating(true);
+      setIsAdding(false);
+    } else {
+      setEmployee({
+        id: '', firstName: '', lastName: '', email: '', phoneNumber: '', image: '',
+        employeeId: '', location: '', company: '', department: '', designation: '',
+        aadharNumber: '', EPF: '', ESIC: '', device: '', holidayCalendar: '',
+        otApplicable: '', mobilePolicy: '', gender: 'Male', dob: '', personalEmail: '',
+        tag: '', dateJoining: '', status: 0
+      });
+      setIsAdding(true);
+      setIsUpdating(false);
     }
-  };
-
-  const handleUpdate = (employee) => {
-    setId(employee.id);
-    setFirstName(employee.firstName);
-    setLastName(employee.lastName);
-    setEmail(employee.email);
-    setPhoneNumber(employee.phoneNumber);
-    setImage(employee.image);
-    setEmployeeId(employee.employeeId);
-    setLocation(employee.location);
-    setCompany(employee.company);
-    setDepartment(employee.department);
-    setDesignation(employee.designation);
-    setAadharNumber(employee.aadharNumber);
-    setEPF(employee.EPF);
-    setESIC(employee.ESIC);
-    setDevice(employee.device);
-    setHolidayCalendar(employee.holidayCalendar);
-    setOtApplicable(employee.otApplicable);
-    setMobilePolicy(employee.mobilePolicy);
-    setGender(employee.gender);
-    setDob(employee.dob);
-    setPersonalEmail(employee.personalEmail);
-    setTag(employee.tag);
-    setDateJoining(employee.dateJoining);
-    setStatus(employee.status);
-
-    setIsUpdating(true);
-    setIsAdding(false); // Ensure add form is hidden
-  };
-
-  const handleAdd = () => {
-    setId('');
-    setFirstName('');
-    setLastName('');
-    setEmail('');
-    setPhoneNumber('');
-    setImage('');
-    setEmployeeId('');
-    setLocation('');
-    setCompany('');
-    setDepartment('');
-    setDesignation('');
-    setAadharNumber('');
-    setEPF('');
-    setESIC('');
-    setDevice('');
-    setHolidayCalendar('');
-    setOtApplicable('');
-    setMobilePolicy('');
-    setGender('Male');
-    setDob('');
-    setPersonalEmail('');
-    setTag('');
-    setDateJoining('');
-    setStatus(0);
-
-    setIsAdding(true);
-    setIsUpdating(false); // Ensure update form is hidden
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("working");
-    if (aadharNumber.length !== 12) {
+    if (employee.aadharNumber.length !== 12) {
       toast.error('Aadhar number must be 12 digits');
-      // try {
-      //   const formData = FormData();
-      //   formData.append('id', id);
-      //   formData.append('firstName', firstName);
-      //   formData.append('lastName', lastName);
-      //   formData.append('email', email);
-      //   formData.append('phoneNumber', phoneNumber);
-      //   formData.append('image', image);
-      //   formData.append('employeeId', employeeId);
-      //   formData.append('location', location);
-      //   formData.append('company', company);
-      //   formData.append('department', department);
-      //   formData.append('designation', designation);
-      //   formData.append('aadharNumber', aadharNumber);
-      //   formData.append('EPF', EPF);
-      //   formData.append('ESIC', ESIC);
-      //   formData.append('device', device);
-      //   formData.append('holidayCalendar', holidayCalendar);
-      //   formData.append('otApplicable', otApplicable);
-      //   formData.append('mobilePolicy', mobilePolicy);
-      //   formData.append('gender', gender);
-      //   formData.append('dob', dob);
-      //   formData.append('personalEmail', personalEmail);
-      //   formData.append('tag', tag);
-      //   formData.append('dateJoining', dateJoining);
-      //   formData.append('status', status);
-
-      //   const config = {
-      //     method: isUpdating ? 'put' : 'post',
-      //     url: isUpdating
-      //       ? `https://attend.anujdwivedi.in/employee/update-employee/${id}`
-      //       : 'https://attend.anujdwivedi.in/employee/add-employee',
-      //     headers: {
-      //       'Content-Type': 'multipart/form-data',
-      //       Authorization:
-      //         'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
-      //     },
-      //     data: formData,
-      //   };
-
-      //   console.log("true");
-
-      //   const response = await axios.request(config);
-      //   toast.success(response.data.message);
-      //   fetchEmployees();
-      //   setIsAdding(false);
-      //   setIsUpdating(false);
-      // } catch (error) {
-      //   toast.error('Failed to Update employee');
-      //   console.error(error.response.message);
-      // } finally {
-      //   setIsAdding(false);
-      //   setIsUpdating(false);
-      //   setId('');
-      //   setFirstName('');
-      //   setLastName('');
-      //   setEmail('');
-      //   setPhoneNumber('');
-      //   setImage('');
-      //   setEmployeeId('');
-      //   setLocation('');
-      //   setCompany('');
-      //   setDepartment('');
-      //   setDesignation('');
-      //   setAadharNumber('');
-      //   setEPF('');
-      //   setESIC('');
-      //   setDevice('');
-      //   setHolidayCalendar('');
-      //   setOtApplicable('');
-      //   setMobilePolicy('');
-      //   setGender('');
-      //   setDob('');
-      //   setPersonalEmail('');
-      //   setTag('');
-      //   setDateJoining('');
-      //   setStatus(0);
-      // }
+      return;
     }
-    const myHeaders = new Headers();
-    myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4OTcwNDA4fQ.wzuror3RQWipHbQ9Sfc0FqghVpzNVwsKTC2Eob_uYB8");
-
     const formData = new FormData();
-    formData.append('firstName', firstName);
-    formData.append('lastName', lastName);
-    formData.append('email', email);
-    formData.append('phoneNumber', phoneNumber);
-    formData.append('image', image);
-    formData.append('employeeId', employeeId);
-    formData.append('location', location);
-    formData.append('company', company);
-    formData.append('department', department);
-    formData.append('designation', designation);
-    formData.append('aadharNumber', aadharNumber);
-    formData.append('EPF', EPF);
-    formData.append('ESIC', ESIC);
-    formData.append('device', device);
-    formData.append('holidayCalendar', holidayCalendar);
-    formData.append('otApplicable', otApplicable);
-    formData.append('mobilePolicy', mobilePolicy);
-    formData.append('gender', gender);
-    formData.append('dob', dob);
-    formData.append('personalEmail', personalEmail);
-    formData.append('tag', tag);
-    formData.append('dateJoining', dateJoining);
-    formData.append('status', status);
+    Object.keys(employee).forEach(key => formData.append(key, employee[key]));
 
     const requestOptions = {
       method: isUpdating ? 'PUT' : 'POST',
-      headers: myHeaders,
+      headers: {
+        Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4OTcwNDA4fQ.wzuror3RQWipHbQ9Sfc0FqghVpzNVwsKTC2Eob_uYB8',
+      },
       body: formData,
-      redirect: "follow"
     };
 
-    const url = isUpdating ? `https://attend.anujdwivedi.in/employee/update-employee/${id}` : 'https://attend.anujdwivedi.in/employee/add-employee';
+    const url = isUpdating ? `https://attend.anujdwivedi.in/employee/update-employee/${employee.id}` : 'https://attend.anujdwivedi.in/employee/add-employee';
 
-    fetch(url, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        toast.success(result.message);
-        setIsAdding(false);
-        setIsUpdating(false);
-      })
-      .catch((error) => {
-        toast.error('Failed to Update employee');
-        console.error(error.response.message);
-      });
+    try {
+      const response = await fetch(url, requestOptions);
+      const result = await response.json();
+      toast.success(result.message);
+      setIsAdding(false);
+      setIsUpdating(false);
+    } catch (error) {
+      toast.error('Failed to Update employee');
+    }
   };
 
   return (
-    <div className="container mx-auto  p-4 ">
+    <div className="container mx-auto p-4">
       <ToastContainer />
       {isAdding || isUpdating ? (
-        <form
-          onSubmit={handleSubmit}
-          className="mt-4 bg-gray-100 p-4 rounded"
-        >
+        <form onSubmit={handleSubmit} className="mt-4 bg-gray-100 p-4 rounded">
           <div className="grid grid-cols-3 gap-4">
+            {['FirstName', 'LastName', 'Email', 'PhoneNumber', 'EmployeeId', 'Location', 'EPF', 'ESIC', 'Device', 'HolidayCalendar', 'OTApplicable', 'MobilePolicy', 'PersonalEmail', 'Tag'].map(field => (
+              <div key={field} className="mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2">{field.split(/(?=[A-Z])/).join(' ')}</label>
+                <input
+                  type="text"
+                  name={field}
+                  value={employee[field]}
+                  onChange={handleInputChange}
+                  className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
+                 
+                />
+              </div>
+            ))}
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                First Name
-              </label>
-              <input
-                type="text"
-                name="firstName"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Last Name
-              </label>
-              <input
-                type="text"
-                name="lastName"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-                className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Email
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Phone Number
-              </label>
-              <input
-                type="text"
-                name="phoneNumber"
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-                className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Image
-              </label>
+              <label className="block text-gray-700 text-sm font-bold mb-2">Image</label>
               <input
                 type="file"
                 name="image"
-                onChange={(e) => setImage(e.target.files[0])}
+                onChange={handleInputChange}
                 className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Employee ID
-              </label>
-              <input
-                type="text"
-                name="employeeId"
-                value={employeeId}
-                onChange={(e) => setEmployeeId(e.target.value)}
-                className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Location
-              </label>
-              <input
-                type="text"
-                name="location"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Company
-              </label>
-              <select
-                id="company"
-                className=" border bg-gray-600 rounded w-full py-2 px-3 text-white leading-tight "
-                value={company}
-                onChange={(e) => setCompany(e.target.value)}
-                required
-              >
-                <option className='bg-gray-400' value="">Select Company</option>
-                {companyOptions.map((company) => (
-                  <option key={company.id} value={company.companyId}>
-                    {company.companyName}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Department
-              </label>
-              <select
-                id="department"
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-white bg-gray-600 leading-tight focus:outline-none focus:shadow-outline"
-                value={department}
-                onChange={(e) => setDepartment(e.target.value)}
-                required
-              >
-                <option value="">Select Department</option>
-                {departmentOptions.map((department) => (
-                  <option key={department.id} value={department.designationId}>
-                    {department.departmentName}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Designation
-              </label>
-              <select
-                id="designation"
-                className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-600 leading-tight focus:outline-none focus:shadow-outline"
-                value={designation}
-                onChange={(e) => setDesignation(e.target.value)}
-                required
-              >
-                <option value="">Select Designation</option>
-                {designationOptions.map((designation) => (
-                  <option key={designation.id} value={designation.designationId}>
-                    {designation.designationName}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Aadhar Number
-              </label>
+              <label className="block text-gray-700 text-sm font-bold mb-2">Aaadhaar Number</label>
               <input
                 type="tel"
                 name="aadharNumber"
-                value={aadharNumber}
+                value={employee.aadharNumber}
                 onChange={handleAadharChange}
                 maxLength={12}
                 className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
                 required
-
               />
             </div>
+            {['company', 'department', 'designation'].map(opt => (
+              <div key={opt} className="mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2">{opt.charAt(0).toUpperCase() + opt.slice(1)}</label>
+                <select
+                  name={opt}
+                  value={employee[opt]}
+                  onChange={handleInputChange}
+                  className="border bg-gray-600 rounded w-full py-2 px-3 text-white leading-tight"
+                  required
+                >
+                  <option value="">Select {opt.charAt(0).toUpperCase() + opt.slice(1)}</option>
+                  {options[opt].map(item => (
+                    <option key={item.id} value={item[`${opt}Id`]}>
+                      {item[`${opt}Name`]}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ))}
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                EPF
-              </label>
-              <input
-                type="text"
-                name="EPF"
-                value={EPF}
-                onChange={(e) => setEPF(e.target.value)}
-                className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                ESIC
-              </label>
-              <input
-                type="text"
-                name="ESIC"
-                value={ESIC}
-                onChange={(e) => setESIC(e.target.value)}
-                className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Device
-              </label>
-              <input
-                type="text"
-                name="device"
-                value={device}
-                onChange={(e) => setDevice(e.target.value)}
-                className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Holiday Calendar
-              </label>
-              <input
-                type="text"
-                name="holidayCalendar"
-                value={holidayCalendar}
-                onChange={(e) => setHolidayCalendar(e.target.value)}
-                className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                OT Applicable
-              </label>
-              <input
-                type="text"
-                name="otApplicable"
-                value={otApplicable}
-                onChange={(e) => setOtApplicable(e.target.value)}
-                className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Mobile Policy
-              </label>
-              <input
-                type="text"
-                name="mobilePolicy"
-                value={mobilePolicy}
-                onChange={(e) => setMobilePolicy(e.target.value)}
-                className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Gender
-              </label>
+              <label className="block text-gray-700 text-sm font-bold mb-2">Gender</label>
               <select
                 name="gender"
-                value={gender}
-                onChange={(e) => {
-                  setGender(e.target.value);
-                  console.log(e.target.value)
-                }}
+                value={employee.gender}
+                onChange={handleInputChange}
                 className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
                 required
               >
                 <option value="Male">Male</option>
-                <option value="Other">Other</option>
+              
                 <option value="Female">Female</option>
+                <option value="Other">Other</option>
               </select>
-
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                DOB
-              </label>
-              <DatePicker
+              <label className="block text-gray-700 text-sm font-bold mb-2">Date of Birth</label>
+              <input
                 type="date"
                 name="dob"
-                selected={dob}
-                onChange={(date) => handleDateChange(date, 'dob')}
+                value={employee.dob}
+                onChange={handleDateChange}
                 className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Personal Email
-              </label>
+              <label className="block text-gray-700 text-sm font-bold mb-2">Date Joining</label>
               <input
-                type="email"
-                name="personalEmail"
-                value={personalEmail}
-                onChange={(e) => setPersonalEmail(e.target.value)}
-                className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Tag
-              </label>
-              <input
-                type="text"
-                name="tag"
-                value={tag}
-                onChange={(e) => setTag(e.target.value)}
-                className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Date Joining
-              </label>
-              <DatePicker
-                // showIcon
                 type="date"
                 name="dateJoining"
-                selected={dateJoining}
-                onChange={(date) => handleDateChange(date, 'dateJoining')}
+                value={employee.dateJoining}
+                onChange={handleDateChange}
                 className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
             </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Status
-              </label>
-              <select
-                name="status"
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-                className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-                required
-              >
-                <option value="0">Inactive</option>
-                <option value="1">Active</option>
-              </select>
-            </div>
           </div>
-          <div className="flex items-center gap-5 ">
+          <div className="flex items-center gap-5">
             <button
               type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 w-28 rounded focus:outline-none focus:shadow-outline"
             >
               {isUpdating ? 'Update' : 'Add'}
             </button>
             <button
               type="button"
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              onClick={() => {
-                setIsAdding(false);
-                setIsUpdating(false);
-              }}
+              onClick={() => setIsAdding(false) || setIsUpdating(false)}
+              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 w-28 rounded focus:outline-none focus:shadow-outline"
             >
               Cancel
             </button>
           </div>
         </form>
       ) : (
-        <div>
+        
+        <div className="mt-4 ">
           <div className='flex justify-end items-center'>
-            <button
-              onClick={handleAdd}
-              className="bg-blue-500 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-4"
-            >
-              Add Employee
-            </button>
-          </div>
-
-          <div class="sm:-mx-6 lg:-mx-8">
-            <div class="inline-block !w-[100%] overflow-x-scroll py-2 sm:px-6 lg:px-8 scroll">
-              <div className="relative  flex items-center justify-center">
-                {isLoading ? (
-                  <div className=" inset-0 flex flex-col items-center justify-center  bg-transparent bg-opacity-50">
-                    <div role='status' className="loa  rounded-full border-e-transparent align-[-0.125em] border-8 border-t-8 animate-[spin_1.5s_linear_infinite] border-purple-500 h-24 w-24 mb-4"></div>
-                    <h2 className="text-center text-white text-xl font-semibold">
-                      Loading... Please wait!
-                    </h2>
-                  </div>
-                ) : (
-                  <div class="">
-
-                    <table className="bg-white ">
-                      <thead className='bg-gray-800 text-white'>
-                        <tr>
-                          <th className="py-2 px-4 border border-gray-2000 ">ID</th>
-                          <th className="py-2 px-4 border border-gray-200 ">First Name</th>
-                          <th className="py-2 px-4 border border-gray-200 ">Last Name</th>
-                          <th className="py-2 px-4 border border-gray-200 ">Email</th>
-                          <th className="py-2 px-4 border border-gray-200 ">Phone Number</th>
-                          <th className="py-2 px-4 border border-gray-200 ">Employee ID</th>
-                          <th className="py-2 px-4 border border-gray-200 ">Company</th>
-                          <th className="py-2 px-4 border border-gray-200 ">Designation</th>
-                          <th className="py-2 px-4 border border-gray-200 ">Department</th>
-                          <th className="py-2 px-4 border border-gray-200 ">DOB</th>
-                          <th className="py-2 px-4 border border-gray-200 ">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {employees.map((employee) => (
-                          <tr key={employee.id} className='text-center'>
-                            <td className="py-2 px-4 text-black border border-gray-200">{employee.id}</td>
-                            <td className="py-2 px-4 border text-black border-gray-200">{employee.firstName}</td>
-                            <td className="py-2 px-4 border text-black border-gray-200">{employee.lastname}</td>
-                            <td className="py-2 px-4 border text-black border-gray-200">{employee.email}</td>
-                            <td className="py-2 px-4 border text-black border-gray-200">{employee.phoneNumber}</td>
-                            <td className="py-2 px-4 border text-black border-gray-200">{employee.employeeId}</td>
-                            <td className="py-2 px-4 border text-black border-gray-200">{employee.company}</td>
-                            <td className="py-2 px-4 border text-black border-gray-200">{employee.designation}</td>
-                            <td className="py-2 px-4 border text-black border-gray-200">{employee.department}</td>
-                            <td className="py-2 px-4 border text-black border-gray-200">{employee.dob}</td>
-                            <td className="py-2 px-4 border text-black border-gray-200">
-                              <button
-                                onClick={() => handleUpdate(employee)}
-                                className="bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 w-28 rounded focus:outline-none focus:shadow-outline"
-                              >
-                                View
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-
-                  </div>
-                )}
+          <button
+            onClick={() => handleAction('add')}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          >
+            Add Employee
+          </button></div>
+          <div className="relative  flex items-center justify-center">
+            {isLoading ? (
+              <div className="absolute  inset-0 flex flex-col items-center justify-center  bg-transparent bg-opacity-50">
+                <div role='status' className="loa  rounded-full border-e-transparent align-[-0.125em] border-8 border-t-8 animate-[spin_1.5s_linear_infinite] border-purple-500 h-24 w-24 mb-4"></div>
+                <h2 className="text-center text-white text-xl font-semibold">
+                  Loading... Please wait!
+                </h2>
               </div>
-            </div>
-
+            ) : (
+              <div class="flex flex-col overflow-x-auto">
+              <div class="sm:-mx-6 lg:-mx-8">
+        <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+          <div class="overflow-x-auto"></div>
+          <table className="min-w-full bg-white mt-4">
+            <thead>
+              <tr>
+                <th className="py-2 px-4 border-b border text-white bg-gray-600">ID</th>
+                <th className="py-2 px-4 border-b border text-white bg-gray-600">First Name</th>
+                <th className="py-2 px-4 border-b border text-white bg-gray-600">Last Name</th>
+                <th className="py-2 px-4 border-b border text-white bg-gray-600">Email</th>
+                <th className="py-2 px-4 border-b border text-white bg-gray-600">Employee ID</th>
+                <th className="py-2 px-4 border-b border text-white bg-gray-600">Company</th>
+                <th className="py-2 px-4 border-b border text-white bg-gray-600">Designation</th>
+                <th className="py-2 px-4 border-b border text-white bg-gray-600">Department</th>
+                <th className="py-2 px-4 border-b border text-white bg-gray-600">DOB</th>
+                <th className="py-2 px-4 border-b border text-white bg-gray-600">Phone Number</th>
+                <th className="py-2 px-4 border-b border text-white bg-gray-600">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {isLoading ? (
+                <tr>
+                  <td colSpan="6" className="text-center text-black py-4">Loading...</td>
+                </tr>
+              ) : (
+                employees.map(emp => (
+                  <tr key={emp.id}>
+                    <td className="py-2 px-4 border-b text-center text-black border">{emp.id}</td>
+                    <td className="py-2 px-4 border-b text-center text-black border">{emp.firstName}</td>
+                    <td className="py-2 px-4 border-b text-center text-black border">{emp.lastname}</td>
+                    <td className="py-2 px-4 border-b text-center text-black border">{emp.email}</td>
+                    <td className="py-2 px-4 border-b text-center text-black border">{emp.employeeId}</td>
+                    <td className="py-2 px-4 border-b text-center text-black border">{emp.company}</td>
+                    <td className="py-2 px-4 border-b text-center text-black border">{emp.designation}</td>
+                    <td className="py-2 px-4 border-b text-center text-black border">{emp.department}</td>
+                    <td className="py-2 px-4 border-b text-center text-black border">{emp.dob}</td>
+                    <td className="py-2 px-4 border-b text-center text-black border">{emp.phoneNumber}</td>
+                    <td className="py-2 px-4 border-b text-center text-black border">
+                      <button
+                        onClick={() => handleAction('update', emp)}
+                        className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 w-28 rounded focus:outline-none focus:shadow-outline mr-2"
+                      >
+                        Update
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
           </div>
-
+          </div>
+          </div>
+            )}
+            </div>
         </div>
-
       )}
-      {!isLoading && <Footer />}
+       {!isLoading && <Footer />}
     </div>
-  )
+  );
 }

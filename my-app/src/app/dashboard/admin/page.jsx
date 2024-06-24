@@ -4,12 +4,14 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './admin.module.css'; // Import CSS for flip animation
+import Footer from '../../ui/dashboard/footer/footer';
 
 const AdminPage = () => {
   const [adminData, setAdminData] = useState({});
   const [email, setEmail] = useState('');
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   const [showChangePassword, setShowChangePassword] = useState(false);
 
   useEffect(() => {
@@ -29,6 +31,8 @@ const AdminPage = () => {
         setEmail(response.data.email); // Set email for password change
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsLoading(false); 
       }
     };
 
@@ -70,6 +74,15 @@ const AdminPage = () => {
         <div className="bg-[#182237] rounded-lg shadow-md p-6">
           {!showChangePassword ? (
             <>
+             <div className="relative  flex items-center justify-center">
+            {isLoading ? (
+              <div className="absolute  inset-0 flex flex-col items-center justify-center  bg-transparent bg-opacity-50">
+                <div role='status' className="loa  rounded-full border-e-transparent align-[-0.125em] border-8 border-t-8 animate-[spin_1.5s_linear_infinite] border-purple-500 h-24 w-24 mb-4"></div>
+                <h2 className="text-center text-white text-xl font-semibold">
+                  Loading... Please wait!
+                </h2>
+              </div>
+            ) : (
               <div className="flex flex-col items-center">
                 <img
                   className="w-32 rounded-lg mb-4"
@@ -87,7 +100,10 @@ const AdminPage = () => {
                 >
                   Change Password
                 </button>
+                {!isLoading && <Footer />}
               </div>
+            )}
+            </div>
             </>
           ) : (
             <>

@@ -4,11 +4,13 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Footer from '../../ui/dashboard/footer/footer';
 
 const DevicesPage = () => {
   const [devices, setDevices] = useState([]);
   const [isAdding, setIsAdding] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [currentDevice, setCurrentDevice] = useState({
     serialNumber: '',
     location: '',
@@ -35,6 +37,8 @@ const DevicesPage = () => {
       setDevices(response.data.data);
     } catch (error) {
       console.error('Error fetching devices:', error);
+    } finally {
+      setIsLoading(false); 
     }
   };
 
@@ -211,6 +215,15 @@ const DevicesPage = () => {
               Add Device
             </button>
           </div>
+          <div className="relative  flex items-center justify-center">
+            {isLoading ? (
+              <div className="absolute  inset-0 flex flex-col items-center justify-center  bg-transparent bg-opacity-50">
+                <div role='status' className="loa  rounded-full border-e-transparent align-[-0.125em] border-8 border-t-8 animate-[spin_1.5s_linear_infinite] border-purple-500 h-24 w-24 mb-4"></div>
+                <h2 className="text-center text-white text-xl font-semibold">
+                  Loading... Please wait!
+                </h2>
+              </div>
+            ) : (
           <table className="min-w-full bg-white border">
             <thead className="bg-gray-800 text-white">
               <tr>
@@ -246,8 +259,11 @@ const DevicesPage = () => {
               ))}
             </tbody>
           </table>
+            )}
+            </div>
         </>
       )}
+         {!isLoading && <Footer />}
     </div>
   );
 };

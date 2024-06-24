@@ -3,11 +3,13 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Footer from '../../ui/dashboard/footer/footer';
 
 const VisitorPage = () => {
   const [visitors, setVisitors] = useState([]);
   const [isAdding, setIsAdding] = useState(false);
   const [name, setName] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
   const [company, setCompany] = useState('');
@@ -35,6 +37,8 @@ const VisitorPage = () => {
     } catch (error) {
       console.error(error);
       toast.error('Failed to fetch visitors');
+    } finally {
+      setIsLoading(false); 
     }
   };
 
@@ -120,10 +124,20 @@ const VisitorPage = () => {
               Add Visitor
             </button>
           </div>
+          <div className="relative  flex items-center justify-center">
+            {isLoading ? (
+              <div className="absolute  inset-0 flex flex-col items-center justify-center  bg-transparent bg-opacity-50">
+                <div role='status' className="loa  rounded-full border-e-transparent align-[-0.125em] border-8 border-t-8 animate-[spin_1.5s_linear_infinite] border-purple-500 h-24 w-24 mb-4"></div>
+                <h2 className="text-center text-white text-xl font-semibold">
+                  Loading... Please wait!
+                </h2>
+              </div>
+            ) : (
           <div class="flex flex-col overflow-x-auto">
           <div class="sm:-mx-6 lg:-mx-8">
     <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
       <div class="overflow-x-auto"></div>
+   
           <table className="min-w-full bg-white border text-black">
             <thead className="bg-gray-800 text-white">
               <tr>
@@ -154,12 +168,16 @@ const VisitorPage = () => {
               ))}
             </tbody>
           </table>
+           
           </div>
           </div>
           </div>
+           )}
+            </div>
           
         </>
       )}
+         {!isLoading && <Footer />}
     </div>
   );
 };

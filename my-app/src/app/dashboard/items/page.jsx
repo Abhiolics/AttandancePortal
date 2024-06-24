@@ -3,11 +3,13 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Footer from '../../ui/dashboard/footer/footer';
 
 export default function ItemsPage() {
   const [items, setItems] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [formData, setFormData] = useState({
     itemCode: '',
     itemName: '',
@@ -39,6 +41,8 @@ export default function ItemsPage() {
     } catch (error) {
       console.error(error);
       toast.error('Failed to fetch items');
+    } finally {
+      setIsLoading(false); 
     }
   };
 
@@ -99,6 +103,15 @@ export default function ItemsPage() {
           <div className="flex justify-end items-center mb-4">
             <button onClick={() => setIsAdding(true)} className="bg-blue-500 text-white px-4 py-2 rounded">Add Item</button>
           </div>
+          <div className="relative  flex items-center justify-center">
+            {isLoading ? (
+              <div className="absolute  inset-0 flex flex-col items-center justify-center  bg-transparent bg-opacity-50">
+                <div role='status' className="loa  rounded-full border-e-transparent align-[-0.125em] border-8 border-t-8 animate-[spin_1.5s_linear_infinite] border-purple-500 h-24 w-24 mb-4"></div>
+                <h2 className="text-center text-white text-xl font-semibold">
+                  Loading... Please wait!
+                </h2>
+              </div>
+            ) : (
           <table className="min-w-full bg-white border">
             <thead className="bg-gray-800 text-white">
               <tr>
@@ -131,6 +144,8 @@ export default function ItemsPage() {
               ))}
             </tbody>
           </table>
+            )}
+            </div>
         </>
       )}
 
@@ -220,6 +235,7 @@ export default function ItemsPage() {
           </form>
         </div>
       )}
+       {!isLoading && <Footer />}
     </div>
   );
 }

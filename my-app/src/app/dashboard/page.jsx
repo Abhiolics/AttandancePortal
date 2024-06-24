@@ -7,6 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import Chart from "../ui/dashboard/chart/Chart";
 import styles from '../ui/dashboard/dashboard.module.css';
+import Footer from "../ui/dashboard/footer/footer";
 
 const Card = ({ title, count }) => (
   <div className="flex items-center p-4 bg-[#182237] text-white  rounded shadow-lg">
@@ -112,6 +113,7 @@ const Page = () => {
       <div className={styles.main}>
         <Chart />
       </div>
+      <Footer/>
     </div>
   );
 };

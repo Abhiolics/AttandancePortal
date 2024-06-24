@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Footer from '../../ui/dashboard/footer/footer';
 
 const RecognitionPage = () => {
   const [recognitions, setRecognitions] = useState([]);
@@ -11,6 +12,7 @@ const RecognitionPage = () => {
   const [employees, setEmployees] = useState([]);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [currentRecognition, setCurrentRecognition] = useState({
     companyId: '',
     employeeId: '',
@@ -42,6 +44,8 @@ const RecognitionPage = () => {
     } catch (error) {
       console.error(error);
       toast.error('Failed to fetch recognitions');
+    } finally {
+      setIsLoading(false); 
     }
   };
 
@@ -169,6 +173,15 @@ const RecognitionPage = () => {
               Add Recognition
             </button>
           </div>
+          <div className="relative  flex items-center justify-center">
+            {isLoading ? (
+              <div className="absolute  inset-0 flex flex-col items-center justify-center  bg-transparent bg-opacity-50">
+                <div role='status' className="loa  rounded-full border-e-transparent align-[-0.125em] border-8 border-t-8 animate-[spin_1.5s_linear_infinite] border-purple-500 h-24 w-24 mb-4"></div>
+                <h2 className="text-center text-white text-xl font-semibold">
+                  Loading... Please wait!
+                </h2>
+              </div>
+            ) : (
           <div className="overflow-x-auto">
             <table className="min-w-full bg-white border text-black">
               <thead className="bg-gray-800 text-white">
@@ -197,9 +210,13 @@ const RecognitionPage = () => {
                 ))}
               </tbody>
             </table>
+          
           </div>
+            )}
+            </div>
         </>
       )}
+       {!isLoading && <Footer />}
     </div>
   );
 };

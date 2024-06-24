@@ -45,6 +45,8 @@ export default function Home() {
 
   function getData(e) {
     e.preventDefault();
+    setEffect(true);
+    setMessage("");
 
     let data = {
       email: email,
@@ -63,9 +65,14 @@ export default function Home() {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("auth", response.data.auth);
         setMessage(response.data.message);
+        setEffect(false);
         router.push('/dashboard');
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+        setMessage("Incorrect username or password");
+        setEffect(false);
+      });
   }
 
   const sliderSettings = {
@@ -99,9 +106,7 @@ export default function Home() {
                 <input required type="password" className="input input-bordered" value={password} onChange={(e) => setPassword(e.target.value)} />
               </div>
               <div className="form-control mt-6">
-                <button onClick={() => {
-                  setEffect(true);
-                }} className={`btn btn-primary text-[20px] text-white rounded hover:bg-blue-700 hover:shadow-xl`}>
+                <button type="submit" className={`btn btn-primary text-[20px] text-white rounded hover:bg-blue-700 hover:shadow-xl`}>
                   <div className={`${effect && "loading loading-ring loading-xs"} inline-block`}></div>
                   Submit
                 </button>
@@ -131,10 +136,10 @@ export default function Home() {
           </Slider>
           <div className="card-body text-center ">
             <h2 className="card-title">Attendance System is released!</h2>
-            <p className='text-sm relative'> Powerd by</p>
+            <p className='text-sm relative'> Powered by</p>
             <div className='flex justify-center items-center absolute'>
-          <img src='./logotp.png' className='w-40  mt-10 flex justify-center items-center ml-16' />
-          </div>
+              <img src='./logotp.png' className='w-40 mt-10 flex justify-center items-center ml-16' />
+            </div>
           </div>
         </div>
       </div>

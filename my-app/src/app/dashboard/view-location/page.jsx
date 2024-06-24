@@ -279,8 +279,9 @@ const LocationForm = ({ currentLocation, handleChange, handleSubmit, handleCance
             className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
             required
           >
-            <option value={"0"}>Inactive</option>
+            
             <option value={"1"}>Active</option>
+            <option value={"0"}>Inactive</option>
           </select>
         </div>
       </div>
