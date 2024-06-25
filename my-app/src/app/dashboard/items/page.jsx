@@ -115,15 +115,15 @@ export default function ItemsPage() {
           <table className="min-w-full bg-white border">
             <thead className="bg-gray-800 text-white">
               <tr>
-                <th className="w-1/12 py-2 border">Item Code</th>
-                <th className="w-1/12 py-2 border">Item Name</th>
-                <th className="w-1/6 py-2 border">Description</th>
-                <th className="w-1/12 py-2 border">Price</th>
-                <th className="w-1/12 py-2 border">Mode</th>
-                <th className="w-1/12 py-2 border">Schedule</th>
-                <th className="w-1/12 py-2 border">Subsidized</th>
-                <th className="w-1/12 py-2 border">Tags</th>
-                <th className="w-1/12 py-2 border">Actions</th>
+                <th className="w-1/6 py-2 px-4 border">Item Code</th>
+                <th className="w-1/12 py-2 px-4 border">Item Name</th>
+                <th className="w-1/6 py-2  px-4  border">Description</th>
+                <th className="w-1/12 py-2 px-4  border">Price</th>
+                <th className="w-1/12 py-2 px-4  border">Mode</th>
+                <th className="w-1/12 py-2 px-4  border">Schedule</th>
+                <th className="w-1/12 py-2 px-4  border">Subsidized</th>
+                <th className="w-1/12 py-2 px-4  border">Tags</th>
+                <th className="w-1/12 py-2 px-4  border">Actions</th>
               </tr>
             </thead>
             <tbody>

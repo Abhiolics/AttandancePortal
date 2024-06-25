@@ -11,6 +11,8 @@ export default function DepartmentPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
   const [currentDepartment, setCurrentDepartment] = useState({
     companyId: '',
     companyName: '',
@@ -112,6 +114,15 @@ export default function DepartmentPage() {
     });
   };
 
+  const handlePageChange = (direction) => {
+    setCurrentPage(prev => {
+      const newPage = prev + direction;
+      if (newPage < 1) return 1;
+      if (newPage > Math.ceil(departments.length / itemsPerPage)) return Math.ceil(departments.length / itemsPerPage);
+      return newPage;
+    });
+  };
+  const displayedDepartments = departments.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
   return (
     <div className="container mx-auto p-4">
       <ToastContainer />
@@ -132,6 +143,10 @@ export default function DepartmentPage() {
                 </h2>
               </div>
             ) : (
+              <div class="flex flex-col overflow-x-auto">
+              <div class="sm:-mx-6 lg:-mx-8">
+        <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+          <div class="overflow-x-auto"></div>
           <table className="min-w-full bg-white border">
             <thead className='bg-gray-800 text-white border'>
               <tr>
@@ -145,17 +160,17 @@ export default function DepartmentPage() {
               </tr>
             </thead>
             <tbody>
-              {departments.map((department, index) => (
+              {displayedDepartments.map((department, index) => (
                 <tr key={department.id} className="border-t">
-                  <td className="py-2 text-black border text-center">{index + 1}</td>
-                  <td className="py-2 text-black border text-center">{department.companyId}</td>
+                  <td className="py-2 px-4 text-black border text-center">{index + 1}</td>
+                  <td className="py-2 px-4 text-black border text-center">{department.companyId}</td>
                   {/* <td className="py-2 text-black border text-center">{department.companyName}</td> */}
-                  <td className="py-2 text-black border text-center">{department.departmentName}</td>
-                  <td className="py-2 text-black border text-center">{department.departmentId}</td>
-                  <td className="py-2 text-black border text-center">
+                  <td className="py-2 px-4 text-black border text-center">{department.departmentName}</td>
+                  <td className="py-2 px-4 text-black border text-center">{department.departmentId}</td>
+                  <td className="py-2 px-4 text-black border text-center">
                     {department.status === 'active' ? 'Active' : 'Inactive'}
                   </td>
-                  <td className="py-2 text-black text-center">
+                  <td className="py-2 text-black text-center px-4">
                     <button
                       className="bg-yellow-500 text-white w-28 py-1 rounded"
                       onClick={() => handleUpdateClick(department)}
@@ -168,6 +183,30 @@ export default function DepartmentPage() {
             </tbody>
            
           </table>
+          </div>
+
+          
+          <div className="mt-4 flex mb-4 justify-center items-center">
+  <button
+    onClick={() => handlePageChange(-1)}
+    disabled={currentPage === 1}
+    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 w-20 rounded mr-2 focus:outline-none focus:shadow-outline"
+  >
+    «
+  </button>
+  <span className="text-white mx-4"> {currentPage} / {Math.ceil(departments.length / itemsPerPage)}</span>
+  <button
+    onClick={() => handlePageChange(1)}
+    disabled={currentPage === Math.ceil(departments.length / itemsPerPage)}
+    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 w-20 rounded focus:outline-none focus:shadow-outline"
+  >
+   »
+  </button>
+</div>
+
+
+          </div>
+          </div>
            )}
           </div>
         </>

@@ -12,13 +12,15 @@ export default function EmployeePage() {
   const [isAdding, setIsAdding] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const [employee, setEmployee] = useState({
     id: '', firstName: '', lastName: '', email: '', phoneNumber: '', image: '',
     employeeId: '', location: '', company: '', department: '', designation: '',
     aadharNumber: '', EPF: '', ESIC: '', device: '', holidayCalendar: '',
     otApplicable: '', mobilePolicy: '', gender: 'Male', dob: '', personalEmail: '',
-    tag: '', dateJoining: '', status: 0
+    tag: '', dateJoining: '', status: "0"
   });
 
   const [options, setOptions] = useState({
@@ -130,6 +132,7 @@ export default function EmployeePage() {
       toast.error('Aadhar number must be 12 digits');
       return;
     }
+    
     const formData = new FormData();
     Object.keys(employee).forEach(key => formData.append(key, employee[key]));
 
@@ -146,7 +149,11 @@ export default function EmployeePage() {
     try {
       const response = await fetch(url, requestOptions);
       const result = await response.json();
-      toast.success(result.message);
+      if (result.status === false) {
+        toast.error(result.message);
+      } else {
+        toast.success(result.message)
+      }
       setIsAdding(false);
       setIsUpdating(false);
     } catch (error) {
@@ -154,13 +161,25 @@ export default function EmployeePage() {
     }
   };
 
+ 
+
+  const handlePageChange = (direction) => {
+    setCurrentPage(prev => {
+      const newPage = prev + direction;
+      if (newPage < 1) return 1;
+      if (newPage > Math.ceil(employees.length / itemsPerPage)) return Math.ceil(employees.length / itemsPerPage);
+      return newPage;
+    });
+  };
+  const displayedEmployees = employees.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
   return (
     <div className="container mx-auto p-4">
       <ToastContainer />
       {isAdding || isUpdating ? (
         <form onSubmit={handleSubmit} className="mt-4 bg-gray-100 p-4 rounded">
           <div className="grid grid-cols-3 gap-4">
-            {['FirstName', 'LastName', 'Email', 'PhoneNumber', 'EmployeeId', 'Location', 'EPF', 'ESIC', 'Device', 'HolidayCalendar', 'OTApplicable', 'MobilePolicy', 'PersonalEmail', 'Tag'].map(field => (
+            {['firstName', 'lastName', 'email', 'phoneNumber', 'employeeId', 'location', 'EPF', 'ESIC', 'device', 'holidayCalendar', 'otApplicable', 'mobilePolicy', 'personalEmail', 'tag'].map(field => (
               <div key={field} className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2">{field.split(/(?=[A-Z])/).join(' ')}</label>
                 <input
@@ -312,7 +331,7 @@ export default function EmployeePage() {
                   <td colSpan="6" className="text-center text-black py-4">Loading...</td>
                 </tr>
               ) : (
-                employees.map(emp => (
+                displayedEmployees.map(emp => (
                   <tr key={emp.id}>
                     <td className="py-2 px-4 border-b text-center text-black border">{emp.id}</td>
                     <td className="py-2 px-4 border-b text-center text-black border">{emp.firstName}</td>
@@ -338,10 +357,29 @@ export default function EmployeePage() {
             </tbody>
           </table>
           </div>
-          </div>
+        
+            <div className="mt-4 flex mb-4 justify-center items-center">
+  <button
+    onClick={() => handlePageChange(-1)}
+    disabled={currentPage === 1}
+    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 w-20 rounded mr-2 focus:outline-none focus:shadow-outline"
+  >
+    «
+  </button>
+  <span className="text-white mx-4"> {currentPage} / {Math.ceil(employees.length / itemsPerPage)}</span>
+  <button
+    onClick={() => handlePageChange(1)}
+    disabled={currentPage === Math.ceil(employees.length / itemsPerPage)}
+    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 w-20 rounded focus:outline-none focus:shadow-outline"
+  >
+   »
+  </button>
+</div>
+</div>
           </div>
             )}
             </div>
+
         </div>
       )}
        {!isLoading && <Footer />}

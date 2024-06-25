@@ -9,6 +9,8 @@ export default function CompanyManagement() {
   const [companies, setCompanies] = useState([]);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
   const [isAdding, setIsAdding] = useState(false);
   const [currentCompany, setCurrentCompany] = useState({
     id: '',
@@ -86,6 +88,16 @@ export default function CompanyManagement() {
     }
   };
 
+  const handlePageChange = (direction) => {
+    setCurrentPage(prev => {
+      const newPage = prev + direction;
+      if (newPage < 1) return 1;
+      if (newPage > Math.ceil(companies.length / itemsPerPage)) return Math.ceil(companies.length / itemsPerPage);
+      return newPage;
+    });
+  };
+  const displayedCompanies = companies.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
   return (
     <div className="container mx-auto p-4">
       <ToastContainer />
@@ -158,7 +170,7 @@ export default function CompanyManagement() {
               Add Company
             </button>
           </div>
-          <div className="relative min-h-screen flex items-center justify-center">
+          <div className="relative flex items-center justify-center">
             {isLoading ? (
               <div className="absolute  inset-0 flex flex-col items-center justify-center  bg-transparent bg-opacity-50">
                 <div role='status' className="loa  rounded-full border-e-transparent align-[-0.125em] border-8 border-t-8 animate-[spin_1.5s_linear_infinite] border-purple-500 h-24 w-24 mb-4"></div>
@@ -167,6 +179,10 @@ export default function CompanyManagement() {
                 </h2>
               </div>
             ) : (
+              <div class="flex flex-col overflow-x-auto">
+              <div class="sm:-mx-6 lg:-mx-8">
+        <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+          <div class="overflow-x-auto"></div>
               <table className="min-w-full bg-white border">
                 <thead className="bg-gray-800 text-white">
                   <tr>
@@ -178,7 +194,7 @@ export default function CompanyManagement() {
                   </tr>
                 </thead>
                 <tbody>
-                  {companies.map((company, index) => (
+                  {displayedCompanies.map((company, index) => (
                     <tr key={company.id}>
                       <td className="py-2 px-4 border text-black text-center">
                         {index + 1}
@@ -201,10 +217,33 @@ export default function CompanyManagement() {
                         </button>
                       </td>
                     </tr>
+                  
                   ))}
                 </tbody>
               </table>
+              </div>
+                
+            <div className="mt-4 flex mb-4 justify-center items-center">
+  <button
+    onClick={() => handlePageChange(-1)}
+    disabled={currentPage === 1}
+    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 w-20 rounded mr-2 focus:outline-none focus:shadow-outline"
+  >
+    «
+  </button>
+  <span className="text-white mx-4"> {currentPage} / {Math.ceil(companies.length / itemsPerPage)}</span>
+  <button
+    onClick={() => handlePageChange(1)}
+    disabled={currentPage === Math.ceil(companies.length / itemsPerPage)}
+    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 w-20 rounded focus:outline-none focus:shadow-outline"
+  >
+   »
+  </button>
+</div>
+              </div>
+              </div>
             )}
+                  
           </div>
         </>
       )}
