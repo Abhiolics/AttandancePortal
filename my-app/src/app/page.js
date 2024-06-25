@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import axios from 'axios';
 import Link from 'next/link';
 import { redirect, useRouter } from 'next/navigation';
@@ -64,7 +64,7 @@ export default function Home() {
         console.log(response.data);
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("auth", response.data.auth);
-        setMessage(response.data.message);
+        setMessage("User successfully logged in");
         setEffect(false);
         router.push('/dashboard');
       })
@@ -113,8 +113,8 @@ export default function Home() {
               </div>
             </form>
             {message && (
-              <div className="alert mt-4 " role="alert">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-info text-red-600 shrink-0 w-6 h-6">
+              <div className={`alert mt-4 ${message.includes("Incorrect") ? "text-red-600" : "text-green-600"}`} role="alert">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className={`stroke-info ${message.includes("Incorrect") ? "text-red-600" : "text-green-600"} shrink-0 w-6 h-6`}>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
                 <span>{message}</span>
@@ -146,5 +146,6 @@ export default function Home() {
     </main>
   );
 }
+
 
 

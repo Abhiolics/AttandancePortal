@@ -16,11 +16,11 @@ export default function EmployeePage() {
   const itemsPerPage = 10;
 
   const [employee, setEmployee] = useState({
-    id: '', firstName: '', lastName: '', email: '', phoneNumber: '', image: '',
-    employeeId: '', location: '', company: '', department: '', designation: '',
-    aadharNumber: '', EPF: '', ESIC: '', device: '', holidayCalendar: '',
-    otApplicable: '', mobilePolicy: '', gender: 'Male', dob: '', personalEmail: '',
-    tag: '', dateJoining: '', status: "0"
+    id: '', FirstName: '', LastName: '', Email: '', PhoneNumber: '', Image: '',
+    EmployeeId: '', Location: '', company: '', department: '', designation: '',
+    AadharNumber: '', EPF: '', ESIC: '', Device: '', HolidayCalendar: '',
+    OTApplicable: '', MobilePolicy: '', Gender: 'Male', Dob: '', PersonalEmail: '',
+    Tag: '', DateJoining: '', Status: 0
   });
 
   const [options, setOptions] = useState({
@@ -98,13 +98,14 @@ export default function EmployeePage() {
 
   const handleDateChange = (e) => {
     const { name, value } = e.target;
+    console.log(name)
     setEmployee(prev => ({ ...prev, [name]: value }));
   };
 
   const handleAadharChange = (e) => {
     const aadhar = e.target.value;
     if (/^[0-9\b]{0,12}$/.test(aadhar)) {
-      setEmployee(prev => ({ ...prev, aadharNumber: aadhar }));
+      setEmployee(prev => ({ ...prev, AadharNumber: aadhar }));
     }
   };
 
@@ -115,26 +116,39 @@ export default function EmployeePage() {
       setIsAdding(false);
     } else {
       setEmployee({
-        id: '', firstName: '', lastName: '', email: '', phoneNumber: '', image: '',
-        employeeId: '', location: '', company: '', department: '', designation: '',
-        aadharNumber: '', EPF: '', ESIC: '', device: '', holidayCalendar: '',
-        otApplicable: '', mobilePolicy: '', gender: 'Male', dob: '', personalEmail: '',
-        tag: '', dateJoining: '', status: 0
+        FirstName: '', LastName: '', Email: '', PhoneNumber: '', Image: '',
+        EmployeeId: '', Location: '', company: '', department: '', designation: '',
+        AadharNumber: '', EPF: '', ESIC: '', Device: '', HolidayCalendar: '',
+        OTApplicable: '', MobilePolicy: '', Gender: 'Male', Dob: '', PersonalEmail: '',
+        Tag: '', DateJoining: '', Status: 0
       });
       setIsAdding(true);
       setIsUpdating(false);
     }
   };
 
+  function toCamelCase(str) {
+    return str.charAt(0).toLowerCase() + str.slice(1);
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (employee.aadharNumber.length !== 12) {
+    if (employee.AadharNumber.length !== 12) {
       toast.error('Aadhar number must be 12 digits');
       return;
     }
-    
+
+    const keysToExclude = ["EPF", "ESIC"];
+
     const formData = new FormData();
-    Object.keys(employee).forEach(key => formData.append(key, employee[key]));
+
+    Object.keys(employee).forEach(key => {
+      let finalKey = keysToExclude.includes(key) ? key : toCamelCase(key);
+      formData.append(finalKey, employee[key]);
+      console.log(finalKey)
+    });
+
+    console.log(formData)
 
     const requestOptions = {
       method: isUpdating ? 'PUT' : 'POST',
@@ -161,7 +175,7 @@ export default function EmployeePage() {
     }
   };
 
- 
+
 
   const handlePageChange = (direction) => {
     setCurrentPage(prev => {
@@ -179,16 +193,16 @@ export default function EmployeePage() {
       {isAdding || isUpdating ? (
         <form onSubmit={handleSubmit} className="mt-4 bg-gray-100 p-4 rounded">
           <div className="grid grid-cols-3 gap-4">
-            {['firstName', 'lastName', 'email', 'phoneNumber', 'employeeId', 'location', 'EPF', 'ESIC', 'device', 'holidayCalendar', 'otApplicable', 'mobilePolicy', 'personalEmail', 'tag'].map(field => (
+            {['FirstName', 'LastName', 'Email', 'PhoneNumber', 'EmployeeId', 'Location', 'EPF', 'ESIC', 'Device', 'HolidayCalendar', 'OtApplicable', 'MobilePolicy', 'PersonalEmail', 'Tag'].map(field => (
               <div key={field} className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">{field.split(/(?=[A-Z])/).join(' ')}</label>
+                <label className="block text-gray-700 text-sm font-bold mb-2 capitalize">{field.split(/(?=[A-Z])/).join(' ')}</label>
                 <input
                   type="text"
                   name={field}
                   value={employee[field]}
                   onChange={handleInputChange}
                   className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-                 
+
                 />
               </div>
             ))}
@@ -202,15 +216,15 @@ export default function EmployeePage() {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">Aaadhaar Number</label>
+              <label className="block text-gray-700 text-sm font-bold mb-2">Aadhaar Number</label>
               <input
                 type="tel"
                 name="aadharNumber"
-                value={employee.aadharNumber}
+                value={employee.AadharNumber}
                 onChange={handleAadharChange}
                 maxLength={12}
                 className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-                required
+              // required
               />
             </div>
             {['company', 'department', 'designation'].map(opt => (
@@ -221,7 +235,7 @@ export default function EmployeePage() {
                   value={employee[opt]}
                   onChange={handleInputChange}
                   className="border bg-gray-600 rounded w-full py-2 px-3 text-white leading-tight"
-                  required
+                // required
                 >
                   <option value="">Select {opt.charAt(0).toUpperCase() + opt.slice(1)}</option>
                   {options[opt].map(item => (
@@ -236,13 +250,13 @@ export default function EmployeePage() {
               <label className="block text-gray-700 text-sm font-bold mb-2">Gender</label>
               <select
                 name="gender"
-                value={employee.gender}
+                value={employee.Gender}
                 onChange={handleInputChange}
                 className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-                required
+              // required
               >
                 <option value="Male">Male</option>
-              
+
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
               </select>
@@ -251,22 +265,22 @@ export default function EmployeePage() {
               <label className="block text-gray-700 text-sm font-bold mb-2">Date of Birth</label>
               <input
                 type="date"
-                name="dob"
-                value={employee.dob}
+                name="Dob"
+                value={employee.Dob}
                 onChange={handleDateChange}
                 className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-                required
+              // required
               />
             </div>
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">Date Joining</label>
               <input
                 type="date"
-                name="dateJoining"
-                value={employee.dateJoining}
+                name="DateJoining"
+                value={employee.DateJoining}
                 onChange={handleDateChange}
                 className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-                required
+              // required
               />
             </div>
           </div>
@@ -287,15 +301,15 @@ export default function EmployeePage() {
           </div>
         </form>
       ) : (
-        
+
         <div className="mt-4 ">
           <div className='flex justify-end items-center'>
-          <button
-            onClick={() => handleAction('add')}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          >
-            Add Employee
-          </button></div>
+            <button
+              onClick={() => handleAction('add')}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            >
+              Add Employee
+            </button></div>
           <div className="relative  flex items-center justify-center">
             {isLoading ? (
               <div className="absolute  inset-0 flex flex-col items-center justify-center  bg-transparent bg-opacity-50">
@@ -306,83 +320,83 @@ export default function EmployeePage() {
               </div>
             ) : (
               <div class="flex flex-col overflow-x-auto">
-              <div class="sm:-mx-6 lg:-mx-8">
-        <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
-          <div class="overflow-x-auto"></div>
-          <table className="min-w-full bg-white mt-4">
-            <thead>
-              <tr>
-                <th className="py-2 px-4 border-b border text-white bg-gray-600">ID</th>
-                <th className="py-2 px-4 border-b border text-white bg-gray-600">First Name</th>
-                <th className="py-2 px-4 border-b border text-white bg-gray-600">Last Name</th>
-                <th className="py-2 px-4 border-b border text-white bg-gray-600">Email</th>
-                <th className="py-2 px-4 border-b border text-white bg-gray-600">Employee ID</th>
-                <th className="py-2 px-4 border-b border text-white bg-gray-600">Company</th>
-                <th className="py-2 px-4 border-b border text-white bg-gray-600">Designation</th>
-                <th className="py-2 px-4 border-b border text-white bg-gray-600">Department</th>
-                <th className="py-2 px-4 border-b border text-white bg-gray-600">DOB</th>
-                <th className="py-2 px-4 border-b border text-white bg-gray-600">Phone Number</th>
-                <th className="py-2 px-4 border-b border text-white bg-gray-600">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {isLoading ? (
-                <tr>
-                  <td colSpan="6" className="text-center text-black py-4">Loading...</td>
-                </tr>
-              ) : (
-                displayedEmployees.map(emp => (
-                  <tr key={emp.id}>
-                    <td className="py-2 px-4 border-b text-center text-black border">{emp.id}</td>
-                    <td className="py-2 px-4 border-b text-center text-black border">{emp.firstName}</td>
-                    <td className="py-2 px-4 border-b text-center text-black border">{emp.lastname}</td>
-                    <td className="py-2 px-4 border-b text-center text-black border">{emp.email}</td>
-                    <td className="py-2 px-4 border-b text-center text-black border">{emp.employeeId}</td>
-                    <td className="py-2 px-4 border-b text-center text-black border">{emp.company}</td>
-                    <td className="py-2 px-4 border-b text-center text-black border">{emp.designation}</td>
-                    <td className="py-2 px-4 border-b text-center text-black border">{emp.department}</td>
-                    <td className="py-2 px-4 border-b text-center text-black border">{emp.dob}</td>
-                    <td className="py-2 px-4 border-b text-center text-black border">{emp.phoneNumber}</td>
-                    <td className="py-2 px-4 border-b text-center text-black border">
-                      <button
-                        onClick={() => handleAction('update', emp)}
-                        className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 w-28 rounded focus:outline-none focus:shadow-outline mr-2"
-                      >
-                        Update
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-          </div>
-        
-            <div className="mt-4 flex mb-4 justify-center items-center">
-  <button
-    onClick={() => handlePageChange(-1)}
-    disabled={currentPage === 1}
-    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 w-20 rounded mr-2 focus:outline-none focus:shadow-outline"
-  >
-    «
-  </button>
-  <span className="text-white mx-4"> {currentPage} / {Math.ceil(employees.length / itemsPerPage)}</span>
-  <button
-    onClick={() => handlePageChange(1)}
-    disabled={currentPage === Math.ceil(employees.length / itemsPerPage)}
-    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 w-20 rounded focus:outline-none focus:shadow-outline"
-  >
-   »
-  </button>
-</div>
-</div>
-          </div>
+                <div class="sm:-mx-6 lg:-mx-8">
+                  <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+                    <div class="overflow-x-auto"></div>
+                    <table className="min-w-full bg-white mt-4">
+                      <thead>
+                        <tr>
+                          <th className="py-2 px-4 border-b border text-white bg-gray-600">ID</th>
+                          <th className="py-2 px-4 border-b border text-white bg-gray-600">First Name</th>
+                          <th className="py-2 px-4 border-b border text-white bg-gray-600">Last Name</th>
+                          <th className="py-2 px-4 border-b border text-white bg-gray-600">Email</th>
+                          <th className="py-2 px-4 border-b border text-white bg-gray-600">Employee ID</th>
+                          <th className="py-2 px-4 border-b border text-white bg-gray-600">Company</th>
+                          <th className="py-2 px-4 border-b border text-white bg-gray-600">Designation</th>
+                          <th className="py-2 px-4 border-b border text-white bg-gray-600">Department</th>
+                          <th className="py-2 px-4 border-b border text-white bg-gray-600">DOB</th>
+                          <th className="py-2 px-4 border-b border text-white bg-gray-600">Phone Number</th>
+                          <th className="py-2 px-4 border-b border text-white bg-gray-600">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {isLoading ? (
+                          <tr>
+                            <td colSpan="6" className="text-center text-black py-4">Loading...</td>
+                          </tr>
+                        ) : (
+                          displayedEmployees.map(emp => (
+                            <tr key={emp.id}>
+                              <td className="py-2 px-4 border-b text-center text-black border">{emp.id}</td>
+                              <td className="py-2 px-4 border-b text-center text-black border">{emp.firstName}</td>
+                              <td className="py-2 px-4 border-b text-center text-black border">{emp.lastname}</td>
+                              <td className="py-2 px-4 border-b text-center text-black border">{emp.email}</td>
+                              <td className="py-2 px-4 border-b text-center text-black border">{emp.employeeId}</td>
+                              <td className="py-2 px-4 border-b text-center text-black border">{emp.company}</td>
+                              <td className="py-2 px-4 border-b text-center text-black border">{emp.designation}</td>
+                              <td className="py-2 px-4 border-b text-center text-black border">{emp.department}</td>
+                              <td className="py-2 px-4 border-b text-center text-black border">{emp.dob}</td>
+                              <td className="py-2 px-4 border-b text-center text-black border">{emp.phoneNumber}</td>
+                              <td className="py-2 px-4 border-b text-center text-black border">
+                                <button
+                                  onClick={() => handleAction('update', emp)}
+                                  className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 w-28 rounded focus:outline-none focus:shadow-outline mr-2"
+                                >
+                                  Update
+                                </button>
+                              </td>
+                            </tr>
+                          ))
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div className="mt-4 flex mb-4 justify-center items-center">
+                    <button
+                      onClick={() => handlePageChange(-1)}
+                      disabled={currentPage === 1}
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 w-20 rounded mr-2 focus:outline-none focus:shadow-outline"
+                    >
+                      «
+                    </button>
+                    <span className="text-white mx-4"> {currentPage} / {Math.ceil(employees.length / itemsPerPage)}</span>
+                    <button
+                      onClick={() => handlePageChange(1)}
+                      disabled={currentPage === Math.ceil(employees.length / itemsPerPage)}
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 w-20 rounded focus:outline-none focus:shadow-outline"
+                    >
+                      »
+                    </button>
+                  </div>
+                </div>
+              </div>
             )}
-            </div>
+          </div>
 
         </div>
       )}
-       {!isLoading && <Footer />}
+      {!isLoading && <Footer />}
     </div>
   );
 }
