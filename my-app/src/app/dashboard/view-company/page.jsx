@@ -170,7 +170,7 @@ export default function CompanyManagement() {
               Add Company
             </button>
           </div>
-          <div className="relative flex items-center justify-center">
+          <div className="relative  flex items-center justify-center">
             {isLoading ? (
               <div className="absolute  inset-0 flex flex-col items-center justify-center  bg-transparent bg-opacity-50">
                 <div role='status' className="loa  rounded-full border-e-transparent align-[-0.125em] border-8 border-t-8 animate-[spin_1.5s_linear_infinite] border-purple-500 h-24 w-24 mb-4"></div>
@@ -179,18 +179,18 @@ export default function CompanyManagement() {
                 </h2>
               </div>
             ) : (
-              <div class="flex flex-col overflow-x-auto">
-              <div class="sm:-mx-6 lg:-mx-8">
-        <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+              <div class="flex min-w-full flex-col ">
+              <div class="sm:-mx-6  lg:-mx-8">
+        <div class="inline-block min-w-full  py-2 sm:px-6 lg:px-8">
           <div class="overflow-x-auto"></div>
-              <table className="min-w-full bg-white border">
+              <table className="min-w-full  bg-white border">
                 <thead className="bg-gray-800 text-white">
                   <tr>
-                    <th className="py-2 px-4 border text-center">S.No</th>
-                    <th className="py-2 px-4 border">Company Name</th>
-                    <th className="py-2 px-4 border">Company ID</th>
-                    <th className="py-2 px-4 border">Status</th>
-                    <th className="py-2 px-4 border">Actions</th>
+                    <th className="py-2 px-8 border text-center">S.No</th>
+                    <th className="py-2 px-8 border">Company Name</th>
+                    <th className="py-2 px-8 border">Company ID</th>
+                    <th className="py-2 px-8 border">Status</th>
+                    <th className="py-2 px-8 border">Actions</th>
                   </tr>
                 </thead>
                 <tbody>

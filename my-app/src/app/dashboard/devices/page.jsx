@@ -11,6 +11,8 @@ const DevicesPage = () => {
   const [isAdding, setIsAdding] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
   const [currentDevice, setCurrentDevice] = useState({
     serialNumber: '',
     location: '',
@@ -115,6 +117,17 @@ const DevicesPage = () => {
       });
     }
   };
+
+  const handlePageChange = (direction) => {
+    setCurrentPage(prev => {
+      const newPage = prev + direction;
+      if (newPage < 1) return 1;
+      if (newPage > Math.ceil(devices.length / itemsPerPage)) return Math.ceil(devices.length / itemsPerPage);
+      return newPage;
+    });
+  };
+  const displayedDevices = devices.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
 
   return (
     <div className="container mx-auto p-4">
@@ -224,6 +237,10 @@ const DevicesPage = () => {
                 </h2>
               </div>
             ) : (
+              <div class="flex min-w-full flex-col ">
+              <div class="sm:-mx-6  lg:-mx-8">
+        <div class="inline-block min-w-full  py-2 sm:px-6 lg:px-8">
+          <div class="overflow-x-auto"></div>
           <table className="min-w-full bg-white border">
             <thead className="bg-gray-800 text-white">
               <tr>
@@ -236,7 +253,7 @@ const DevicesPage = () => {
               </tr>
             </thead>
             <tbody>
-              {devices.map((device) => (
+              {displayedDevices.map((device) => (
                 <tr key={device.id}>
                   <td className="py-2 px-4 border text-black text-center">
                     {device.serialNumber}
@@ -259,6 +276,26 @@ const DevicesPage = () => {
               ))}
             </tbody>
           </table>
+          </div>
+          <div className="mt-4 flex mb-4 justify-center items-center">
+  <button
+    onClick={() => handlePageChange(-1)}
+    disabled={currentPage === 1}
+    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 w-20 rounded mr-2 focus:outline-none focus:shadow-outline"
+  >
+    «
+  </button>
+  <span className="text-white mx-4"> {currentPage} / {Math.ceil(devices.length / itemsPerPage)}</span>
+  <button
+    onClick={() => handlePageChange(1)}
+    disabled={currentPage === Math.ceil(devices.length / itemsPerPage)}
+    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 w-20 rounded focus:outline-none focus:shadow-outline"
+  >
+   »
+  </button>
+</div>
+          </div>
+          </div>
             )}
             </div>
         </>

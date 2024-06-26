@@ -143,7 +143,7 @@ export default function DepartmentPage() {
                 </h2>
               </div>
             ) : (
-              <div class="flex flex-col overflow-x-auto">
+              <div class="flex w-full flex-col overflow-x-auto">
               <div class="sm:-mx-6 lg:-mx-8">
         <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
           <div class="overflow-x-auto"></div>

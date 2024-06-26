@@ -11,6 +11,8 @@ export default function LocationPage() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
   const [currentLocation, setCurrentLocation] = useState({
     locationName: '',
     addressLine: '',
@@ -31,7 +33,7 @@ export default function LocationPage() {
 
   const fetchLocations = async () => {
     try {
-      const response = await axios.get('https://attendence-api-px8b.onrender.com/location/get-locations', {
+      const response = await axios.get('https://attend.anujdwivedi.in/location/get-locations', {
         headers: {
           Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
         },
@@ -130,6 +132,17 @@ export default function LocationPage() {
     setIsAdding(false);
   };
 
+
+  const handlePageChange = (direction) => {
+    setCurrentPage(prev => {
+      const newPage = prev + direction;
+      if (newPage < 1) return 1;
+      if (newPage > Math.ceil(locations.length / itemsPerPage)) return Math.ceil(locations.length / itemsPerPage);
+      return newPage;
+    });
+  };
+  const displayedLocations = locations.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
   return (
     <div className="container mx-auto p-4">
       <ToastContainer />
@@ -160,7 +173,7 @@ export default function LocationPage() {
                 </h2>
               </div>
             ) : (
-          <div className='!w-[100%] overflow-x-scroll py-2 sm:px-6 lg:px-8 scroll'>
+          <div className='!w-[100%] overflow-x py-2 sm:px-6 lg:px-8 scroll'>
           <table className="min-w-full  bg-white border text-black">
             <thead className="bg-gray-800 text-white">
               <tr>
@@ -177,7 +190,7 @@ export default function LocationPage() {
               </tr>
             </thead>
             <tbody>
-              {locations.map((location) => (
+              {displayedLocations.map((location) => (
                 <tr key={location.id} className="border-t">
                   <td className="py-2 px-4 border text-center">{location.locationName}</td>
                   <td className="py-2 px-4 border text-center">{location.addressLine}</td>
@@ -200,8 +213,25 @@ export default function LocationPage() {
               ))}
             </tbody>
           </table>
-         
+          <div className="mt-4 flex mb-4 justify-center items-center">
+  <button
+    onClick={() => handlePageChange(-1)}
+    disabled={currentPage === 1}
+    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 w-20 rounded mr-2 focus:outline-none focus:shadow-outline"
+  >
+    «
+  </button>
+  <span className="text-white mx-4"> {currentPage} / {Math.ceil(locations.length / itemsPerPage)}</span>
+  <button
+    onClick={() => handlePageChange(1)}
+    disabled={currentPage === Math.ceil(locations.length / itemsPerPage)}
+    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 w-20 rounded focus:outline-none focus:shadow-outline"
+  >
+   »
+  </button>
+</div>
           </div>
+          
          )}
        
           </div>
@@ -218,13 +248,11 @@ const LocationForm = ({ currentLocation, handleChange, handleSubmit, handleCance
   const [cities, setCities] = useState([]);
 
   useEffect(() => {
-    // Extract unique states from cities data
     const uniqueStates = [...new Set(citiesData.map(city => city.state))];
     setStates(uniqueStates);
   }, []);
 
   useEffect(() => {
-    // Update cities dropdown based on selected state
     if (currentLocation.state) {
       const filteredCities = citiesData.filter(city => city.state === currentLocation.state);
       setCities(filteredCities);

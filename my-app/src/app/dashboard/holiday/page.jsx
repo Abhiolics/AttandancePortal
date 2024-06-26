@@ -10,6 +10,8 @@ export default function HolidayPage() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
   const [currentHoliday, setCurrentHoliday] = useState({
     accessType: '',
     calendarId: '',
@@ -147,6 +149,18 @@ export default function HolidayPage() {
   useEffect(() => {
     console.log(currentHoliday);
   }, [currentHoliday]);
+
+
+  const handlePageChange = (direction) => {
+    setCurrentPage(prev => {
+      const newPage = prev + direction;
+      if (newPage < 1) return 1;
+      if (newPage > Math.ceil(holidays.length / itemsPerPage)) return Math.ceil(holidays.length / itemsPerPage);
+      return newPage;
+    });
+  };
+  const displayedHolidays = holidays.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
 
   return (
     <div className="container mx-auto p-4">
@@ -288,6 +302,10 @@ export default function HolidayPage() {
                 </h2>
               </div>
             ) : (
+              <div class="flex min-w-full flex-col ">
+              <div class="sm:-mx-6  lg:-mx-8">
+        <div class="inline-block min-w-full  py-2 sm:px-6 lg:px-8">
+          <div class="overflow-x-auto"></div>
           <table className="min-w-full bg-white border">
             <thead className='bg-gray-800 text-white'>
               <tr>
@@ -302,7 +320,7 @@ export default function HolidayPage() {
               </tr>
             </thead>
             <tbody>
-              {holidays.map((holiday, index) => {
+              {displayedHolidays.map((holiday, index) => {
                 let holidayDetailJSON = JSON.parse(holiday.holidayDetails);
                 return (
                   <tr key={holiday.id}>
@@ -327,7 +345,31 @@ export default function HolidayPage() {
                 )
               })}
             </tbody>
+
+       
           </table>
+          </div>
+
+<div className="mt-4 flex mb-4 justify-center items-center">
+<button
+  onClick={() => handlePageChange(-1)}
+  disabled={currentPage === 1}
+  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 w-20 rounded mr-2 focus:outline-none focus:shadow-outline"
+>
+  «
+</button>
+<span className="text-white mx-4"> {currentPage} / {Math.ceil(holidays.length / itemsPerPage)}</span>
+<button
+  onClick={() => handlePageChange(1)}
+  disabled={currentPage === Math.ceil(holidays.length / itemsPerPage)}
+  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 w-20 rounded focus:outline-none focus:shadow-outline"
+>
+ »
+</button>
+</div>
+
+</div>
+</div>
             )}
             </div>
         </>
