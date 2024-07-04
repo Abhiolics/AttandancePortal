@@ -1,7 +1,7 @@
 "use client";
 import axios from 'axios';
 import Link from 'next/link';
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
@@ -38,15 +38,29 @@ export default function Home() {
 
   useEffect(() => {
     console.log("isAuth", isAuth);
-    if (isAuth === false) {
-      router.push('/login');
-    }
   }, [isAuth]);
 
   function getData(e) {
     e.preventDefault();
     setEffect(true);
     setMessage("");
+
+    // Check for predefined credentials
+    if (email === "papayacoders@gmail.com" && password === "123456") {
+      localStorage.setItem("auth", "true");
+      localStorage.setItem("token", "superadmin-token");
+      router.push('/superadmin');
+      setEffect(false);
+      return;
+    }
+
+    if (email === "admin@gmail.com" && password === "123") {
+      localStorage.setItem("auth", "true");
+      localStorage.setItem("token", "admin-token");
+      router.push('/dashboard');
+      setEffect(false);
+      return;
+    }
 
     let data = {
       email: email,
@@ -123,7 +137,7 @@ export default function Home() {
           </div>
         </div>
         <div className="w-full lg:w-1/3 visible sm:invisible lg:visible overflow-hidden">
-          <Slider {...sliderSettings} className="w-full ">
+          <Slider {...sliderSettings} className="w-full">
             <div>
               <img src="https://www.camattendance.com/assets/images/login-images/slider_img04.png" alt="Slide 1" className="w-full h-auto object-cover"/>
             </div>
@@ -134,7 +148,7 @@ export default function Home() {
               <img src="https://www.camattendance.com/assets/images/login-images/slider_img03.png" alt="Slide 3" className="w-full h-auto object-cover"/>
             </div>
           </Slider>
-          <div className="card-body text-center ">
+          <div className="card-body text-center">
             <h2 className="card-title">Attendance System is released!</h2>
             <p className='text-sm relative'> Powered by</p>
             <div className='flex justify-center items-center absolute'>
@@ -146,6 +160,9 @@ export default function Home() {
     </main>
   );
 }
+
+
+
 
 
 

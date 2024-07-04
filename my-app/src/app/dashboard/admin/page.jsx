@@ -80,7 +80,7 @@ const AdminPage = () => {
                 <div role='status' className="loa  rounded-full border-e-transparent align-[-0.125em] border-8 border-t-8 animate-[spin_1.5s_linear_infinite] border-purple-500 h-24 w-24 mb-4"></div>
                 <h2 className="text-center text-white text-xl font-semibold">
                   Loading... Please wait!
-                </h2>
+                </h2> 
               </div>
             ) : (
               <div className="flex flex-col items-center">

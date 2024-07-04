@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { MdApartment, MdBusiness, MdGroups, MdHolidayVillage, MdSupervisedUserCircle, MdVisibility } from "react-icons/md";
+import { MdApartment, MdBusiness, MdGroups, MdHolidayVillage, MdVisibility } from "react-icons/md";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
@@ -10,10 +10,10 @@ import styles from '../ui/dashboard/dashboard.module.css';
 import Footer from "../ui/dashboard/footer/footer";
 
 const Card = ({ title, count }) => (
-  <div className="flex  items-center hover:shadow-lg py-8 p-7 bg-[#293755] text-white rounded h-48 shadow-lg w-full">
+  <div className="flex c items-center hover:shadow-lg py-8 p-7 bg-[#293755] text-white rounded h-48 shadow-lg w-full">
     <div className="ml-4">
       <span className="block text-gray-300 text-center text-sm font-bold">{title}</span>
-      <span className="block text-green-500  font-bold text-xl">{count}</span>
+      <span className="block text-green-500 font-bold text-xl">{count}</span>
     </div>
   </div>
 );
@@ -29,9 +29,11 @@ const Page = () => {
   const router = useRouter();
 
   useEffect(() => {
-    checkAdmin();
-    checkToken();
-    loadLottieScript();
+    if (typeof window !== "undefined") {
+      checkAdmin();
+      checkToken();
+      loadLottieScript();
+    }
   }, []);
 
   useEffect(() => {
@@ -112,42 +114,32 @@ const Page = () => {
 
   return (
     <div className="min-h-screen p-8">
-        
-      
-   
       <ToastContainer />
       <div className="grid gap-6">
-        <div className="ml-3 grid grid-cols-1   md:grid-cols-3 gap-6">
-        <lottie-player 
-          src="https://lottie.host/5383c0bf-6cd2-471a-9af2-5b25a370bc06/o5kqw72KDI.json" 
-          background="##ffffff" 
-          speed="1" 
-          
-          style={{ width: "250px", height: "250px" }} 
-          loop 
-          
-          controls 
-          autoplay 
-          direction="1" 
-          mode="normal">
-        </lottie-player>
-          <Card title="Total Employees" count={employeesCount}  icon={MdGroups}/>
+        <div className="ml-3 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <lottie-player 
+            src="https://lottie.host/5383c0bf-6cd2-471a-9af2-5b25a370bc06/o5kqw72KDI.json" 
+            background="##ffffff" 
+            speed="1" 
+            style={{ width: "250px", height: "250px" }} 
+            loop 
+            controls 
+            autoplay 
+            direction="1" 
+            mode="normal">
+          </lottie-player>
+          <Card title="Total Employees" count={employeesCount} icon={MdGroups}/>
           <Card title="Total Companies" count={companiesCount} icon={MdBusiness} />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card title="Total Departments" count={departmentsCount} icon={MdApartment} />
-          <Card title="Total Visitors" count={visitorsCount}  icon={MdVisibility} />
+          <Card title="Total Visitors" count={visitorsCount} icon={MdVisibility} />
           <Card title="Total Holidays" count={holidaysCount} icon={MdHolidayVillage} />
         </div>
       </div>
-    
       <Footer />
     </div>
   );
 };
 
 export default Page;
-
-
-
-

@@ -24,6 +24,7 @@ import { SlCalender } from "react-icons/sl";
 import { TbHealthRecognition } from "react-icons/tb";
 import { MdGroups } from "react-icons/md";
 import { IoFastFoodOutline } from "react-icons/io5";
+import { TbReportAnalytics } from "react-icons/tb";
 
 const menuItems = [
   {
@@ -192,7 +193,7 @@ const Sidebar = () => {
             <ul>
               <li><Link href="/dashboard/designation"><TfiIdBadge size={22}/> Designation</Link></li>
               <li><Link href="/dashboard/department"><AiOutlineAppstoreAdd size={22}/>Department</Link></li>
-
+              <li><Link href="/dashboard/reports"><TbReportAnalytics size={25}/>Reports</Link></li>
               <li><Link href="/dashboard/view-location"><MdOutlineAddLocationAlt size={22}/> Location</Link></li>
               <li><Link href="/dashboard/holiday"><SlCalender  size={22}/>Holiday</Link></li>
             </ul>
@@ -215,7 +216,7 @@ const Sidebar = () => {
         </li>
        
         <button className={styles.logout} onClick={() => logOut()}> <LuLogOut /> Logout</button>
-        <img className="rounded-lg p-2 flex items-center justify-end  " src="/download.png" alt="" />
+        <img className="rounded-lg p-2 bottom-5 flex items-center justify-end  " src="/download.png" alt="" />
 </ul>
     </div>
   )

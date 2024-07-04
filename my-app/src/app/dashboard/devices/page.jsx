@@ -250,7 +250,7 @@ const DevicesPage = () => {
                 <th className="py-2 px-4 border">Type</th>
                 <th className="py-2 px-4 border">Status</th>
                 <th className="py-2 px-4 border">Actions</th>
-              </tr>
+              </tr> 
             </thead>
             <tbody>
               {displayedDevices.map((device) => (
