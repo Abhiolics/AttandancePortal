@@ -27,8 +27,10 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx",
-    "./src/**/*.ts"
-, "src/app/dashboard/view-location/page.jsx"  ],
+    "./src/**/*.ts",
+    "src/app/dashboard/view-location/page.jsx",
+    "dist/types/**/*.ts"
+  ],
   "exclude": [
     "node_modules"
   ]
