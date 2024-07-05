@@ -1,1 +1,7 @@
-{}
+{
+  "/superadmin/page": "app/superadmin/page.js",
+  "/dashboard/employees/page": "app/dashboard/employees/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/dashboard/view-company/page": "app/dashboard/view-company/page.js",
+  "/dashboard/schedule/page": "app/dashboard/schedule/page.js"
+}

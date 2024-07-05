@@ -123,8 +123,7 @@ const Page = () => {
             speed="1" 
             style={{ width: "250px", height: "250px" }} 
             loop 
-            controls 
-            autoplay 
+            autoplay
             direction="1" 
             mode="normal">
           </lottie-player>
