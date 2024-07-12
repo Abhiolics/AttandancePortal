@@ -5,6 +5,7 @@ import { FaListCheck } from "react-icons/fa6";
 import { IoMdPersonAdd } from "react-icons/io";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useRouter }  from 'next/navigation';
 
 export default function SuperAdminPage() {
   const [showAddAdminModal, setShowAddAdminModal] = useState(false);
@@ -13,6 +14,7 @@ export default function SuperAdminPage() {
   const [newAdmin, setNewAdmin] = useState({ name: '', email: '', password: '', role: 'admin', status: 1 });
   const [updateAdmin, setUpdateAdmin] = useState({ id: '', name: '', email: '', role: 'admin', status: 1 });
   const [showUpdateAdminModal, setShowUpdateAdminModal] = useState(false);
+  const router = useRouter();
 
   const handleAddAdmin = async () => {
     const data = JSON.stringify(newAdmin);
@@ -84,6 +86,26 @@ export default function SuperAdminPage() {
     }
   };
 
+  const handleLogout = async () => {
+    const config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'https://attendence-api-px8b.onrender.com/admin/logout',
+      headers: { 
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzIwNzY2NzQxfQ.S__q-oS5K2Vn0yDfdrZAuO6sQMssCTB1rs923-JZdKA'
+      }
+    };
+
+    try {
+      await axios.request(config);
+      toast.success('Logged out successfully');
+      router.push('/');
+    } catch (error) {
+      console.log(error);
+      toast.error('Error logging out');
+    }
+  };
+
   return (
     <div className={`min-h-screen flex flex-col items-center justify-center bg-[#151c2c] ${showAddAdminModal || showGetAdminListModal ? 'backdrop-blur-md' : ''}`}>
       <div className="flex flex-col items-center gap-4 w-full max-w-md">
@@ -98,6 +120,12 @@ export default function SuperAdminPage() {
           onClick={handleGetAdminList}
         >
           Admin List <FaListCheck />
+        </button>
+        <button
+          className="btn btn-outline text-lg w-[200px] text-white"
+          onClick={handleLogout}
+        >
+          Logout
         </button>
       </div>
 
@@ -267,6 +295,7 @@ export default function SuperAdminPage() {
     </div>
   );
 }
+
 
 
 
