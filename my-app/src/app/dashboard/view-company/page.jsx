@@ -69,7 +69,7 @@ export default function CompanyManagement() {
         method: isUpdating ? 'put' : 'post',
         url: isUpdating
           ? `https://attend.anujdwivedi.in/company/update-company/${currentCompany.id}`
-          : 'https://attend.anujdwivedi.in/company/add-company',
+          : 'https://attendence-api-px8b.onrender.com/company/add-company',
         headers: {
           'Content-Type': 'application/json',
           Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',

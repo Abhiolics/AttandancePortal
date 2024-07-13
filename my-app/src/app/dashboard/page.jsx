@@ -68,14 +68,14 @@ const Page = () => {
     try {
       const config = {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzIwNzkwNTgzfQ.C1mvfVqoxrnn8pcGPV_w5awEk4ltrcnr3JKxh3yQNKs`,
         },
       };
 
       const [employeesResponse, companiesResponse, departmentsResponse, visitorsResponse, holidaysResponse] = await Promise.all([
-        axios.get('https://attend.anujdwivedi.in/employee/get-employees', config),
-        axios.get('https://attend.anujdwivedi.in/company/get-companies', config),
-        axios.get('https://attend.anujdwivedi.in/department/get-departments', config),
+        axios.get('https://attendence-api-px8b.onrender.com/employee/get-employees', config),
+        axios.get('https://attendence-api-px8b.onrender.com/company/get-companies', config),
+        axios.get('https://attendence-api-px8b.onrender.com/department/get-departments', config),
         axios.get('https://attend.anujdwivedi.in/recognition/get-visitors', config),
         axios.get('https://attend.anujdwivedi.in/holiday/get-holidays', config),
       ]);
@@ -97,7 +97,7 @@ const Page = () => {
       maxBodyLength: Infinity,
       url: 'https://attend.anujdwivedi.in//admin/logout',
       headers: { 
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzIwNzkwNTgzfQ.C1mvfVqoxrnn8pcGPV_w5awEk4ltrcnr3JKxh3yQNKs`
       }
     };
 
@@ -105,7 +105,7 @@ const Page = () => {
       .then((response) => {
         console.log(JSON.stringify(response.data));
         localStorage.clear();
-        router.push('/login');
+        router.push('/');
       })
       .catch((error) => {
         console.log(error);

@@ -49,7 +49,7 @@ export default function HolidayPage() {
 
   const fetchHolidays = async () => {
     try {
-      const response = await axios.get('https://attend.anujdwivedi.in/holiday/get-holidays', {
+      const response = await axios.get('https://attendence-api-px8b.onrender.com/holiday/get-holidays', {
         headers: {
           Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
         },
@@ -115,8 +115,8 @@ export default function HolidayPage() {
       const config = {
         method: isUpdating ? 'put' : 'post',
         url: isUpdating
-          ? `https://attend.anujdwivedi.in/holiday/update-holiday/${currentHoliday.id}`
-          : 'https://attend.anujdwivedi.in/holiday/add-holiday',
+          ? `https://attendence-api-px8b.onrender.com/holiday/update-holiday/${currentHoliday.id}`
+          : 'https://attendence-api-px8b.onrender.com/holiday/add-holiday',
         headers: {
           'Content-Type': 'application/json',
           Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',

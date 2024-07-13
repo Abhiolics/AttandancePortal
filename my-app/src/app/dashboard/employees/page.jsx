@@ -6,6 +6,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import FormData from 'form-data';
 import Footer from '../../ui/dashboard/footer/footer';
+import { format, parseISO } from 'date-fns';
 
 export default function EmployeePage() {
   const [employees, setEmployees] = useState([]);
@@ -17,7 +18,7 @@ export default function EmployeePage() {
 
   const [employee, setEmployee] = useState({
     id: '', FirstName: '', LastName: '', Email: '', PhoneNumber: '', Image: '',
-    EmployeeId: '', Location: '', company: '', department: '', designation: '',
+    EmployeeId: '', Location: '', companyId: '', departmentId: '', designation: '',
     AadharNumber: '', EPF: '', ESIC: '', Device: '', HolidayCalendar: '',
     OTApplicable: '', MobilePolicy: '', Gender: 'Male', Dob: '', PersonalEmail: '',
     Tag: '', DateJoining: '', Status: 0
@@ -31,7 +32,7 @@ export default function EmployeePage() {
     try {
       const response = await axios.get(url, {
         headers: {
-          Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzE4ODgxNzc2fQ.wIRnWLnZJqn0Xyb2gBLFooDatqKRx4F0eZjVF3Uc_ac',
+          Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
         },
       });
       setOptions(prev => ({ ...prev, [key]: response.data.data }));
@@ -43,7 +44,7 @@ export default function EmployeePage() {
   const fetchEmployees = async () => {
     try {
       const response = await axios.get(
-        'https://attend.anujdwivedi.in/employee/get-employees',
+        'https://attendence-api-px8b.onrender.com/employee/get-employees',
         {
           headers: {
             Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
@@ -51,6 +52,9 @@ export default function EmployeePage() {
         }
       );
       setEmployees(response.data.data);
+      // setEmployee({
+        
+      // })
     } catch (error) {
       toast.error('Failed to fetch employees');
     } finally {
@@ -60,7 +64,7 @@ export default function EmployeePage() {
 
   useEffect(() => {
     fetchEmployees();
-    fetchOptions('https://attend.anujdwivedi.in/company/get-companies', 'company');
+    fetchOptions('https://attendence-api-px8b.onrender.com/company/get-companies', 'company');
   }, []);
 
   const handleInputChange = async (e) => {
@@ -70,18 +74,18 @@ export default function EmployeePage() {
     if (name === 'company') {
       try {
         const departmentResponse = await axios.get(
-          `https://attend.anujdwivedi.in/department/get-department/${value}`,
+          `https://attendence-api-px8b.onrender.com/department/get-department/${value}`,
           {
             headers: {
-              Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE5MjA4NTg5fQ.dA7GAVbAxL4BORJwcIm9cgfUxN7m_QiU31K4wYZq3oI',
+              Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
             },
           }
         );
         const designationResponse = await axios.get(
-          `https://attend.anujdwivedi.in/designation/get-designation/${value}`,
+          `https://attendence-api-px8b.onrender.com/designation/get-designation/${value}`,
           {
             headers: {
-              Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE5MjA4NTg5fQ.dA7GAVbAxL4BORJwcIm9cgfUxN7m_QiU31K4wYZq3oI',
+              Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
             },
           }
         );
@@ -98,8 +102,11 @@ export default function EmployeePage() {
 
   const handleDateChange = (e) => {
     const { name, value } = e.target;
-    console.log(name)
-    setEmployee(prev => ({ ...prev, [name]: value }));
+    const parsedDate = parseISO(value);
+    const formattedDate = format(parsedDate, 'yyyy-MM-dd');
+
+    console.log(name);
+    setEmployee(prev => ({ ...prev, [name]: formattedDate }));
   };
 
   const handleAadharChange = (e) => {
@@ -117,7 +124,7 @@ export default function EmployeePage() {
     } else {
       setEmployee({
         FirstName: '', LastName: '', Email: '', PhoneNumber: '', Image: '',
-        EmployeeId: '', Location: '', company: '', department: '', designation: '',
+        EmployeeId: '', Location: '', companyId: '', departmentId: '', designationId: '',
         AadharNumber: '', EPF: '', ESIC: '', Device: '', HolidayCalendar: '',
         OTApplicable: '', MobilePolicy: '', Gender: 'Male', Dob: '', PersonalEmail: '',
         Tag: '', DateJoining: '', Status: 0
@@ -158,7 +165,7 @@ export default function EmployeePage() {
       body: formData,
     };
 
-    const url = isUpdating ? `https://attend.anujdwivedi.in/employee/update-employee/${employee.id}` : 'https://attend.anujdwivedi.in/employee/add-employee';
+    const url = isUpdating ? `https://attendence-api-px8b.onrender.com/employee/update-employee/${employee.id}` : 'https://attendence-api-px8b.onrender.com/employee/add-employee';
 
     try {
       const response = await fetch(url, requestOptions);
@@ -170,6 +177,7 @@ export default function EmployeePage() {
       }
       setIsAdding(false);
       setIsUpdating(false);
+      fetchEmployees();
     } catch (error) {
       toast.error('Failed to Update employee');
     }
@@ -352,9 +360,9 @@ export default function EmployeePage() {
                               <td className="py-2 px-4 border-b text-center text-black border">{emp.lastname}</td>
                               <td className="py-2 px-4 border-b text-center text-black border">{emp.email}</td>
                               <td className="py-2 px-4 border-b text-center text-black border">{emp.employeeId}</td>
-                              <td className="py-2 px-4 border-b text-center text-black border">{emp.company}</td>
-                              <td className="py-2 px-4 border-b text-center text-black border">{emp.designation}</td>
-                              <td className="py-2 px-4 border-b text-center text-black border">{emp.department}</td>
+                              <td className="py-2 px-4 border-b text-center text-black border">{emp.companyId}</td>
+                              <td className="py-2 px-4 border-b text-center text-black border">{emp.designationId}</td>
+                              <td className="py-2 px-4 border-b text-center text-black border">{emp.departmentId}</td>
                               <td className="py-2 px-4 border-b text-center text-black border">{emp.dob}</td>
                               <td className="py-2 px-4 border-b text-center text-black border">{emp.phoneNumber}</td>
                               <td className="py-2 px-4 border-b text-center text-black border">

@@ -29,7 +29,7 @@ export default function SchedulePage() {
   const fetchSchedules = async () => {
     try {
       const response = await axios.get(
-        "https://attend.anujdwivedi.in/schedule/get-schedules",
+        "https://attendence-api-px8b.onrender.com/schedule/get-schedules",
         {
           headers: {
             Authorization:
@@ -76,8 +76,8 @@ export default function SchedulePage() {
       const config = {
         method: isUpdating ? "put" : "post",
         url: isUpdating
-          ? `https://attend.anujdwivedi.in/schedule/update-schedule/${currentSchedule.id}`
-          : "https://attend.anujdwivedi.in/schedule/add-schedule",
+          ? `https://attendence-api-px8b.onrender.com/schedule/update-schedule/${currentSchedule.id}`
+          : "https://attendence-api-px8b.onrender.com/schedule/add-schedule",
         headers: {
           "Content-Type": "application/json",
           Authorization:
@@ -100,7 +100,7 @@ export default function SchedulePage() {
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(
-        `https://attend.anujdwivedi.in/schedule/delete-schedule/${id}`,
+        `http://localhost:5000/schedule/delete-schedule/${id}`,
         {
           headers: {
             Authorization:

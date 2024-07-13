@@ -36,7 +36,7 @@ const RecognitionPage = () => {
       const config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: 'https://attend.anujdwivedi.in/recognition/get-employees',
+        url: 'https://attendence-api-px8b.onrender.com/recognition/get-employees',
         headers: {
           'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE'
         }
@@ -56,7 +56,7 @@ const RecognitionPage = () => {
       const config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: 'https://attend.anujdwivedi.in/company/get-companies',
+        url: 'https://attendence-api-px8b.onrender.com/company/get-companies',
         headers: {
           'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE'
         }
@@ -74,7 +74,7 @@ const RecognitionPage = () => {
       const config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: 'https://attend.anujdwivedi.in/employee/get-employees',
+        url: 'https://attendence-api-px8b.onrender.com/employee/get-employees',
         headers: {
           'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE'
         }
@@ -126,8 +126,8 @@ const RecognitionPage = () => {
         method: isUpdating ? 'put' : 'post',
         maxBodyLength: Infinity,
         url: isUpdating
-          ? `https://attend.anujdwivedi.in/recognition/update-employee/${currentRecognition.id}`
-          : 'https://attend.anujdwivedi.in/recognition/add-employee',
+          ? `https://attendence-api-px8b.onrender.com/recognition/update-employee/${currentRecognition.id}`
+          : 'https://attendence-api-px8b.onrender.com/recognition/add-employee',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE'

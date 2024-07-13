@@ -28,7 +28,7 @@ const DevicesPage = () => {
   const fetchDevices = async () => {
     try {
       const response = await axios.get(
-        'https://attend.anujdwivedi.in/device/get-devices',
+        'https://attendence-api-px8b.onrender.com/device/get-devices',
         {
           headers: {
             Authorization:
@@ -77,7 +77,7 @@ const DevicesPage = () => {
       if (isUpdating) {
         const updateConfig = {
           method: 'put',
-          url: `https://attend.anujdwivedi.in/device/update-device/${currentDevice.id}`,
+          url: `https://attendence-api-px8b.onrender.com/device/update-device/${currentDevice.id}`,
           headers: {
             'Content-Type': 'application/json',
             Authorization:
@@ -89,7 +89,7 @@ const DevicesPage = () => {
       } else {
         const addConfig = {
           method: 'post',
-          url: 'https://attend.anujdwivedi.in/device/add-device',
+          url: 'https://attendence-api-px8b.onrender.com/device/add-device',
           headers: {
             'Content-Type': 'application/json',
             Authorization:
