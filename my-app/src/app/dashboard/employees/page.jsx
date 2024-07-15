@@ -24,6 +24,9 @@ export default function EmployeePage() {
     Tag: '', DateJoining: '', Status: 0
   });
 
+
+  
+
   const [options, setOptions] = useState({
     company: [], department: [], designation: []
   });
@@ -53,7 +56,7 @@ export default function EmployeePage() {
       );
       setEmployees(response.data.data);
       // setEmployee({
-        
+
       // })
     } catch (error) {
       toast.error('Failed to fetch employees');
@@ -140,6 +143,18 @@ export default function EmployeePage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+
+    
+    if (!employee.FirstName || !employee.LastName || !employee.Email || !employee.EmployeeId) {
+      toast.error('First name, last name, email, and employee ID are required fields');
+      return;
+    }
+    const phoneNumberRegex = /^\d{10}$/;
+    if (!phoneNumberRegex.test(employee.PhoneNumber)) {
+      toast.error('Phone number must be a 10-digit number');
+      return;
+    }
     if (employee.AadharNumber.length !== 12) {
       toast.error('Aadhar number must be 12 digits');
       return;
@@ -205,12 +220,12 @@ export default function EmployeePage() {
               <div key={field} className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2 capitalize">{field.split(/(?=[A-Z])/).join(' ')}</label>
                 <input
-                  type="text"
+                  type={field === 'PhoneNumber' ? 'tel' : 'tel'}
+                  required={['FirstName', 'LastName', 'Email', 'PhoneNumber', 'EmployeeId'].includes(field)}
                   name={field}
                   value={employee[field]}
                   onChange={handleInputChange}
                   className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-
                 />
               </div>
             ))}
@@ -232,9 +247,12 @@ export default function EmployeePage() {
                 onChange={handleAadharChange}
                 maxLength={12}
                 className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-              // required
               />
             </div>
+      
+
+
+
             {['company', 'department', 'designation'].map(opt => (
               <div key={opt} className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2">{opt.charAt(0).toUpperCase() + opt.slice(1)}</label>
@@ -252,6 +270,7 @@ export default function EmployeePage() {
                     </option>
                   ))}
                 </select>
+
               </div>
             ))}
             <div className="mb-4">
@@ -290,23 +309,27 @@ export default function EmployeePage() {
                 className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
               // required
               />
+
+
+</div>
+
             </div>
-          </div>
-          <div className="flex items-center gap-5">
-            <button
-              type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 w-28 rounded focus:outline-none focus:shadow-outline"
-            >
-              {isUpdating ? 'Update' : 'Add'}
-            </button>
-            <button
-              type="button"
-              onClick={() => setIsAdding(false) || setIsUpdating(false)}
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 w-28 rounded focus:outline-none focus:shadow-outline"
-            >
-              Cancel
-            </button>
-          </div>
+            <div className="flex items-center gap-5">
+              <button
+                type="submit"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 w-28 rounded focus:outline-none focus:shadow-outline"
+              >
+                {isUpdating ? 'Update' : 'Add'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsAdding(false) || setIsUpdating(false)}
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 w-28 rounded focus:outline-none focus:shadow-outline"
+              >
+                Cancel
+              </button>
+           
+            </div>
         </form>
       ) : (
 
@@ -401,7 +424,6 @@ export default function EmployeePage() {
               </div>
             )}
           </div>
-
         </div>
       )}
       {!isLoading && <Footer />}

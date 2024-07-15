@@ -1,85 +1,152 @@
-'use client';
-
+"use client";
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { AiOutlineDownload } from 'react-icons/ai';
+import Footer from '../../ui/dashboard/footer/footer';
 
-const MusterRoll = () => {
-  const [data, setData] = useState({
-    location: "Lucknow",
-    company: "papaya_coders_3894638fdgy8tgd",
-    department: "Operations",
-    designation: "something",
-    device: "TEM_2204",
-    sortBy: "0",
-    fromDate: "0",
-    toDate: "0",
-    fileType: "Excel"
-  });
-  const [loading, setLoading] = useState(true);
+const AttendanceReport = () => {
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
-      const requestData = JSON.stringify(data);
+      let data = JSON.stringify({
+        "fromDate": "2024-07-10",
+        "toDate": "2024-07-12"
+      });
 
-      const config = {
+      let config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: 'https://attend.anujdwivedi.in/reports/muster-roll',
+        url: 'https://attendence-api-px8b.onrender.com/export',
         headers: { 
           'Content-Type': 'application/json', 
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE5MzgyODI3fQ.9Q-PXf4Fl9OWxCWtktFuryIcXea8unhpF9X8Z0MFPJs'
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzIxMDIwNTMxfQ.2v7_7trTAsXB9PW-v7AOYS4GRUZkc0fCKef7KWAUVlQ'
         },
-        data: requestData
+        data : data
       };
 
       try {
         const response = await axios.request(config);
-        console.log(JSON.stringify(response.data));
-        setLoading(false);
+        setData(response.data);
+        setIsLoading(false);
       } catch (error) {
         console.error(error);
-        toast.error('Failed to fetch data');
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
     fetchData();
   }, []);
 
-  const downloadFile = () => {
-    window.open("http://localhost:5000/download?file=muster_roll_1719472684760.xlsx", "_blank");
+  const handleReportDownload = async () => {
+    let data = JSON.stringify({
+      "location": "Lucknow",
+      "company": "papaya_coders_3894638fdgy8tgd",
+      "department": "Operations",
+      "designation": "something",
+      "device": "TEM_2204",
+      "sortBy": "",
+      "fromDate": "",
+      "toDate": "",
+      "fileType": "Excel"
+    });
+
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'https://attendence-api-px8b.onrender.com/reports/muster-roll',
+      headers: { 
+        'Content-Type': 'application/json', 
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzIxMDIwNTMxfQ.2v7_7trTAsXB9PW-v7AOYS4GRUZkc0fCKef7KWAUVlQ'
+      },
+      data : data
+    };
+
+    try {
+      const response = await axios.request(config);
+      const fileURL = URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement('a');
+      a.href = fileURL;
+      a.target = '_blank';
+      a.click();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  if (loading) {
-    return <div className="flex justify-center items-center h-screen">Loading...</div>;
-  }
-
   return (
-    <div className="p-4">
-      <ToastContainer />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {Object.keys(data).map((key, index) => (
-          <div key={index} className="bg-white text-black shadow-md rounded p-4 flex flex-col justify-between">
-            <h2 className="text-xl font-bold capitalize">{key}</h2>
-            <p>{data[key]}</p>
+    <>
+      <div className="relative flex items-center justify-center ">
+        {isLoading ? (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-transparent bg-opacity-50">
+            <div role="status" className="rounded-full border-e-transparent align-[-0.125em] border-8 border-t-8 animate-[spin_1.5s_linear_infinite] border-purple-500 h-24 w-24 mb-4"></div>
+            <h2 className="text-center text-white text-xl font-semibold">
+              Loading... Please wait!
+            </h2>
           </div>
-        ))}
+          
+        ) : (
+          <div className="flex flex-col overflow-x-auto w-full">
+            <div className="sm:-mx-6 lg:-mx-8 ">
+              <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+                <div className="flex justify-end">
+                  <button
+                    onClick={handleReportDownload}
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  >
+                    View Report
+                  </button>
+                </div>
+                <div class="flex flex-col overflow-x-auto">
+                <div class="sm:-mx-6 lg:-mx-8 max-w-full">
+                  <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+                  <table className="min-w-full bg-white mt-4">
+                    <thead>
+                      <tr>
+                        <th className="py-2 px-4 border-b border text-white bg-gray-600">EMP ID</th>
+                        <th className="py-2 px-4 border-b border text-white bg-gray-600">Name</th>
+                        <th className="py-2 px-4 border-b border text-white bg-gray-600">Email</th>
+                        <th className="py-2 px-4 border-b border text-white bg-gray-600">Company</th>
+                        <th className="py-2 px-4 border-b border text-white bg-gray-600">Designation</th>
+                        <th className="py-2 px-4 border-b border text-white bg-gray-600">Date</th>
+                        <th className="py-2 px-4 border-b border text-white bg-gray-600">Time</th>
+                        <th className="py-2 px-4 border-b border text-white bg-gray-600">Role</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {data.map(emp => (
+                        <tr key={emp.id}>
+                          <td className="py-2 px-4 border-b text-center text-black border">{emp.emp_id}</td>
+                          <td className="py-2 px-4 border-b text-center text-black border">{emp.name}</td>
+                          <td className="py-2 px-4 border-b text-center text-black border">{emp.email}</td>
+                          <td className="py-2 px-4 border-b text-center text-black border">{emp.company_id}</td>
+                          <td className="py-2 px-4 border-b text-center text-black border">{emp.d_name}</td>
+                          <td className="py-2 px-4 border-b text-center text-black border">{new Date(emp.date_at).toLocaleDateString()}</td>
+                          <td className="py-2 px-4 border-b text-center text-black border">{new Date(emp.time).toLocaleTimeString()}</td>
+                          <td className="py-2 px-4 border-b text-center text-black border">{emp.role}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+              </div>
+            </div>
+          
+          </div>
+          </div>
+          </div>
+          
+        )}
+        
       </div>
-      <div className="mt-4 flex justify-center">
-        <button 
-          onClick={downloadFile}
-          className="bg-blue-500 text-white px-4 py-2 rounded flex items-center"
-        >
-          <AiOutlineDownload className="mr-2" /> Download Report
-        </button>
-      </div>
-    </div>
+      {!isLoading && <Footer />}
+    </>
   );
 };
 
-export default MusterRoll;
+export default AttendanceReport;
+
+
 
 

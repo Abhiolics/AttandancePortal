@@ -24,47 +24,17 @@
       "static/css/app/dashboard/layout.css",
       "static/chunks/app/dashboard/layout.js"
     ],
-    "/dashboard/employees/page": [
+    "/dashboard/holiday/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/dashboard/employees/page.css",
-      "static/chunks/app/dashboard/employees/page.js"
-    ],
-    "/dashboard/view-company/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/dashboard/view-company/page.css",
-      "static/chunks/app/dashboard/view-company/page.js"
-    ],
-    "/dashboard/designation/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/dashboard/designation/page.css",
-      "static/chunks/app/dashboard/designation/page.js"
-    ],
-    "/dashboard/department/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/dashboard/department/page.css",
-      "static/chunks/app/dashboard/department/page.js"
-    ],
-    "/dashboard/reports/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/dashboard/reports/page.css",
-      "static/chunks/app/dashboard/reports/page.js"
+      "static/css/app/dashboard/holiday/page.css",
+      "static/chunks/app/dashboard/holiday/page.js"
     ],
     "/dashboard/view-location/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/css/app/dashboard/view-location/page.css",
       "static/chunks/app/dashboard/view-location/page.js"
-    ],
-    "/dashboard/holiday/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/dashboard/holiday/page.css",
-      "static/chunks/app/dashboard/holiday/page.js"
     ],
     "/dashboard/schedule/page": [
       "static/chunks/webpack.js",
@@ -78,11 +48,29 @@
       "static/css/app/dashboard/items/page.css",
       "static/chunks/app/dashboard/items/page.js"
     ],
-    "/dashboard/devices/page": [
+    "/dashboard/employees/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/dashboard/devices/page.css",
-      "static/chunks/app/dashboard/devices/page.js"
+      "static/css/app/dashboard/employees/page.css",
+      "static/chunks/app/dashboard/employees/page.js"
+    ],
+    "/dashboard/department/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/dashboard/department/page.css",
+      "static/chunks/app/dashboard/department/page.js"
+    ],
+    "/dashboard/designation/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/dashboard/designation/page.css",
+      "static/chunks/app/dashboard/designation/page.js"
+    ],
+    "/dashboard/recognition/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/dashboard/recognition/page.css",
+      "static/chunks/app/dashboard/recognition/page.js"
     ],
     "/dashboard/visitors/page": [
       "static/chunks/webpack.js",
@@ -90,11 +78,23 @@
       "static/css/app/dashboard/visitors/page.css",
       "static/chunks/app/dashboard/visitors/page.js"
     ],
-    "/dashboard/recognition/page": [
+    "/dashboard/reports/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/dashboard/recognition/page.css",
-      "static/chunks/app/dashboard/recognition/page.js"
+      "static/css/app/dashboard/reports/page.css",
+      "static/chunks/app/dashboard/reports/page.js"
+    ],
+    "/dashboard/view-company/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/dashboard/view-company/page.css",
+      "static/chunks/app/dashboard/view-company/page.js"
+    ],
+    "/dashboard/devices/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/dashboard/devices/page.css",
+      "static/chunks/app/dashboard/devices/page.js"
     ],
     "/_not-found/page": [
       "static/chunks/webpack.js",

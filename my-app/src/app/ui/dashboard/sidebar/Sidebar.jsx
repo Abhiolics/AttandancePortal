@@ -126,7 +126,7 @@ const Sidebar = () => {
   useEffect(() => {
     console.log("isAuth", isAuth);
     if (isAuth === false) {
-      router.push('/login');
+      router.push('/');
     }
   }, [isAuth]);
 
@@ -144,7 +144,7 @@ const Sidebar = () => {
       .then((response) => {
         console.log(JSON.stringify(response.data));
         localStorage.clear();
-        router.push('/login')
+        router.push('/')
       })
       .catch((error) => {
         console.log(error);

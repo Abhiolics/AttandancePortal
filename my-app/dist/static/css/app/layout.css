@@ -2501,6 +2501,9 @@ html {
 .max-w-sm {
   max-width: 24rem;
 }
+.max-w-7xl {
+  max-width: 80rem;
+}
 .flex-1 {
   flex: 1 1 0%;
 }
@@ -2518,6 +2521,15 @@ html {
 }
 .animate-\[spin_1\.5s_linear_infinite\] {
   animation: spin 1.5s linear infinite;
+}
+@keyframes spin {
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+.animate-spin {
+  animation: spin 1s linear infinite;
 }
 .appearance-none {
   appearance: none;
@@ -2615,6 +2627,10 @@ html {
 .border-purple-500 {
   --tw-border-opacity: 1;
   border-color: rgb(168 85 247 / var(--tw-border-opacity));
+}
+.border-gray-200 {
+  --tw-border-opacity: 1;
+  border-color: rgb(229 231 235 / var(--tw-border-opacity));
 }
 .border-e-transparent {
   border-inline-end-color: transparent;
@@ -2776,6 +2792,10 @@ html {
 .text-xl {
   font-size: 1.25rem;
   line-height: 1.75rem;
+}
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
 }
 .font-bold {
   font-weight: 700;
