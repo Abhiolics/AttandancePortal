@@ -109,10 +109,7 @@ const AttendanceReport = () => {
             <div className="sm:-mx-6 lg:-mx-8 ">
               <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between">
-                  <RangePicker
-                  allowClear={false}
-                    onChange={handleDateChange}
-                  />
+                  <RangePicker allowClear={false} onChange={handleDateChange} />
                   <button
                     onClick={handleReportDownload}
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
