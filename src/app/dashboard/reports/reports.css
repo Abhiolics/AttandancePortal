@@ -1,0 +1,20 @@
+.ant-picker{
+    border-radius: 3px !important;
+    height: 40px !important;
+}
+
+.ant-picker-outlined{
+    background: #4B5563 !important;
+    border: 1px solid #4B5563 !important;
+}
+
+.ant-picker-input > input,
+.ant-picker-input > input:focus,
+.ant-picker-input > input::placeholder{
+    color: #fff !important;
+}
+
+.ant-picker-separator,
+.ant-picker-suffix{
+    color: #fff !important;
+}
