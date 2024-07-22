@@ -6,6 +6,7 @@ import Footer from "../../ui/dashboard/footer/footer";
 import { DatePicker } from "antd";
 import moment from "moment";
 const { RangePicker } = DatePicker;
+import * as XLSX from "xlsx";
 
 const AttendanceReport = () => {
   const [data, setData] = useState([]);
@@ -47,48 +48,29 @@ const AttendanceReport = () => {
     fetchData();
   }, [selectedDates]);
 
-  const handleReportDownload = async () => {
-    let data = JSON.stringify({
-      location: "Lucknow",
-      company: "papaya_coders_3894638fdgy8tgd",
-      department: "Operations",
-      designation: "something",
-      device: "TEM_2204",
-      sortBy: "",
-      fromDate: "",
-      toDate: "",
-      fileType: "Excel",
-    });
-
-    let config = {
-      method: "post",
-      maxBodyLength: Infinity,
-      url: "https://attendence-api-px8b.onrender.com/reports/muster-roll",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzIxMDIwNTMxfQ.2v7_7trTAsXB9PW-v7AOYS4GRUZkc0fCKef7KWAUVlQ",
-      },
-      data: data,
-    };
-
-    try {
-      const response = await axios.request(config);
-      const fileURL = URL.createObjectURL(new Blob([response.data]));
-      const a = document.createElement("a");
-      a.href = fileURL;
-      a.target = "_blank";
-      a.click();
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const handleDateChange = (dates, dateStrings) => {
     setSelectedDates({
       fromDate: dateStrings[0],
       toDate: dateStrings[1],
     });
+  };
+
+  const exportToExcel = () => {
+    const filteredData = data.map((emp) => {
+      return {
+        "EMP ID": emp.emp_id,
+        Name: `${emp.firstName} ${emp.lastname}`,
+        Email: emp.email,
+        Company: emp.companyId,
+        Designation: emp.d_name,
+        Date: new Date(emp.date_at).toLocaleDateString(),
+        Time: new Date(emp.time).toLocaleTimeString(),
+      };
+    });
+    const ws = XLSX.utils.json_to_sheet(filteredData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+    XLSX.writeFile(wb, "attendance_report.xlsx");
   };
 
   return (
@@ -111,7 +93,7 @@ const AttendanceReport = () => {
                 <div className="flex items-center justify-between">
                   <RangePicker allowClear={false} onChange={handleDateChange} />
                   <button
-                    onClick={handleReportDownload}
+                    onClick={exportToExcel}
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                   >
                     View Report
