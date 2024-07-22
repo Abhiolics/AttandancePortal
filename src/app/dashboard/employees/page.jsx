@@ -1,12 +1,11 @@
-
 "use client";
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import FormData from 'form-data';
-import Footer from '../../ui/dashboard/footer/footer';
-import { format, parseISO } from 'date-fns';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import FormData from "form-data";
+import Footer from "../../ui/dashboard/footer/footer";
+import { format, parseISO } from "date-fns";
 
 export default function EmployeePage() {
   const [employees, setEmployees] = useState([]);
@@ -14,43 +13,72 @@ export default function EmployeePage() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
   const itemsPerPage = 10;
 
   const [employee, setEmployee] = useState({
-    id: '', FirstName: '', LastName: '', Email: '', PhoneNumber: '', Image: '',
-    EmployeeId: '', Location: '', companyId: '', departmentId: '', designation: '',
-    AadharNumber: '', EPF: '', ESIC: '', Device: '', HolidayCalendar: '',
-    OTApplicable: '', MobilePolicy: '', Gender: 'Male', Dob: '', PersonalEmail: '',
-    Tag: '', DateJoining: '', Status: 0
+    id: "",
+    FirstName: "",
+    LastName: "",
+    Email: "",
+    PhoneNumber: "",
+    Image: "",
+    EmployeeId: "",
+    Location: "",
+    companyId: "",
+    departmentId: "",
+    designation: "",
+    AadharNumber: "",
+    EPF: "",
+    ESIC: "",
+    Device: "",
+    HolidayCalendar: "",
+    OTApplicable: "",
+    MobilePolicy: "",
+    Gender: "Male",
+    Dob: "",
+    PersonalEmail: "",
+    Tag: "",
+    DateJoining: "",
+    Status: 0,
   });
-
-
-  
 
   const [options, setOptions] = useState({
-    company: [], department: [], designation: []
+    company: [],
+    department: [],
+    designation: [],
   });
 
-  const fetchOptions = async (url, key) => {
-    try {
-      const response = await axios.get(url, {
-        headers: {
-          Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
-        },
-      });
-      setOptions(prev => ({ ...prev, [key]: response.data.data }));
-    } catch (error) {
-      toast.error(`Failed to fetch ${key} options`);
-    }
-  };
+  // const searchEmployee = (name, email) => {
+  //   const lowerCaseName = name.toLowerCase();
+  //   const lowerCaseEmail = email ? email.toLowerCase() : '';
+
+  //   console.log(lowerCaseName, lowerCaseEmail);
+
+  //   const filteredEmployees = employees.filter((employee) => {
+  //     const fullName = `${employee.FirstName || ""} ${
+  //       employee.LastName || ""
+  //     }`.toLowerCase();
+  //     const email = (employee.Email || "").toLowerCase();
+
+  //     return (
+  //       fullName.includes(lowerCaseName) || email.includes(lowerCaseEmail)
+  //     );
+  //   });
+
+  //   console.log(filteredEmployees);
+
+  //   // return filteredEmployees;
+  // };
 
   const fetchEmployees = async () => {
     try {
       const response = await axios.get(
-        'https://attendence-api-px8b.onrender.com/employee/get-employees',
+        "https://attendence-api-px8b.onrender.com/employee/get-employees",
         {
           headers: {
-            Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
+            Authorization:
+              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE",
           },
         }
       );
@@ -59,28 +87,74 @@ export default function EmployeePage() {
 
       // })
     } catch (error) {
-      toast.error('Failed to fetch employees');
+      toast.error("Failed to fetch employees");
     } finally {
       setIsLoading(false);
     }
   };
 
+  const searchEmployee = (query) => {
+    const lowerCaseQuery = query.toLowerCase();
+    console.log(lowerCaseQuery);
+
+    if (!lowerCaseQuery) {
+      fetchEmployees();
+      return;
+    }
+
+    if (!employees) {
+      console.warn('Employees data is not available.');
+      return;
+    }
+
+    const filteredEmployees = employees.filter((employee) => {
+      const firstName = employee.FirstName.toLowerCase();
+      return firstName.includes(lowerCaseQuery);
+    });
+
+    console.log(filteredEmployees);
+    setEmployees(filteredEmployees);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    searchEmployee(e.target.value);
+  };
+
+  const fetchOptions = async (url, key) => {
+    try {
+      const response = await axios.get(url, {
+        headers: {
+          Authorization:
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE",
+        },
+      });
+      setOptions((prev) => ({ ...prev, [key]: response.data.data }));
+    } catch (error) {
+      toast.error(`Failed to fetch ${key} options`);
+    }
+  };
+
   useEffect(() => {
     fetchEmployees();
-    fetchOptions('https://attendence-api-px8b.onrender.com/company/get-companies', 'company');
+    fetchOptions(
+      "https://attendence-api-px8b.onrender.com/company/get-companies",
+      "company"
+    );
   }, []);
 
   const handleInputChange = async (e) => {
     const { name, value, files } = e.target;
-    setEmployee(prev => ({ ...prev, [name]: files ? files[0] : value }));
+    setEmployee((prev) => ({ ...prev, [name]: files ? files[0] : value }));
 
-    if (name === 'company') {
+    if (name === "company") {
       try {
         const departmentResponse = await axios.get(
           `https://attendence-api-px8b.onrender.com/department/get-department/${value}`,
           {
             headers: {
-              Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
+              Authorization:
+                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE",
             },
           }
         );
@@ -88,17 +162,18 @@ export default function EmployeePage() {
           `https://attendence-api-px8b.onrender.com/designation/get-designation/${value}`,
           {
             headers: {
-              Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
+              Authorization:
+                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE",
             },
           }
         );
-        setOptions(prev => ({
+        setOptions((prev) => ({
           ...prev,
           department: departmentResponse.data.data,
           designation: designationResponse.data.data,
         }));
       } catch (error) {
-        toast.error('Failed to fetch department or designation options');
+        toast.error("Failed to fetch department or designation options");
       }
     }
   };
@@ -106,31 +181,49 @@ export default function EmployeePage() {
   const handleDateChange = (e) => {
     const { name, value } = e.target;
     const parsedDate = parseISO(value);
-    const formattedDate = format(parsedDate, 'yyyy-MM-dd');
+    const formattedDate = format(parsedDate, "yyyy-MM-dd");
 
     console.log(name);
-    setEmployee(prev => ({ ...prev, [name]: formattedDate }));
+    setEmployee((prev) => ({ ...prev, [name]: formattedDate }));
   };
 
   const handleAadharChange = (e) => {
     const aadhar = e.target.value;
     if (/^[0-9\b]{0,12}$/.test(aadhar)) {
-      setEmployee(prev => ({ ...prev, AadharNumber: aadhar }));
+      setEmployee((prev) => ({ ...prev, AadharNumber: aadhar }));
     }
   };
 
   const handleAction = (action, emp = {}) => {
-    if (action === 'update') {
+    if (action === "update") {
       setEmployee(emp);
       setIsUpdating(true);
       setIsAdding(false);
     } else {
       setEmployee({
-        FirstName: '', LastName: '', Email: '', PhoneNumber: '', Image: '',
-        EmployeeId: '', Location: '', companyId: '', departmentId: '', designationId: '',
-        AadharNumber: '', EPF: '', ESIC: '', Device: '', HolidayCalendar: '',
-        OTApplicable: '', MobilePolicy: '', Gender: 'Male', Dob: '', PersonalEmail: '',
-        Tag: '', DateJoining: '', Status: 0
+        FirstName: "",
+        LastName: "",
+        Email: "",
+        PhoneNumber: "",
+        Image: "",
+        EmployeeId: "",
+        Location: "",
+        companyId: "",
+        departmentId: "",
+        designationId: "",
+        AadharNumber: "",
+        EPF: "",
+        ESIC: "",
+        Device: "",
+        HolidayCalendar: "",
+        OTApplicable: "",
+        MobilePolicy: "",
+        Gender: "Male",
+        Dob: "",
+        PersonalEmail: "",
+        Tag: "",
+        DateJoining: "",
+        Status: 0,
       });
       setIsAdding(true);
       setIsUpdating(false);
@@ -144,19 +237,24 @@ export default function EmployeePage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-
-    
-    if (!employee.FirstName || !employee.LastName || !employee.Email || !employee.EmployeeId) {
-      toast.error('First name, last name, email, and employee ID are required fields');
+    if (
+      !employee.FirstName ||
+      !employee.LastName ||
+      !employee.Email ||
+      !employee.EmployeeId
+    ) {
+      toast.error(
+        "First name, last name, email, and employee ID are required fields"
+      );
       return;
     }
     const phoneNumberRegex = /^\d{10}$/;
     if (!phoneNumberRegex.test(employee.PhoneNumber)) {
-      toast.error('Phone number must be a 10-digit number');
+      toast.error("Phone number must be a 10-digit number");
       return;
     }
     if (employee.AadharNumber.length !== 12) {
-      toast.error('Aadhar number must be 12 digits');
+      toast.error("Aadhar number must be 12 digits");
       return;
     }
 
@@ -164,23 +262,26 @@ export default function EmployeePage() {
 
     const formData = new FormData();
 
-    Object.keys(employee).forEach(key => {
+    Object.keys(employee).forEach((key) => {
       let finalKey = keysToExclude.includes(key) ? key : toCamelCase(key);
       formData.append(finalKey, employee[key]);
-      console.log(finalKey)
+      console.log(finalKey);
     });
 
-    console.log(formData)
+    console.log(formData);
 
     const requestOptions = {
-      method: isUpdating ? 'PUT' : 'POST',
+      method: isUpdating ? "PUT" : "POST",
       headers: {
-        Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4OTcwNDA4fQ.wzuror3RQWipHbQ9Sfc0FqghVpzNVwsKTC2Eob_uYB8',
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4OTcwNDA4fQ.wzuror3RQWipHbQ9Sfc0FqghVpzNVwsKTC2Eob_uYB8",
       },
       body: formData,
     };
 
-    const url = isUpdating ? `https://attendence-api-px8b.onrender.com/employee/update-employee/${employee.id}` : 'https://attendence-api-px8b.onrender.com/employee/add-employee';
+    const url = isUpdating
+      ? `https://attendence-api-px8b.onrender.com/employee/update-employee/${employee.id}`
+      : "https://attendence-api-px8b.onrender.com/employee/add-employee";
 
     try {
       const response = await fetch(url, requestOptions);
@@ -188,27 +289,30 @@ export default function EmployeePage() {
       if (result.status === false) {
         toast.error(result.message);
       } else {
-        toast.success(result.message)
+        toast.success(result.message);
       }
       setIsAdding(false);
       setIsUpdating(false);
       fetchEmployees();
     } catch (error) {
-      toast.error('Failed to Update employee');
+      toast.error("Failed to Update employee");
     }
   };
 
-
-
   const handlePageChange = (direction) => {
-    setCurrentPage(prev => {
+    setCurrentPage((prev) => {
       const newPage = prev + direction;
       if (newPage < 1) return 1;
-      if (newPage > Math.ceil(employees.length / itemsPerPage)) return Math.ceil(employees.length / itemsPerPage);
+      if (newPage > Math.ceil(employees.length / itemsPerPage))
+        return Math.ceil(employees.length / itemsPerPage);
       return newPage;
     });
   };
-  const displayedEmployees = employees.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const displayedEmployees = employees.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <div className="container mx-auto p-4">
@@ -216,13 +320,37 @@ export default function EmployeePage() {
       {isAdding || isUpdating ? (
         <form onSubmit={handleSubmit} className="mt-4 bg-gray-100 p-4 rounded">
           <div className="grid grid-cols-3 gap-4">
-            {['FirstName', 'LastName', 'Email', 'PhoneNumber', 'EmployeeId', 'Location', 'EPF', 'ESIC', 'Device', 'HolidayCalendar', 'OtApplicable', 'MobilePolicy', 'PersonalEmail', 'Tag'].map(field => (
+            {[
+              "FirstName",
+              "LastName",
+              "Email",
+              "PhoneNumber",
+              "EmployeeId",
+              "Location",
+              "EPF",
+              "ESIC",
+              "Device",
+              "HolidayCalendar",
+              "OtApplicable",
+              "MobilePolicy",
+              "PersonalEmail",
+              "Tag",
+            ].map((field) => (
               <div key={field} className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2 capitalize">{field.split(/(?=[A-Z])/).join(' ')}</label>
+                <label className="block text-gray-700 text-sm font-bold mb-2 capitalize">
+                  {field.split(/(?=[A-Z])/).join(" ")}
+                </label>
                 <input
-                  type={field === 'PhoneNumber' ? 'tel' : 'tel'}
-                  required={['FirstName', 'LastName', 'Email', 'PhoneNumber', 'EmployeeId'].includes(field)}
+                  type={field === "PhoneNumber" ? "tel" : "text"}
+                  required={[
+                    "FirstName",
+                    "LastName",
+                    "Email",
+                    "PhoneNumber",
+                    "EmployeeId",
+                  ].includes(field)}
                   name={field}
+                  maxLength={field === "PhoneNumber" ? 10 : 100}
                   value={employee[field]}
                   onChange={handleInputChange}
                   className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
@@ -230,7 +358,9 @@ export default function EmployeePage() {
               </div>
             ))}
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">Image</label>
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Image
+              </label>
               <input
                 type="file"
                 name="image"
@@ -239,7 +369,9 @@ export default function EmployeePage() {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">Aadhaar Number</label>
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Aadhaar Number
+              </label>
               <input
                 type="tel"
                 name="aadharNumber"
@@ -249,38 +381,40 @@ export default function EmployeePage() {
                 className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
-      
 
-
-
-            {['company', 'department', 'designation'].map(opt => (
+            {["company", "department", "designation"].map((opt) => (
               <div key={opt} className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">{opt.charAt(0).toUpperCase() + opt.slice(1)}</label>
+                <label className="block text-gray-700 text-sm font-bold mb-2">
+                  {opt.charAt(0).toUpperCase() + opt.slice(1)}
+                </label>
                 <select
                   name={opt}
                   value={employee[opt]}
                   onChange={handleInputChange}
                   className="border bg-gray-600 rounded w-full py-2 px-3 text-white leading-tight"
-                // required
+                  // required
                 >
-                  <option value="">Select {opt.charAt(0).toUpperCase() + opt.slice(1)}</option>
-                  {options[opt].map(item => (
+                  <option value="">
+                    Select {opt.charAt(0).toUpperCase() + opt.slice(1)}
+                  </option>
+                  {options[opt].map((item) => (
                     <option key={item.id} value={item[`${opt}Id`]}>
                       {item[`${opt}Name`]}
                     </option>
                   ))}
                 </select>
-
               </div>
             ))}
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">Gender</label>
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Gender
+              </label>
               <select
                 name="gender"
                 value={employee.Gender}
                 onChange={handleInputChange}
                 className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-              // required
+                // required
               >
                 <option value="Male">Male</option>
 
@@ -289,62 +423,72 @@ export default function EmployeePage() {
               </select>
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">Date of Birth</label>
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Date of Birth
+              </label>
               <input
                 type="date"
                 name="Dob"
                 value={employee.Dob}
                 onChange={handleDateChange}
                 className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-              // required
+                // required
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">Date Joining</label>
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Date Joining
+              </label>
               <input
                 type="date"
                 name="DateJoining"
                 value={employee.DateJoining}
                 onChange={handleDateChange}
                 className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-              // required
+                // required
               />
-
-
-</div>
-
             </div>
-            <div className="flex items-center gap-5">
-              <button
-                type="submit"
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 w-28 rounded focus:outline-none focus:shadow-outline"
-              >
-                {isUpdating ? 'Update' : 'Add'}
-              </button>
-              <button
-                type="button"
-                onClick={() => setIsAdding(false) || setIsUpdating(false)}
-                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 w-28 rounded focus:outline-none focus:shadow-outline"
-              >
-                Cancel
-              </button>
-           
-            </div>
+          </div>
+          <div className="flex items-center gap-5">
+            <button
+              type="submit"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 w-28 rounded focus:outline-none focus:shadow-outline"
+            >
+              {isUpdating ? "Update" : "Add"}
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsAdding(false) || setIsUpdating(false)}
+              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 w-28 rounded focus:outline-none focus:shadow-outline"
+            >
+              Cancel
+            </button>
+          </div>
         </form>
       ) : (
-
         <div className="mt-4 ">
-          <div className='flex justify-end items-center'>
+          <div className="flex justify-between items-center">
+            <input
+              type="text"
+              className="shadow appearance-none border bg-slate-600 rounded py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
+              placeholder="Search by Name or Email"
+              value={searchQuery}
+              onChange={handleSearchChange}
+            />
             <button
-              onClick={() => handleAction('add')}
+              onClick={() => handleAction("add")}
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
               Add Employee
-            </button></div>
+            </button>
+          </div>
           <div className="relative  flex items-center justify-center">
             {isLoading ? (
               <div className="absolute  inset-0 flex flex-col items-center justify-center  bg-transparent bg-opacity-50">
-                <div role='status' className="loa  rounded-full border-e-transparent align-[-0.125em] border-8 border-t-8 animate-[spin_1.5s_linear_infinite] border-purple-500 h-24 w-24 mb-4"></div>
+                <div
+                  role="status"
+                  className="loa  rounded-full border-e-transparent align-[-0.125em] border-8 border-t-8 animate-[spin_1.5s_linear_infinite] border-purple-500 h-24 w-24 mb-4"
+                ></div>
                 <h2 className="text-center text-white text-xl font-semibold">
                   Loading... Please wait!
                 </h2>
@@ -357,40 +501,87 @@ export default function EmployeePage() {
                     <table className="min-w-full bg-white mt-4">
                       <thead>
                         <tr>
-                          <th className="py-2 px-4 border-b border text-white bg-gray-600">ID</th>
-                          <th className="py-2 px-4 border-b border text-white bg-gray-600">First Name</th>
-                          <th className="py-2 px-4 border-b border text-white bg-gray-600">Last Name</th>
-                          <th className="py-2 px-4 border-b border text-white bg-gray-600">Email</th>
-                          <th className="py-2 px-4 border-b border text-white bg-gray-600">Employee ID</th>
-                          <th className="py-2 px-4 border-b border text-white bg-gray-600">Company</th>
-                          <th className="py-2 px-4 border-b border text-white bg-gray-600">Designation</th>
-                          <th className="py-2 px-4 border-b border text-white bg-gray-600">Department</th>
-                          <th className="py-2 px-4 border-b border text-white bg-gray-600">DOB</th>
-                          <th className="py-2 px-4 border-b border text-white bg-gray-600">Phone Number</th>
-                          <th className="py-2 px-4 border-b border text-white bg-gray-600">Actions</th>
+                          <th className="py-2 px-4 border-b border text-white bg-gray-600">
+                            Sr. No.
+                          </th>
+                          <th className="py-2 px-4 border-b border text-white bg-gray-600">
+                            First Name
+                          </th>
+                          <th className="py-2 px-4 border-b border text-white bg-gray-600">
+                            Last Name
+                          </th>
+                          <th className="py-2 px-4 border-b border text-white bg-gray-600">
+                            Email
+                          </th>
+                          <th className="py-2 px-4 border-b border text-white bg-gray-600">
+                            Employee ID
+                          </th>
+                          <th className="py-2 px-4 border-b border text-white bg-gray-600">
+                            Company
+                          </th>
+                          <th className="py-2 px-4 border-b border text-white bg-gray-600">
+                            Designation
+                          </th>
+                          <th className="py-2 px-4 border-b border text-white bg-gray-600">
+                            Department
+                          </th>
+                          <th className="py-2 px-4 border-b border text-white bg-gray-600">
+                            DOB
+                          </th>
+                          <th className="py-2 px-4 border-b border text-white bg-gray-600">
+                            Phone Number
+                          </th>
+                          <th className="py-2 px-4 border-b border text-white bg-gray-600">
+                            Actions
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
                         {isLoading ? (
                           <tr>
-                            <td colSpan="6" className="text-center text-black py-4">Loading...</td>
+                            <td
+                              colSpan="6"
+                              className="text-center text-black py-4"
+                            >
+                              Loading...
+                            </td>
                           </tr>
                         ) : (
-                          displayedEmployees.map(emp => (
+                          displayedEmployees.map((emp, i) => (
                             <tr key={emp.id}>
-                              <td className="py-2 px-4 border-b text-center text-black border">{emp.id}</td>
-                              <td className="py-2 px-4 border-b text-center text-black border">{emp.firstName}</td>
-                              <td className="py-2 px-4 border-b text-center text-black border">{emp.lastname}</td>
-                              <td className="py-2 px-4 border-b text-center text-black border">{emp.email}</td>
-                              <td className="py-2 px-4 border-b text-center text-black border">{emp.employeeId}</td>
-                              <td className="py-2 px-4 border-b text-center text-black border">{emp.companyId}</td>
-                              <td className="py-2 px-4 border-b text-center text-black border">{emp.designationId}</td>
-                              <td className="py-2 px-4 border-b text-center text-black border">{emp.departmentId}</td>
-                              <td className="py-2 px-4 border-b text-center text-black border">{emp.dob}</td>
-                              <td className="py-2 px-4 border-b text-center text-black border">{emp.phoneNumber}</td>
+                              <td className="py-2 px-4 border-b text-center text-black border">
+                                {i + 1}
+                              </td>
+                              <td className="py-2 px-4 border-b text-center text-black border">
+                                {emp.firstName}
+                              </td>
+                              <td className="py-2 px-4 border-b text-center text-black border">
+                                {emp.lastname}
+                              </td>
+                              <td className="py-2 px-4 border-b text-center text-black border">
+                                {emp.email}
+                              </td>
+                              <td className="py-2 px-4 border-b text-center text-black border">
+                                {emp.employeeId}
+                              </td>
+                              <td className="py-2 px-4 border-b text-center text-black border">
+                                {emp.companyId}
+                              </td>
+                              <td className="py-2 px-4 border-b text-center text-black border">
+                                {emp.designationId}
+                              </td>
+                              <td className="py-2 px-4 border-b text-center text-black border">
+                                {emp.departmentId}
+                              </td>
+                              <td className="py-2 px-4 border-b text-center text-black border">
+                                {emp.dob}
+                              </td>
+                              <td className="py-2 px-4 border-b text-center text-black border">
+                                {emp.phoneNumber}
+                              </td>
                               <td className="py-2 px-4 border-b text-center text-black border">
                                 <button
-                                  onClick={() => handleAction('update', emp)}
+                                  onClick={() => handleAction("update", emp)}
                                   className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 w-28 rounded focus:outline-none focus:shadow-outline mr-2"
                                 >
                                   Update
@@ -411,10 +602,17 @@ export default function EmployeePage() {
                     >
                       «
                     </button>
-                    <span className="text-white mx-4"> {currentPage} / {Math.ceil(employees.length / itemsPerPage)}</span>
+                    <span className="text-white mx-4">
+                      {" "}
+                      {currentPage} /{" "}
+                      {Math.ceil(employees.length / itemsPerPage)}
+                    </span>
                     <button
                       onClick={() => handlePageChange(1)}
-                      disabled={currentPage === Math.ceil(employees.length / itemsPerPage)}
+                      disabled={
+                        currentPage ===
+                        Math.ceil(employees.length / itemsPerPage)
+                      }
                       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 w-20 rounded focus:outline-none focus:shadow-outline"
                     >
                       »
