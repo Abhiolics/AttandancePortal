@@ -4,6 +4,7 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Footer from '../../ui/dashboard/footer/footer';
+import {BASE_URL} from "../../../../config";
 
 export default function CompanyManagement() {
   const [companies, setCompanies] = useState([]);
@@ -26,7 +27,7 @@ export default function CompanyManagement() {
   const fetchCompanies = async () => {
     try {
       setIsLoading(true); 
-      const response = await axios.get('https://attend.anujdwivedi.in/company/get-companies', {
+      const response = await axios.get(`${BASE_URL}/company/get-companies`, {
         headers: {
           Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
         },
@@ -68,8 +69,8 @@ export default function CompanyManagement() {
       const config = {
         method: isUpdating ? 'put' : 'post',
         url: isUpdating
-          ? `https://attend.anujdwivedi.in/company/update-company/${currentCompany.id}`
-          : 'https://attendence-api-px8b.onrender.com/company/add-company',
+          ? `${BASE_URL}/company/update-company/${currentCompany.id}`
+          :`${BASE_URL}/company/add-company`,
         headers: {
           'Content-Type': 'application/json',
           Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',

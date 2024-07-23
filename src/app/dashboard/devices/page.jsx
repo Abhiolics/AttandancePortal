@@ -5,6 +5,7 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Footer from '../../ui/dashboard/footer/footer';
+import {BASE_URL} from "../../../../config";
 
 const DevicesPage = () => {
   const [devices, setDevices] = useState([]);
@@ -28,7 +29,7 @@ const DevicesPage = () => {
   const fetchDevices = async () => {
     try {
       const response = await axios.get(
-        'https://attendence-api-px8b.onrender.com/device/get-devices',
+        `${BASE_URL}/device/get-devices`,
         {
           headers: {
             Authorization:
@@ -77,7 +78,7 @@ const DevicesPage = () => {
       if (isUpdating) {
         const updateConfig = {
           method: 'put',
-          url: `https://attendence-api-px8b.onrender.com/device/update-device/${currentDevice.id}`,
+          url: `${BASE_URL}/device/update-device/${currentDevice.id}`,
           headers: {
             'Content-Type': 'application/json',
             Authorization:
@@ -89,7 +90,7 @@ const DevicesPage = () => {
       } else {
         const addConfig = {
           method: 'post',
-          url: 'https://attendence-api-px8b.onrender.com/device/add-device',
+          url: `${BASE_URL}/device/add-device`,
           headers: {
             'Content-Type': 'application/json',
             Authorization:

@@ -7,6 +7,7 @@ import { DatePicker } from "antd";
 import moment from "moment";
 const { RangePicker } = DatePicker;
 import * as XLSX from "xlsx";
+import {BASE_URL} from "../../../../config";
 
 const AttendanceReport = () => {
   const [data, setData] = useState([]);
@@ -26,7 +27,7 @@ const AttendanceReport = () => {
       let config = {
         method: "post",
         maxBodyLength: Infinity,
-        url: "https://attendence-api-px8b.onrender.com/export",
+        url: `${BASE_URL}/export`,
         headers: {
           "Content-Type": "application/json",
           Authorization:

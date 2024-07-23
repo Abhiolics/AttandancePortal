@@ -5,6 +5,7 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Footer from '../../ui/dashboard/footer/footer';
+import {BASE_URL} from "../../../../config";
 
 const RecognitionPage = () => {
   const [recognitions, setRecognitions] = useState([]);
@@ -36,7 +37,7 @@ const RecognitionPage = () => {
       const config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: 'https://attendence-api-px8b.onrender.com/recognition/get-employees',
+        url: `${BASE_URL}/recognition/get-employees`,
         headers: {
           'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE'
         }
@@ -56,7 +57,7 @@ const RecognitionPage = () => {
       const config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: 'https://attendence-api-px8b.onrender.com/company/get-companies',
+        url: `${BASE_URL}/company/get-companies`,
         headers: {
           'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE'
         }
@@ -74,7 +75,7 @@ const RecognitionPage = () => {
       const config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: 'https://attendence-api-px8b.onrender.com/employee/get-employees',
+        url: `${BASE_URL}/employee/get-employees`,
         headers: {
           'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE'
         }
@@ -126,8 +127,8 @@ const RecognitionPage = () => {
         method: isUpdating ? 'put' : 'post',
         maxBodyLength: Infinity,
         url: isUpdating
-          ? `https://attendence-api-px8b.onrender.com/recognition/update-employee/${currentRecognition.id}`
-          : 'https://attendence-api-px8b.onrender.com/recognition/add-employee',
+          ?`${BASE_URL}/recognition/update-employee/${currentRecognition.id}`
+          : `${BASE_URL}/recognition/add-employee`,
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE'

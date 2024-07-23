@@ -4,6 +4,7 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Footer from '../../ui/dashboard/footer/footer';
+import {BASE_URL} from "../../../../config";
 
 export default function HolidayPage() {
   const [holidays, setHolidays] = useState([]);
@@ -49,7 +50,7 @@ export default function HolidayPage() {
 
   const fetchHolidays = async () => {
     try {
-      const response = await axios.get('https://attendence-api-px8b.onrender.com/holiday/get-holidays', {
+      const response = await axios.get(`${BASE_URL}/holiday/get-holidays`, {
         headers: {
           Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
         },
@@ -115,8 +116,8 @@ export default function HolidayPage() {
       const config = {
         method: isUpdating ? 'put' : 'post',
         url: isUpdating
-          ? `https://attendence-api-px8b.onrender.com/holiday/update-holiday/${currentHoliday.id}`
-          : 'https://attendence-api-px8b.onrender.com/holiday/add-holiday',
+          ? `${BASE_URL}/holiday/update-holiday/${currentHoliday.id}`
+          : `${BASE_URL}/holiday/add-holiday`,
         headers: {
           'Content-Type': 'application/json',
           Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',

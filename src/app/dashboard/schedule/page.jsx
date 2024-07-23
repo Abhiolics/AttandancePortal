@@ -6,6 +6,7 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Footer from "../../ui/dashboard/footer/footer";
+import {BASE_URL} from "../../../../config";
 
 export default function SchedulePage() {
   const [schedules, setSchedules] = useState([]);
@@ -29,7 +30,7 @@ export default function SchedulePage() {
   const fetchSchedules = async () => {
     try {
       const response = await axios.get(
-        "https://attendence-api-px8b.onrender.com/schedule/get-schedules",
+        `${BASE_URL}/schedule/get-schedules`,
         {
           headers: {
             Authorization:
@@ -76,8 +77,8 @@ export default function SchedulePage() {
       const config = {
         method: isUpdating ? "put" : "post",
         url: isUpdating
-          ? `https://attendence-api-px8b.onrender.com/schedule/update-schedule/${currentSchedule.id}`
-          : "https://attendence-api-px8b.onrender.com/schedule/add-schedule",
+          ? `${BASE_URL}/schedule/update-schedule/${currentSchedule.id}`
+          : `${BASE_URL}/schedule/add-schedule`,
         headers: {
           "Content-Type": "application/json",
           Authorization:

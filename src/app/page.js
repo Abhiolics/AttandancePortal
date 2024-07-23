@@ -1,11 +1,11 @@
 "use client";
 import axios from 'axios';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { BASE_URL } from '../../config';
 
 export default function Home() {
   const [email, setEmail] = useState("");
@@ -69,7 +69,7 @@ export default function Home() {
 
     let config = {
       method: 'post',
-      url: 'https://attend.anujdwivedi.in/admin/login',
+      url: `${BASE_URL}/admin/login`,
       data: data,
     };
 
@@ -78,6 +78,7 @@ export default function Home() {
         console.log(response.data);
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("auth", response.data.auth);
+        localStorage.setItem("name", response.data.name);
         setMessage("User successfully logged in");
         setEffect(false);
         router.push('/dashboard');

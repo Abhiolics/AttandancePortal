@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Chart from "../ui/dashboard/chart/Chart";
 import styles from '../ui/dashboard/dashboard.module.css';
 import Footer from "../ui/dashboard/footer/footer";
+import {BASE_URL} from "../../../config";
 
 const Card = ({ title, count }) => (
   <div className="flex c items-center hover:shadow-lg py-8 p-7 bg-[#293755] text-white rounded h-48 shadow-lg w-full">
@@ -73,11 +74,11 @@ const Page = () => {
       };
 
       const [employeesResponse, companiesResponse, departmentsResponse, visitorsResponse, holidaysResponse] = await Promise.all([
-        axios.get('https://attendence-api-px8b.onrender.com/employee/get-employees', config),
-        axios.get('https://attendence-api-px8b.onrender.com/company/get-companies', config),
-        axios.get('https://attendence-api-px8b.onrender.com/department/get-departments', config),
-        axios.get('https://attend.anujdwivedi.in/recognition/get-visitors', config),
-        axios.get('https://attend.anujdwivedi.in/holiday/get-holidays', config),
+        axios.get(`${BASE_URL}/employee/get-employees`, config),
+        axios.get(`${BASE_URL}/company/get-companies`, config),
+        axios.get(`${BASE_URL}/department/get-departments`, config),
+        axios.get(`${BASE_URL}/recognition/get-visitors`, config),
+        axios.get(`${BASE_URL}/holiday/get-holidays`, config),
       ]);
 
       setEmployeesCount(employeesResponse.data.data.length);
@@ -95,7 +96,7 @@ const Page = () => {
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: 'https://attend.anujdwivedi.in//admin/logout',
+      url: `${BASE_URL}/admin/logout`,
       headers: { 
         'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzIwNzkwNTgzfQ.C1mvfVqoxrnn8pcGPV_w5awEk4ltrcnr3JKxh3yQNKs`
       }

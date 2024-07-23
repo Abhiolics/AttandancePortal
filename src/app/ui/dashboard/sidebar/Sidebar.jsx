@@ -1,9 +1,9 @@
-"use client"
+"use client";
 import axios from "axios";
-import { useState, useEffect } from "react"
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import MenuLink from './menuLink/MenuLink';
-import styles from './sidebar.module.css'
+import MenuLink from "./menuLink/MenuLink";
+import styles from "./sidebar.module.css";
 import { MdDashboard, MdViewComfy } from "react-icons/md";
 import { CgOrganisation } from "react-icons/cg";
 import { AiOutlineAppstoreAdd } from "react-icons/ai";
@@ -33,67 +33,63 @@ const menuItems = [
       {
         title: "Dashboard",
         path: "/dashboard",
-        icon: <MdDashboard />
+        icon: <MdDashboard />,
       },
       {
         title: "Register",
         path: "/register",
-        icon: <AiOutlineUsergroupAdd />
+        icon: <AiOutlineUsergroupAdd />,
       },
 
       {
         title: "Admin",
         path: "/dashboard/admin",
-        icon: <MdOutlineAdminPanelSettings />
+        icon: <MdOutlineAdminPanelSettings />,
       },
 
       {
         title: "Add company",
         path: "/dashboard/add-company",
-        icon: <CgOrganisation />
+        icon: <CgOrganisation />,
       },
       {
         title: "Add Department",
         path: "/dashboard/add-department",
-        icon: <AiOutlineAppstoreAdd />
+        icon: <AiOutlineAppstoreAdd />,
       },
       {
         title: "Add Designation",
         path: "/dashboard/add-designation",
-        icon: <TfiIdBadge />
+        icon: <TfiIdBadge />,
       },
       {
         title: "Add Employee",
         path: "/dashboard/add-employee",
-        icon: <IoPersonAddOutline />
+        icon: <IoPersonAddOutline />,
       },
       {
         title: "Add Location",
         path: "/dashboard/add-location",
-        icon: <MdOutlineAddLocationAlt />
+        icon: <MdOutlineAddLocationAlt />,
       },
       {
         title: "View Schedule",
         path: "/dashboard/view-schedule",
-        icon: <MdOutlineAddLocationAlt />
+        icon: <MdOutlineAddLocationAlt />,
       },
-    ]
+    ],
   },
-]
-
+];
 
 const subMenuItems = [
-  
-    {
-      title: "Add Location",
-      path: "/dashboard/add-location",
-      icon: <MdOutlineAddLocationAlt />
-    },
-  
-]
+  {
+    title: "Add Location",
+    path: "/dashboard/add-location",
+    icon: <MdOutlineAddLocationAlt />,
+  },
+];
 
 const Sidebar = () => {
-
   const [company, setCompany] = useState([]);
   const [isAuth, setIsAuth] = useState(null);
   const [token, setToken] = useState("");
@@ -106,15 +102,15 @@ const Sidebar = () => {
     const isAuthenticated = checkAuth === "true";
     setIsAuth(isAuthenticated);
     console.log("isAuthenticated", isAuthenticated);
-  }
+  };
 
   const checkToken = () => {
     const checkTokenValue = localStorage.getItem("token");
 
-    // const isTokenAvailable = checkToken === 
+    // const isTokenAvailable = checkToken ===
 
     setToken(checkTokenValue);
-  }
+  };
 
   useEffect(() => {
     checkAdmin();
@@ -122,46 +118,48 @@ const Sidebar = () => {
     checkToken();
   }, []);
 
-
   useEffect(() => {
     console.log("isAuth", isAuth);
     if (isAuth === false) {
-      router.push('/');
+      router.push("/");
     }
   }, [isAuth]);
 
   function logOut() {
     let config = {
-      method: 'post',
+      method: "post",
       maxBodyLength: Infinity,
-      url: 'https://attendence-api-px8b.onrender.com/admin/logout',
+      url: "https://attendence-api-px8b.onrender.com/admin/logout",
       headers: {
-        'Authorization': `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     };
 
-    axios.request(config)
+    axios
+      .request(config)
       .then((response) => {
         console.log(JSON.stringify(response.data));
         localStorage.clear();
-        router.push('/')
+        router.push("/");
       })
       .catch((error) => {
         console.log(error);
       });
   }
 
-
-
   return (
     <div className={styles.container}>
       <div className={styles.user}>
         <Link href="/dashboard/admin">
-        <img src="https://tse3.mm.bing.net/th/id/OIP.IGNf7GuQaCqz_RPq5wCkPgAAAA?rs=1&pid=ImgDetMain" alt="" className={styles.userImage} />
+          <img
+            src="https://tse3.mm.bing.net/th/id/OIP.IGNf7GuQaCqz_RPq5wCkPgAAAA?rs=1&pid=ImgDetMain"
+            alt=""
+            className={styles.userImage}
+          />
         </Link>
         <div className={styles.userDetail}>
           <span className={styles.username}>Welcome back,</span>
-          <span className={styles.userTitle}>Abhay Sharma </span>
+          <span className={styles.userTitle}>{localStorage.getItem("name") || ""}</span>
         </div>
       </div>
 
@@ -180,31 +178,82 @@ const Sidebar = () => {
         </ul>
       </details> */}
 
-
-
       {/* New Menu */}
       <ul className="menu bg-[#1a294f] w-56 rounded-box min-h-screen">
-      <li><Link href="/dashboard"><MdDashboard size={20}/>Dashboard</Link></li>
-      <li><Link href="/dashboard/employees"><MdGroups size={22} />Employees</Link></li>
-    <li><Link href="/dashboard/view-company"><CgOrganisation size={20}/>View Company</Link></li>
-    <li>
-          <details >
-            <summary><BsClipboardData  size={20}/>Master Data</summary>
+        <li>
+          <Link href="/dashboard">
+            <MdDashboard size={20} />
+            Dashboard
+          </Link>
+        </li>
+        <li>
+          <Link href="/dashboard/employees">
+            <MdGroups size={22} />
+            Employees
+          </Link>
+        </li>
+        <li>
+          <Link href="/dashboard/view-company">
+            <CgOrganisation size={20} />
+            View Company
+          </Link>
+        </li>
+        <li>
+          <Link href="/dashboard/reports">
+            <TbReportAnalytics size={25} />
+            Reports
+          </Link>
+        </li>
+        <li>
+          <details>
+            <summary>
+              <BsClipboardData size={20} />
+              Master Data
+            </summary>
             <ul>
-              <li><Link href="/dashboard/designation"><TfiIdBadge size={22}/> Designation</Link></li>
-              <li><Link href="/dashboard/department"><AiOutlineAppstoreAdd size={22}/>Department</Link></li>
-              <li><Link href="/dashboard/reports"><TbReportAnalytics size={25}/>Reports</Link></li>
-              <li><Link href="/dashboard/view-location"><MdOutlineAddLocationAlt size={22}/> Location</Link></li>
-              <li><Link href="/dashboard/holiday"><SlCalender  size={22}/>Holiday</Link></li>
+              <li>
+                <Link href="/dashboard/designation">
+                  <TfiIdBadge size={22} /> Designation
+                </Link>
+              </li>
+              <li>
+                <Link href="/dashboard/department">
+                  <AiOutlineAppstoreAdd size={22} />
+                  Department
+                </Link>
+              </li>
+              <li>
+                <Link href="/dashboard/view-location">
+                  <MdOutlineAddLocationAlt size={22} /> Location
+                </Link>
+              </li>
+              <li>
+                <Link href="/dashboard/holiday">
+                  <SlCalender size={22} />
+                  Holiday
+                </Link>
+              </li>
             </ul>
           </details>
         </li>
-        <li><Link href="/dashboard/schedule"><AiOutlineSchedule size={22} /> Schedule </Link></li>
-        <li><Link href="/dashboard/items"><IoFastFoodOutline size={22}/> Items</Link></li>
-        <li><Link href="/dashboard/devices"><MdDevices size={22} />Devices</Link>
-        </li>
-        
         <li>
+          <Link href="/dashboard/schedule">
+            <AiOutlineSchedule size={22} /> Schedule{" "}
+          </Link>
+        </li>
+        <li>
+          <Link href="/dashboard/items">
+            <IoFastFoodOutline size={22} /> Items
+          </Link>
+        </li>
+        <li>
+          <Link href="/dashboard/devices">
+            <MdDevices size={22} />
+            Devices
+          </Link>
+        </li>
+
+        {/* <li>
           <details >
             <summary><RiVoiceRecognitionLine  size={22}/>Recognitions</summary>
             <ul>
@@ -213,13 +262,20 @@ const Sidebar = () => {
               <li><Link href="/dashboard/recognition"><TbHealthRecognition  size={22}/>Recognition</Link></li>
             </ul>
           </details>
-        </li>
-       
-        <button className={styles.logout} onClick={() => logOut()}> <LuLogOut /> Logout</button>
-        <img className="rounded-lg p-2 bottom-5 flex items-center justify-end  " src="/download.png" alt="" />
-</ul>
-    </div>
-  )
-}
+        </li> */}
 
-export default Sidebar
+        <button className={styles.logout} onClick={() => logOut()}>
+          {" "}
+          <LuLogOut /> Logout
+        </button>
+        <img
+          className="rounded-lg p-2 bottom-5 flex items-center justify-end  "
+          src="/download.png"
+          alt=""
+        />
+      </ul>
+    </div>
+  );
+};
+
+export default Sidebar;

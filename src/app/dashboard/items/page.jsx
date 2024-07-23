@@ -4,6 +4,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Footer from '../../ui/dashboard/footer/footer';
+import {BASE_URL} from "../../../../config";
 
 export default function ItemsPage() {
   const [items, setItems] = useState([]);
@@ -33,7 +34,7 @@ export default function ItemsPage() {
       const response = await axios({
         method: 'get',
         maxBodyLength: Infinity,
-        url: 'https://attend.anujdwivedi.in/menu/get-items',
+        url: `${BASE_URL}/menu/get-items`,
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
@@ -54,8 +55,8 @@ export default function ItemsPage() {
         method: isAdding ? 'post' : 'put',
         maxBodyLength: Infinity,
         url: isAdding ? 
-          'https://attend.anujdwivedi.in/menu/add-item' : 
-          `https://attend.anujdwivedi.in/menu/update-item/${formData.id}`,
+          `${BASE_URL}/menu/add-item` : 
+          `${BASE_URL}/menu/update-item/${formData.id}`,
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
@@ -83,7 +84,7 @@ export default function ItemsPage() {
       await axios({
         method: 'delete',
         maxBodyLength: Infinity,
-        url: `https://attend.anujdwivedi.in/menu/delete-item/${id}`,
+        url: `${BASE_URL}/menu/delete-item/${id}`,
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',

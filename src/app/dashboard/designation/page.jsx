@@ -4,6 +4,7 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Footer from '../../ui/dashboard/footer/footer';
+import {BASE_URL} from "../../../../config";
 
 export default function Designations() {
   const [designations, setDesignations] = useState([]);
@@ -28,7 +29,7 @@ export default function Designations() {
 
   const fetchDesignations = async () => {
     try {
-      const response = await axios.get('https://attend.anujdwivedi.in/designation/get-designations', {
+      const response = await axios.get(`${BASE_URL}/designation/get-designations`, {
         headers: {
           Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
         },
@@ -43,7 +44,7 @@ export default function Designations() {
 
   const fetchCompanies = async () => {
     try {
-      const response = await axios.get('https://attend.anujdwivedi.in/company/get-companies', {
+      const response = await axios.get(`${BASE_URL}/company/get-companies`, {
         headers: {
           Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
         },
@@ -91,8 +92,8 @@ export default function Designations() {
       const config = {
         method: isUpdating ? 'put' : 'post',
         url: isUpdating
-          ? `https://attend.anujdwivedi.in/designation/update-designation/${currentDesignation.id}`
-          : 'https://attend.anujdwivedi.in/designation/add-designation',
+          ? `${BASE_URL}/designation/update-designation/${currentDesignation.id}`
+          : `${BASE_URL}/designation/add-designation`,
         headers: {
           'Content-Type': 'application/json',
           Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',

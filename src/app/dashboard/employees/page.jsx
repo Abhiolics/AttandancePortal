@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import FormData from "form-data";
 import Footer from "../../ui/dashboard/footer/footer";
 import { format, parseISO } from "date-fns";
+import {BASE_URL} from "../../../../config";
 
 export default function EmployeePage() {
   const [employees, setEmployees] = useState([]);
@@ -27,7 +28,7 @@ export default function EmployeePage() {
     Location: "",
     companyId: "",
     departmentId: "",
-    designation: "",
+    designationId: "",
     AadharNumber: "",
     EPF: "",
     ESIC: "",
@@ -36,10 +37,10 @@ export default function EmployeePage() {
     OTApplicable: "",
     MobilePolicy: "",
     Gender: "Male",
-    Dob: "",
+    dob: "",
     PersonalEmail: "",
     Tag: "",
-    DateJoining: "",
+    dateJoining: "",
     Status: 0,
   });
 
@@ -74,7 +75,7 @@ export default function EmployeePage() {
   const fetchEmployees = async () => {
     try {
       const response = await axios.get(
-        "https://attendence-api-px8b.onrender.com/employee/get-employees",
+        `${BASE_URL}/employee/get-employees`,
         {
           headers: {
             Authorization:
@@ -83,9 +84,6 @@ export default function EmployeePage() {
         }
       );
       setEmployees(response.data.data);
-      // setEmployee({
-
-      // })
     } catch (error) {
       toast.error("Failed to fetch employees");
     } finally {
@@ -103,7 +101,7 @@ export default function EmployeePage() {
     }
 
     if (!employees) {
-      console.warn('Employees data is not available.');
+      console.warn("Employees data is not available.");
       return;
     }
 
@@ -137,20 +135,24 @@ export default function EmployeePage() {
 
   useEffect(() => {
     fetchEmployees();
-    fetchOptions(
-      "https://attendence-api-px8b.onrender.com/company/get-companies",
-      "company"
-    );
+    fetchOptions(`${BASE_URL}/company/get-companies`, "company");
   }, []);
 
   const handleInputChange = async (e) => {
     const { name, value, files } = e.target;
-    setEmployee((prev) => ({ ...prev, [name]: files ? files[0] : value }));
+    console.log(name);
+    console.log(value);
 
     if (name === "company") {
+      setEmployee((prev) => ({
+        ...prev,
+        companyId: value,
+        departmentId: "",
+        designationId: "",
+      }));
       try {
         const departmentResponse = await axios.get(
-          `https://attendence-api-px8b.onrender.com/department/get-department/${value}`,
+          `${BASE_URL}/department/get-department/${value}`,
           {
             headers: {
               Authorization:
@@ -159,7 +161,47 @@ export default function EmployeePage() {
           }
         );
         const designationResponse = await axios.get(
-          `https://attendence-api-px8b.onrender.com/designation/get-designation/${value}`,
+          `${BASE_URL}/designation/get-designation/${value}`,
+          {
+            headers: {
+              Authorization:
+                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE",
+            },
+          }
+        );
+        setOptions((prev) => ({
+          ...prev,
+          department: departmentResponse.data.data,
+          designation: designationResponse.data.data,
+        }));
+      } catch (error) {
+        toast.error("Failed to fetch department or designation options");
+      }
+    } else if (name === "department") {
+      setEmployee((prev) => ({
+        ...prev,
+        departmentId: value,
+        designationId: "",
+      }));
+    } else if (name === "designation") {
+      setEmployee((prev) => ({ ...prev, designationId: value }));
+    } else {
+      setEmployee((prev) => ({ ...prev, [name]: files ? files[0] : value }));
+    }
+
+    if (name === "company") {
+      try {
+        const departmentResponse = await axios.get(
+          `${BASE_URL}/department/get-department/${value}`,
+          {
+            headers: {
+              Authorization:
+                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE",
+            },
+          }
+        );
+        const designationResponse = await axios.get(
+          `${BASE_URL}/designation/get-designation/${value}`,
           {
             headers: {
               Authorization:
@@ -219,10 +261,10 @@ export default function EmployeePage() {
         OTApplicable: "",
         MobilePolicy: "",
         Gender: "Male",
-        Dob: "",
+        dob: "",
         PersonalEmail: "",
         Tag: "",
-        DateJoining: "",
+        dateJoining: "",
         Status: 0,
       });
       setIsAdding(true);
@@ -244,7 +286,7 @@ export default function EmployeePage() {
       !employee.EmployeeId
     ) {
       toast.error(
-        "First name, last name, email, and employee ID are required fields"
+        "First name, Last name, email, and employee ID are required fields"
       );
       return;
     }
@@ -253,8 +295,24 @@ export default function EmployeePage() {
       toast.error("Phone number must be a 10-digit number");
       return;
     }
+
     if (employee.AadharNumber.length !== 12) {
       toast.error("Aadhar number must be 12 digits");
+      return;
+    }
+
+    if (employee.companyId === "" || employee.departmentId === "") {
+      toast.error("Company and department are required fields");
+      return;
+    }
+
+    if (employee.designationId === "") {
+      toast.error("Designation is a required field");
+      return;
+    }
+
+    if (employee.dob === "" || employee.dateJoining === "") {
+      toast.error("Date of birth and date of joining are required fields");
       return;
     }
 
@@ -265,10 +323,8 @@ export default function EmployeePage() {
     Object.keys(employee).forEach((key) => {
       let finalKey = keysToExclude.includes(key) ? key : toCamelCase(key);
       formData.append(finalKey, employee[key]);
-      console.log(finalKey);
+      console.log(finalKey, employee[key]);
     });
-
-    console.log(formData);
 
     const requestOptions = {
       method: isUpdating ? "PUT" : "POST",
@@ -280,8 +336,8 @@ export default function EmployeePage() {
     };
 
     const url = isUpdating
-      ? `https://attendence-api-px8b.onrender.com/employee/update-employee/${employee.id}`
-      : "https://attendence-api-px8b.onrender.com/employee/add-employee";
+      ? `${BASE_URL}/employee/update-employee/${employee.id}`
+      : `${BASE_URL}/employee/add-employee`;
 
     try {
       const response = await fetch(url, requestOptions);
@@ -290,10 +346,10 @@ export default function EmployeePage() {
         toast.error(result.message);
       } else {
         toast.success(result.message);
+        setIsAdding(false);
+        setIsUpdating(false);
+        fetchEmployees();
       }
-      setIsAdding(false);
-      setIsUpdating(false);
-      fetchEmployees();
     } catch (error) {
       toast.error("Failed to Update employee");
     }
@@ -326,6 +382,7 @@ export default function EmployeePage() {
               "Email",
               "PhoneNumber",
               "EmployeeId",
+              "AadharNumber",
               "Location",
               "EPF",
               "ESIC",
@@ -335,28 +392,51 @@ export default function EmployeePage() {
               "MobilePolicy",
               "PersonalEmail",
               "Tag",
-            ].map((field) => (
-              <div key={field} className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2 capitalize">
-                  {field.split(/(?=[A-Z])/).join(" ")}
-                </label>
-                <input
-                  type={field === "PhoneNumber" ? "tel" : "text"}
-                  required={[
-                    "FirstName",
-                    "LastName",
-                    "Email",
-                    "PhoneNumber",
-                    "EmployeeId",
-                  ].includes(field)}
-                  name={field}
-                  maxLength={field === "PhoneNumber" ? 10 : 100}
-                  value={employee[field]}
-                  onChange={handleInputChange}
-                  className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-                />
-              </div>
-            ))}
+            ].map((field) => {
+              const camelCaseField =
+                field.charAt(0).toLowerCase() + field.slice(1);
+              return (
+                <div key={field} className="mb-4">
+                  <label className="block text-gray-700 text-sm font-bold mb-2 capitalize">
+                    {field.split(/(?=[A-Z])/).join(" ")}
+                  </label>
+                  <input
+                    type={
+                      ["PhoneNumber", "AadharNumber"].includes(field)
+                        ? "tel"
+                        : ["Email", "PersonalEmail"].includes(field)
+                        ? "email"
+                        : "text"
+                    }
+                    required={[
+                      "FirstName",
+                      "LastName",
+                      "Email",
+                      "PhoneNumber",
+                      "EmployeeId",
+                    ].includes(field)}
+                    name={field}
+                    maxLength={
+                      field === "PhoneNumber"
+                        ? 10
+                        : field === "AadharNumber"
+                        ? 12
+                        : 100
+                    }
+                    value={employee[field]}
+                    defaultValue={
+                      isUpdating ? employee[camelCaseField] : employee[field]
+                    }
+                    onChange={
+                      field === "AadharNumber"
+                        ? handleAadharChange
+                        : handleInputChange
+                    }
+                    className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
+                  />
+                </div>
+              );
+            })}
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">
                 Image
@@ -368,43 +448,44 @@ export default function EmployeePage() {
                 className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Aadhaar Number
-              </label>
-              <input
-                type="tel"
-                name="aadharNumber"
-                value={employee.AadharNumber}
-                onChange={handleAadharChange}
-                maxLength={12}
-                className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-              />
-            </div>
 
-            {["company", "department", "designation"].map((opt) => (
-              <div key={opt} className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
-                  {opt.charAt(0).toUpperCase() + opt.slice(1)}
-                </label>
-                <select
-                  name={opt}
-                  value={employee[opt]}
-                  onChange={handleInputChange}
-                  className="border bg-gray-600 rounded w-full py-2 px-3 text-white leading-tight"
-                  // required
-                >
-                  <option value="">
-                    Select {opt.charAt(0).toUpperCase() + opt.slice(1)}
-                  </option>
-                  {options[opt].map((item) => (
-                    <option key={item.id} value={item[`${opt}Id`]}>
-                      {item[`${opt}Name`]}
+            {["company", "department", "designation"].map((opt) => {
+              let option = "";
+              if (opt === "company") {
+                option = "companyId";
+              } else if (opt === "department") {
+                option = "departmentId";
+              } else if (opt === "designation") {
+                option = "designationId";
+              }
+              const camelCaseField =
+                option.charAt(0).toLowerCase() + option.slice(1);
+              return (
+                <div key={opt} className="mb-4">
+                  <label className="block text-gray-700 text-sm font-bold mb-2">
+                    {opt.charAt(0).toUpperCase() + opt.slice(1)}
+                  </label>
+                  <select
+                    name={opt}
+                    value={employee[opt]}
+                    onChange={handleInputChange}
+                    className="border bg-gray-600 rounded w-full py-2 px-3 text-white leading-tight"
+                    defaultValue={
+                      isUpdating ? employee[camelCaseField] : employee[opt]
+                    }
+                  >
+                    <option value="">
+                      Select {opt.charAt(0).toUpperCase() + opt.slice(1)}
                     </option>
-                  ))}
-                </select>
-              </div>
-            ))}
+                    {options[opt].map((item) => (
+                      <option key={item.id} value={item[`${opt}Id`]}>
+                        {item[`${opt}Name`]}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              );
+            })}
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">
                 Gender
@@ -428,8 +509,8 @@ export default function EmployeePage() {
               </label>
               <input
                 type="date"
-                name="Dob"
-                value={employee.Dob}
+                name="dob"
+                value={employee.dob}
                 onChange={handleDateChange}
                 className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
                 // required
@@ -441,8 +522,8 @@ export default function EmployeePage() {
               </label>
               <input
                 type="date"
-                name="DateJoining"
-                value={employee.DateJoining}
+                name="dateJoining"
+                value={employee.dateJoining}
                 onChange={handleDateChange}
                 className="shadow appearance-none border bg-slate-600 rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
                 // required
@@ -556,7 +637,7 @@ export default function EmployeePage() {
                                 {emp.firstName}
                               </td>
                               <td className="py-2 px-4 border-b text-center text-black border">
-                                {emp.lastname}
+                                {emp.lastName}
                               </td>
                               <td className="py-2 px-4 border-b text-center text-black border">
                                 {emp.email}
@@ -574,7 +655,7 @@ export default function EmployeePage() {
                                 {emp.departmentId}
                               </td>
                               <td className="py-2 px-4 border-b text-center text-black border">
-                                {emp.dob}
+                                {format(parseISO(emp.dob), "dd/MM/yyyy")}
                               </td>
                               <td className="py-2 px-4 border-b text-center text-black border">
                                 {emp.phoneNumber}

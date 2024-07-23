@@ -1,6 +1,7 @@
 "use client"
 import React, { useState } from 'react';
 import axios from 'axios';
+import {BASE_URL} from "../../../../config";
 
 const UpdatePasswordPage = () => {
   const [email, setEmail] = useState('');
@@ -21,7 +22,7 @@ const UpdatePasswordPage = () => {
     const config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: 'https://attend.anujdwivedi.in/admin/change-password',
+      url: `${BASE_URL}/admin/change-password`,
       headers: { 
         'Content-Type': 'application/json'
       },

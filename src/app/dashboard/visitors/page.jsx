@@ -4,6 +4,7 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Footer from '../../ui/dashboard/footer/footer';
+import {BASE_URL} from "../../../../config";
 
 const VisitorPage = () => {
   const [visitors, setVisitors] = useState([]);
@@ -29,7 +30,7 @@ const VisitorPage = () => {
       const config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: 'https://attend.anujdwivedi.in/recognition/get-visitors',
+        url: `${BASE_URL}/recognition/get-visitors`,
         headers: { 
           'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE'
         }
@@ -72,7 +73,7 @@ const VisitorPage = () => {
       const config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: 'https://attend.anujdwivedi.in/recognition/add-visitor',
+        url: `${BASE_URL}/recognition/add-visitor`,
         headers: { 
           'Content-Type': 'application/json', 
           'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE'

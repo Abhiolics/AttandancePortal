@@ -5,6 +5,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import citiesData from './cities.json';
 import Footer from '../../ui/dashboard/footer/footer';
+import {BASE_URL} from "../../../../config";
 
 export default function LocationPage() {
   const [locations, setLocations] = useState([]);
@@ -33,7 +34,7 @@ export default function LocationPage() {
 
   const fetchLocations = async () => {
     try {
-      const response = await axios.get('https://attend.anujdwivedi.in/location/get-locations', {
+      const response = await axios.get(`${BASE_URL}/location/get-locations`, {
         headers: {
           Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
         },
@@ -95,8 +96,8 @@ export default function LocationPage() {
       const config = {
         method: isUpdating ? 'put' : 'post',
         url: isUpdating
-          ? `https://attendence-api-px8b.onrender.com/location/update-location/${currentLocation.id}`
-          : 'https://attendence-api-px8b.onrender.com/location/add-location',
+          ? `${BASE_URL}/location/update-location/${currentLocation.id}`
+          : `${BASE_URL}/location/add-location`,
         headers: {
           'Content-Type': 'application/json',
           Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',

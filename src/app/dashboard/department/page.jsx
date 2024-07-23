@@ -4,6 +4,7 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Footer from '../../ui/dashboard/footer/footer';
+import {BASE_URL} from "../../../../config";
 
 export default function DepartmentPage() {
   const [departments, setDepartments] = useState([]);
@@ -28,7 +29,7 @@ export default function DepartmentPage() {
 
   const fetchDepartments = async () => {
     try {
-      const response = await axios.get('https://attend.anujdwivedi.in/department/get-departments', {
+      const response = await axios.get(`${BASE_URL}/department/get-departments`, {
         headers: {
           Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE'
         }
@@ -43,7 +44,7 @@ export default function DepartmentPage() {
 
   const fetchCompanies = async () => {
     try {
-      const response = await axios.get('https://attend.anujdwivedi.in/company/get-companies', {
+      const response = await axios.get(`${BASE_URL}/company/get-companies`, {
         headers: {
           Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE'
         }
@@ -66,8 +67,8 @@ export default function DepartmentPage() {
     e.preventDefault();
     const isUpdate = !!currentDepartment.id;
     const url = isUpdate 
-      ? `https://attend.anujdwivedi.in/department/update-department/${currentDepartment.id}` 
-      : 'https://attend.anujdwivedi.in/department/add-department';
+      ? `${BASE_URL}/department/update-department/${currentDepartment.id}` 
+      : `${BASE_URL}/department/add-department`;
     const method = isUpdate ? 'PUT' : 'POST';
 
     try {

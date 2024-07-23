@@ -5,6 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './admin.module.css'; // Import CSS for flip animation
 import Footer from '../../ui/dashboard/footer/footer';
+import {BASE_URL} from "../../../../config";
 
 const AdminPage = () => {
   const [adminData, setAdminData] = useState({});
@@ -19,7 +20,7 @@ const AdminPage = () => {
       const config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: 'https://attend.anujdwivedi.in/admin/get-admin',
+        url: `${BASE_URL}/admin/get-admin`,
         headers: {
           'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE'
         }
@@ -51,7 +52,7 @@ const AdminPage = () => {
     const config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: 'https://attend.anujdwivedi.in/admin/change-password',
+      url: `${BASE_URL}/admin/change-password`,
       headers: {
         'Content-Type': 'application/json'
       },
