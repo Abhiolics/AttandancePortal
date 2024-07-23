@@ -6,6 +6,7 @@ import { IoMdPersonAdd } from "react-icons/io";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter }  from 'next/navigation';
+import { BASE_URL } from '../../../config';
 
 export default function SuperAdminPage() {
   const [showAddAdminModal, setShowAddAdminModal] = useState(false);
@@ -22,7 +23,7 @@ export default function SuperAdminPage() {
     const config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: 'https://attendence-api-px8b.onrender.com/admin/register-admin',
+      url: `${BASE_URL}/admin/register-admin`,
       headers: { 
         'Content-Type': 'application/json'
       },
@@ -44,7 +45,7 @@ export default function SuperAdminPage() {
     const config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: 'https://attendence-api-px8b.onrender.com/admin/get-all-admin',
+      url: `${BASE_URL}/admin/get-all-admin`,
       headers: { 
         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzIwMDkzNzMxfQ.stSh8jSWVCzRmlpe6ilyU3F1lZbhRbtB6w5HFNspyiQ'
       }
@@ -66,7 +67,7 @@ export default function SuperAdminPage() {
     const config = {
       method: 'put',
       maxBodyLength: Infinity,
-      url: `https://attendence-api-px8b.onrender.com/admin/update-admin/${updateAdmin.id}`,
+      url:`${BASE_URL}/admin/update-admin/${updateAdmin.id}`,
       headers: { 
         'Content-Type': 'application/json', 
         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzIwMDkzNzMxfQ.stSh8jSWVCzRmlpe6ilyU3F1lZbhRbtB6w5HFNspyiQ'
@@ -90,7 +91,7 @@ export default function SuperAdminPage() {
     const config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: 'https://attendence-api-px8b.onrender.com/admin/logout',
+      url: `${BASE_URL}/admin/logout`,
       headers: { 
         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzIwNzY2NzQxfQ.S__q-oS5K2Vn0yDfdrZAuO6sQMssCTB1rs923-JZdKA'
       }

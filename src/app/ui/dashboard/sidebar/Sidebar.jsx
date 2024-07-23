@@ -25,6 +25,7 @@ import { TbHealthRecognition } from "react-icons/tb";
 import { MdGroups } from "react-icons/md";
 import { IoFastFoodOutline } from "react-icons/io5";
 import { TbReportAnalytics } from "react-icons/tb";
+import { BASE_URL } from "../../../../../config";
 
 const menuItems = [
   {
@@ -129,7 +130,7 @@ const Sidebar = () => {
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: "https://attendence-api-px8b.onrender.com/admin/logout",
+      url: `${BASE_URL}/admin/logout`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
