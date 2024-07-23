@@ -6,15 +6,18 @@ import "react-toastify/dist/ReactToastify.css";
 import FormData from "form-data";
 import Footer from "../../ui/dashboard/footer/footer";
 import { format, parseISO } from "date-fns";
-import {BASE_URL} from "../../../../config";
+import { BASE_URL } from "../../../../config";
+import Fuse from "fuse.js";
 
 export default function EmployeePage() {
   const [employees, setEmployees] = useState([]);
+  const [data, setData] = useState([]);
   const [isAdding, setIsAdding] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const itemsPerPage = 10;
 
   const [employee, setEmployee] = useState({
@@ -50,73 +53,38 @@ export default function EmployeePage() {
     designation: [],
   });
 
-  // const searchEmployee = (name, email) => {
-  //   const lowerCaseName = name.toLowerCase();
-  //   const lowerCaseEmail = email ? email.toLowerCase() : '';
+  useEffect(() => {
+    if (searchTerm === "") {
+      setEmployees(data);
+      return;
+    } else {
+      const fuse = new Fuse(employees, {
+        keys: ["firstName", "lastName", "email"],
+      });
 
-  //   console.log(lowerCaseName, lowerCaseEmail);
+      const results = fuse.search(searchTerm);
 
-  //   const filteredEmployees = employees.filter((employee) => {
-  //     const fullName = `${employee.FirstName || ""} ${
-  //       employee.LastName || ""
-  //     }`.toLowerCase();
-  //     const email = (employee.Email || "").toLowerCase();
+      console.log(results);
 
-  //     return (
-  //       fullName.includes(lowerCaseName) || email.includes(lowerCaseEmail)
-  //     );
-  //   });
-
-  //   console.log(filteredEmployees);
-
-  //   // return filteredEmployees;
-  // };
+      setEmployees(results.map((result) => result.item));
+    }
+  }, [searchTerm]);
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get(
-        `${BASE_URL}/employee/get-employees`,
-        {
-          headers: {
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE",
-          },
-        }
-      );
+      const response = await axios.get(`${BASE_URL}/employee/get-employees`, {
+        headers: {
+          Authorization:
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE",
+        },
+      });
       setEmployees(response.data.data);
+      setData(response.data.data);
     } catch (error) {
       toast.error("Failed to fetch employees");
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const searchEmployee = (query) => {
-    const lowerCaseQuery = query.toLowerCase();
-    console.log(lowerCaseQuery);
-
-    if (!lowerCaseQuery) {
-      fetchEmployees();
-      return;
-    }
-
-    if (!employees) {
-      console.warn("Employees data is not available.");
-      return;
-    }
-
-    const filteredEmployees = employees.filter((employee) => {
-      const firstName = employee.FirstName.toLowerCase();
-      return firstName.includes(lowerCaseQuery);
-    });
-
-    console.log(filteredEmployees);
-    setEmployees(filteredEmployees);
-  };
-
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
-    searchEmployee(e.target.value);
   };
 
   const fetchOptions = async (url, key) => {
@@ -553,8 +521,8 @@ export default function EmployeePage() {
               type="text"
               className="shadow appearance-none border bg-slate-600 rounded py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
               placeholder="Search by Name or Email"
-              value={searchQuery}
-              onChange={handleSearchChange}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
             <button
               onClick={() => handleAction("add")}
