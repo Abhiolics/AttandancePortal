@@ -91,6 +91,7 @@ const subMenuItems = [
 ];
 
 const Sidebar = () => {
+  const [name, setName] = useState("");
   const [company, setCompany] = useState([]);
   const [isAuth, setIsAuth] = useState(null);
   const [token, setToken] = useState("");
@@ -148,6 +149,13 @@ const Sidebar = () => {
       });
   }
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const username = localStorage.getItem("name");
+      setName(username);
+    }
+  }, []);
+
   return (
     <div className={styles.container}>
       <div className={styles.user}>
@@ -160,7 +168,7 @@ const Sidebar = () => {
         </Link>
         <div className={styles.userDetail}>
           <span className={styles.username}>Welcome back,</span>
-          <span className={styles.userTitle}>{localStorage.getItem("name") || ""}</span>
+          <span className={styles.userTitle}>{name}</span>
         </div>
       </div>
 
