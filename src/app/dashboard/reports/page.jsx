@@ -10,7 +10,7 @@ import * as XLSX from "xlsx";
 import dayjs from "dayjs";
 import { BASE_URL } from "../../../../config";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import { parseISO, differenceInMinutes } from "date-fns";
+import { parseISO, differenceInMinutes, format } from "date-fns";
 dayjs.extend(customParseFormat);
 
 const AttendanceReport = () => {
@@ -131,6 +131,17 @@ const AttendanceReport = () => {
     }
   };
 
+  const formatedTime = (time) => {
+    const cutTime = time.split("T")[1];
+    const cutTime2 = cutTime.split(".")[0];
+    const hours = cutTime2.split(":")[0];
+    const minutes = cutTime2.split(":")[1];
+    const period = hours >= 12 ? "PM" : "AM";
+    const formattedHours = hours % 12 || 12;
+    const formattedTime = `${formattedHours}:${minutes} ${period}`;
+    return formattedTime;
+  }
+
   const exportToExcel = () => {
     const filteredData = data.map((emp) => {
       return {
@@ -140,7 +151,12 @@ const AttendanceReport = () => {
         Company: emp.companyId,
         Designation: emp.d_name,
         Date: new Date(emp.date_at).toLocaleDateString(),
-        Time: parseISO(emp.time),
+        InTime: formatedTime(emp.inTime),
+        OutTime: formatedTime(emp.outTime),
+        "Total Time": subtractTimes(
+          parseISO(emp.inTime),
+          parseISO(emp.outTime)
+        ),
       };
     });
     const ws = XLSX.utils.json_to_sheet(filteredData);
@@ -168,6 +184,7 @@ const AttendanceReport = () => {
               <div className="inline-block w-full py-2 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between">
                   <RangePicker
+                  allowClear={false}
                     defaultValue={[
                       selectedDates.fromDate,
                       selectedDates.toDate,
@@ -239,10 +256,10 @@ const AttendanceReport = () => {
                                 {new Date(emp.date_at).toLocaleDateString()}
                               </td>
                               <td className="py-2 px-4 border-b text-center text-black border">
-                                {parseISO(emp.inTime)}
+                                {formatedTime(emp.inTime)}
                               </td>
                               <td className="py-2 px-4 border-b text-center text-black border">
-                                {parseISO(emp.outTime)}
+                                {formatedTime(emp.outTime)}
                               </td>
                               <td className="py-2 px-4 border-b text-center text-black border">
                                 {subtractTimes(

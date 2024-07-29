@@ -52,3 +52,16 @@ a{
   height: 2px;
   background-color: #3c4048;
 }
+
+.ant-drawer .ant-drawer-content{
+  background: #1a294f !important;
+  color: white !important;
+}
+
+.ant-drawer .ant-drawer-body{
+  padding: 0px !important;
+}
+
+.ant-drawer .ant-drawer-close{
+  color: white !important;
+}

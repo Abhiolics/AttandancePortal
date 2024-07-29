@@ -26,75 +26,20 @@ import { MdGroups } from "react-icons/md";
 import { IoFastFoodOutline } from "react-icons/io5";
 import { TbReportAnalytics } from "react-icons/tb";
 import { BASE_URL } from "../../../../../config";
-
-const menuItems = [
-  {
-    title: "Menu",
-    list: [
-      {
-        title: "Dashboard",
-        path: "/dashboard",
-        icon: <MdDashboard />,
-      },
-      {
-        title: "Register",
-        path: "/register",
-        icon: <AiOutlineUsergroupAdd />,
-      },
-
-      {
-        title: "Admin",
-        path: "/dashboard/admin",
-        icon: <MdOutlineAdminPanelSettings />,
-      },
-
-      {
-        title: "Add company",
-        path: "/dashboard/add-company",
-        icon: <CgOrganisation />,
-      },
-      {
-        title: "Add Department",
-        path: "/dashboard/add-department",
-        icon: <AiOutlineAppstoreAdd />,
-      },
-      {
-        title: "Add Designation",
-        path: "/dashboard/add-designation",
-        icon: <TfiIdBadge />,
-      },
-      {
-        title: "Add Employee",
-        path: "/dashboard/add-employee",
-        icon: <IoPersonAddOutline />,
-      },
-      {
-        title: "Add Location",
-        path: "/dashboard/add-location",
-        icon: <MdOutlineAddLocationAlt />,
-      },
-      {
-        title: "View Schedule",
-        path: "/dashboard/view-schedule",
-        icon: <MdOutlineAddLocationAlt />,
-      },
-    ],
-  },
-];
-
-const subMenuItems = [
-  {
-    title: "Add Location",
-    path: "/dashboard/add-location",
-    icon: <MdOutlineAddLocationAlt />,
-  },
-];
+import { Button, Drawer } from 'antd';
 
 const Sidebar = () => {
   const [name, setName] = useState("");
-  const [company, setCompany] = useState([]);
   const [isAuth, setIsAuth] = useState(null);
   const [token, setToken] = useState("");
+  const [open, setOpen] = useState(false);
+
+  const showDrawer = () => {
+    setOpen(true);
+  };
+  const onClose = () => {
+    setOpen(false);
+  };
 
   const router = useRouter();
 
@@ -108,9 +53,6 @@ const Sidebar = () => {
 
   const checkToken = () => {
     const checkTokenValue = localStorage.getItem("token");
-
-    // const isTokenAvailable = checkToken ===
-
     setToken(checkTokenValue);
   };
 
@@ -162,7 +104,7 @@ const Sidebar = () => {
         <Link href="/dashboard/admin">
           <img
             src="https://tse3.mm.bing.net/th/id/OIP.IGNf7GuQaCqz_RPq5wCkPgAAAA?rs=1&pid=ImgDetMain"
-            alt=""
+            alt="admin image"
             className={styles.userImage}
           />
         </Link>
@@ -170,25 +112,111 @@ const Sidebar = () => {
           <span className={styles.username}>Welcome back,</span>
           <span className={styles.userTitle}>{name}</span>
         </div>
+        <Button className="block md:hidden" type="primary" onClick={showDrawer}>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 9h16.5m-16.5 6.75h16.5" />
+</svg>
+      </Button>
+      <Drawer title={null} onClose={onClose} open={open}>
+      <ul className="menu bg-[#1a294f] rounded-box min-h-screen">
+        <li>
+          <Link href="/dashboard">
+            <MdDashboard size={20} />
+            Dashboard
+          </Link>
+        </li>
+        <li>
+          <Link href="/dashboard/employees">
+            <MdGroups size={22} />
+            Employees
+          </Link>
+        </li>
+        <li>
+          <Link href="/dashboard/view-company">
+            <CgOrganisation size={20} />
+            View Company
+          </Link>
+        </li>
+        <li>
+          <Link href="/dashboard/reports">
+            <TbReportAnalytics size={25} />
+            Reports
+          </Link>
+        </li>
+        <li>
+          <details>
+            <summary>
+              <BsClipboardData size={20} />
+              Master Data
+            </summary>
+            <ul>
+              <li>
+                <Link href="/dashboard/designation">
+                  <TfiIdBadge size={22} /> Designation
+                </Link>
+              </li>
+              <li>
+                <Link href="/dashboard/department">
+                  <AiOutlineAppstoreAdd size={22} />
+                  Department
+                </Link>
+              </li>
+              <li>
+                <Link href="/dashboard/view-location">
+                  <MdOutlineAddLocationAlt size={22} /> Location
+                </Link>
+              </li>
+              <li>
+                <Link href="/dashboard/holiday">
+                  <SlCalender size={22} />
+                  Holiday
+                </Link>
+              </li>
+            </ul>
+          </details>
+        </li>
+        <li>
+          <Link href="/dashboard/schedule">
+            <AiOutlineSchedule size={22} /> Schedule{" "}
+          </Link>
+        </li>
+        <li>
+          <Link href="/dashboard/items">
+            <IoFastFoodOutline size={22} /> Items
+          </Link>
+        </li>
+        <li>
+          <Link href="/dashboard/devices">
+            <MdDevices size={22} />
+            Devices
+          </Link>
+        </li>
+
+        {/* <li>
+          <details >
+            <summary><RiVoiceRecognitionLine  size={22}/>Recognitions</summary>
+            <ul>
+
+              <li><Link href="/dashboard/visitors"><SiTripadvisor size={22}/> Visitors</Link></li>
+              <li><Link href="/dashboard/recognition"><TbHealthRecognition  size={22}/>Recognition</Link></li>
+            </ul>
+          </details>
+        </li> */}
+
+        <button className={styles.logout} onClick={() => logOut()}>
+          {" "}
+          <LuLogOut /> Logout
+        </button>
+        <img
+          className="rounded-lg p-2 bottom-5 flex items-center justify-end  "
+          src="/download.png"
+          alt=""
+        />
+      </ul>
+      </Drawer>
       </div>
 
-      {/* NEW TOGGLE MENU */}
-      {/* <details className="dropdown">
-        <summary className="m-1 btn-outline btn bg-base-500">Tap to see more options</summary>
-        <ul  className={`"p-2 shadow menu dropdown-content z-[1] bg-base-500 rounded-box w-52 "` }>
-        <li className={styles.cat}><Link href="/dashboard/admin"><MdOutlineAdminPanelSettings size={22}/>Admin</Link></li>
-          <li className={styles.cat}><Link href="/dashboard/admin"><AiOutlineUsergroupAdd size={25}/> Register</Link></li>
-          <li className={styles.cat}><Link href="/dashboard/add-employee"><IoPersonAddOutline size={22}/>Add Employee</Link></li>
-          <li className={styles.cat}><Link href="/dashboard/add-designation"><TfiIdBadge size={22}/>Add Designation</Link></li>
-          <li className={styles.cat}><Link href="/dashboard/add-department"><AiOutlineAppstoreAdd size={22}/>Add Department</Link></li>
-          <li className={styles.cat}><Link href="/dashboard/add-location"><MdOutlineAddLocationAlt size={22}/>Add Location</Link></li>
-          <li className={styles.cat}><Link href="/dashboard/add-company"><CgOrganisation size={22}/>Add company</Link></li>
-          
-        </ul>
-      </details> */}
-
-      {/* New Menu */}
-      <ul className="menu bg-[#1a294f] w-56 rounded-box min-h-screen">
+      <ul className="menu hidden md:block bg-[#1a294f] w-56 rounded-box min-h-screen">
         <li>
           <Link href="/dashboard">
             <MdDashboard size={20} />
