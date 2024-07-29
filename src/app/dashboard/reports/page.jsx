@@ -10,6 +10,7 @@ import * as XLSX from "xlsx";
 import dayjs from "dayjs";
 import { BASE_URL } from "../../../../config";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import { parseISO, differenceInMinutes } from "date-fns";
 dayjs.extend(customParseFormat);
 
 const AttendanceReport = () => {
@@ -21,11 +22,6 @@ const AttendanceReport = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const dateFormat = "YYYY/MM/DD";
-
-  const currentDate = dayjs();
-  const oneDayBefore = currentDate.subtract(1, "day");
-
-  const defaultValue = [oneDayBefore, currentDate];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -80,7 +76,7 @@ const AttendanceReport = () => {
     }
   };
 
-  const parseISO = (dateString) => {    
+  const parseISO = (dateString) => {
     function format12Hour(hour) {
       const formattedHour = hour % 12 || 12;
       return `${formattedHour}`;
@@ -91,18 +87,49 @@ const AttendanceReport = () => {
     const istOffset = 5 * 60 * 60 * 1000 + 30 * 60 * 1000;
     const istDate = new Date(utcDate.getTime() + istOffset);
 
-    const day = String(istDate.getUTCDate()).padStart(2, '0');
-    const month = String(istDate.getUTCMonth() + 1).padStart(2, '0');
-    const year = istDate.getUTCFullYear();
+    // const day = String(istDate.getUTCDate()).padStart(2, '0');
+    // const month = String(istDate.getUTCMonth() + 1).padStart(2, '0');
+    // const year = istDate.getUTCFullYear();
     const hours = istDate.getUTCHours();
-    const minutes = String(istDate.getUTCMinutes()).padStart(2, '0');
-    const period = hours >= 12 ? 'PM' : 'AM';
+    const minutes = String(istDate.getUTCMinutes()).padStart(2, "0");
+    const period = hours >= 12 ? "PM" : "AM";
 
     const formattedHours = format12Hour(hours);
     // const formattedDate = `${day}/${month}/${year} ${formattedHours}:${minutes} ${period}`;
     const formattedDate = `${formattedHours}:${minutes} ${period}`;
     return formattedDate;
-};
+  };
+
+  const subtractTimes = (time1, time2) => {
+    const parseTime = (time) => {
+      const [hours, minutes] = time.split(":");
+      const isPM = time.includes("pm");
+      const hour = parseInt(hours, 10);
+      const adjustedHour = hour === 12 ? 12 : isPM ? hour + 12 : hour;
+      return new Date().setHours(adjustedHour, parseInt(minutes, 10), 0, 0);
+    };
+
+    const date1 = parseTime(time1);
+    const date2 = parseTime(time2);
+
+    const differenceMs = date2 - date1;
+
+    if (differenceMs < 0) {
+      return "End time must be after start time";
+    }
+
+    const totalMinutes = Math.floor(differenceMs / (1000 * 60));
+    const hoursDiff = Math.floor(totalMinutes / 60);
+    const minutesDiff = totalMinutes % 60;
+
+    if (hoursDiff > 0) {
+      return `${hoursDiff} hour${
+        hoursDiff > 1 ? "s" : ""
+      } ${minutesDiff} minute${minutesDiff !== 1 ? "s" : ""}`;
+    } else {
+      return `${minutesDiff} minute${minutesDiff !== 1 ? "s" : ""}`;
+    }
+  };
 
   const exportToExcel = () => {
     const filteredData = data.map((emp) => {
@@ -180,7 +207,13 @@ const AttendanceReport = () => {
                               Date
                             </th>
                             <th className="py-2 px-4 border-b border text-white bg-gray-600">
-                              Time
+                              In-Time
+                            </th>
+                            <th className="py-2 px-4 border-b border text-white bg-gray-600">
+                              Out-Time
+                            </th>
+                            <th className="py-2 px-4 border-b border text-white bg-gray-600">
+                              Total Time
                             </th>
                           </tr>
                         </thead>
@@ -206,7 +239,16 @@ const AttendanceReport = () => {
                                 {new Date(emp.date_at).toLocaleDateString()}
                               </td>
                               <td className="py-2 px-4 border-b text-center text-black border">
-                                {parseISO(emp.time)}
+                                {parseISO(emp.inTime)}
+                              </td>
+                              <td className="py-2 px-4 border-b text-center text-black border">
+                                {parseISO(emp.outTime)}
+                              </td>
+                              <td className="py-2 px-4 border-b text-center text-black border">
+                                {subtractTimes(
+                                  parseISO(emp.inTime),
+                                  parseISO(emp.outTime)
+                                )}
                               </td>
                             </tr>
                           ))}
