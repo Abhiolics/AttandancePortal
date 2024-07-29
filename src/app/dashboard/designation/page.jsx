@@ -214,10 +214,10 @@ export default function Designations() {
                 </h2>
               </div>
             ) : (
-              <div class="flex min-w-full flex-col ">
-              <div class="sm:-mx-6  lg:-mx-8">
-        <div class="inline-block min-w-full  py-2 sm:px-6 lg:px-8">
-          <div class="overflow-x-auto"></div>
+              <div className="flex min-w-full flex-col ">
+              <div className="sm:-mx-6  lg:-mx-8">
+        <div className="inline-block min-w-full  py-2 sm:px-6 lg:px-8">
+          <div className="overflow-x-auto"></div>
           <table className="min-w-full bg-white border">
             <thead className="bg-gray-800 text-white">
               <tr>

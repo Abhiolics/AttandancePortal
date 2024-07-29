@@ -7,18 +7,30 @@ import { DatePicker } from "antd";
 import moment from "moment";
 const { RangePicker } = DatePicker;
 import * as XLSX from "xlsx";
-import {BASE_URL} from "../../../../config";
+import dayjs from "dayjs";
+import { BASE_URL } from "../../../../config";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+dayjs.extend(customParseFormat);
 
 const AttendanceReport = () => {
   const [data, setData] = useState([]);
   const [selectedDates, setSelectedDates] = useState({
-    fromDate: moment().subtract(1, "days").format("YYYY-MM-DD"),
-    toDate: moment().format("YYYY-MM-DD"),
+    fromDate: dayjs().subtract(1, "day"),
+    toDate: dayjs(),
   });
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const dateFormat = "YYYY/MM/DD";
+
+  const currentDate = dayjs();
+  const oneDayBefore = currentDate.subtract(1, "day");
+
+  const defaultValue = [oneDayBefore, currentDate];
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
+
       let data = JSON.stringify({
         fromDate: selectedDates.fromDate,
         toDate: selectedDates.toDate,
@@ -49,12 +61,48 @@ const AttendanceReport = () => {
     fetchData();
   }, [selectedDates]);
 
-  const handleDateChange = (dates, dateStrings) => {
-    setSelectedDates({
-      fromDate: dateStrings[0],
-      toDate: dateStrings[1],
-    });
+  const handleDateChange = (dates) => {
+    if (dates && dates.length === 2) {
+      const [startDate, endDate] = dates;
+      if (dayjs.isDayjs(startDate) && dayjs.isDayjs(endDate)) {
+        setSelectedDates({
+          fromDate: startDate,
+          toDate: endDate,
+        });
+      } else {
+        console.error("Invalid date objects received.");
+      }
+    } else {
+      setSelectedDates({
+        fromDate: null,
+        toDate: null,
+      });
+    }
   };
+
+  const parseISO = (dateString) => {    
+    function format12Hour(hour) {
+      const formattedHour = hour % 12 || 12;
+      return `${formattedHour}`;
+    }
+
+    const utcDate = new Date(dateString);
+
+    const istOffset = 5 * 60 * 60 * 1000 + 30 * 60 * 1000;
+    const istDate = new Date(utcDate.getTime() + istOffset);
+
+    const day = String(istDate.getUTCDate()).padStart(2, '0');
+    const month = String(istDate.getUTCMonth() + 1).padStart(2, '0');
+    const year = istDate.getUTCFullYear();
+    const hours = istDate.getUTCHours();
+    const minutes = String(istDate.getUTCMinutes()).padStart(2, '0');
+    const period = hours >= 12 ? 'PM' : 'AM';
+
+    const formattedHours = format12Hour(hours);
+    // const formattedDate = `${day}/${month}/${year} ${formattedHours}:${minutes} ${period}`;
+    const formattedDate = `${formattedHours}:${minutes} ${period}`;
+    return formattedDate;
+};
 
   const exportToExcel = () => {
     const filteredData = data.map((emp) => {
@@ -65,7 +113,7 @@ const AttendanceReport = () => {
         Company: emp.companyId,
         Designation: emp.d_name,
         Date: new Date(emp.date_at).toLocaleDateString(),
-        Time: new Date(emp.time).toLocaleTimeString(),
+        Time: parseISO(emp.time),
       };
     });
     const ws = XLSX.utils.json_to_sheet(filteredData);
@@ -88,11 +136,18 @@ const AttendanceReport = () => {
             </h2>
           </div>
         ) : (
-          <div className="flex flex-col overflow-x-auto w-full">
+          <div className="flex flex-col w-full">
             <div className="sm:-mx-6 lg:-mx-8 ">
-              <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+              <div className="inline-block w-full py-2 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between">
-                  <RangePicker allowClear={false} onChange={handleDateChange} />
+                  <RangePicker
+                    defaultValue={[
+                      selectedDates.fromDate,
+                      selectedDates.toDate,
+                    ]}
+                    format={dateFormat}
+                    onChange={handleDateChange}
+                  />
                   <button
                     onClick={exportToExcel}
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -100,10 +155,10 @@ const AttendanceReport = () => {
                     View Report
                   </button>
                 </div>
-                <div class="flex flex-col overflow-x-auto">
-                  <div class="sm:-mx-6 lg:-mx-8 max-w-full">
-                    <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
-                      <table className="min-w-full bg-white mt-4">
+                <div className="flex flex-col overflow-x-auto">
+                  <div className="w-full">
+                    <div className="inline-block w-full py-2 px-4">
+                      <table className="w-full bg-white mt-4">
                         <thead>
                           <tr>
                             <th className="py-2 px-4 border-b border text-white bg-gray-600">
@@ -130,8 +185,8 @@ const AttendanceReport = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {data.map((emp) => (
-                            <tr key={emp.id}>
+                          {data.map((emp, index) => (
+                            <tr key={index}>
                               <td className="py-2 px-4 border-b text-center text-black border">
                                 {emp.emp_id}
                               </td>
@@ -151,7 +206,7 @@ const AttendanceReport = () => {
                                 {new Date(emp.date_at).toLocaleDateString()}
                               </td>
                               <td className="py-2 px-4 border-b text-center text-black border">
-                                {new Date(emp.time).toLocaleTimeString()}
+                                {parseISO(emp.time)}
                               </td>
                             </tr>
                           ))}

@@ -164,10 +164,10 @@ export default function DepartmentPage() {
                 </h2>
               </div>
             ) : (
-              <div class="flex w-full flex-col overflow-x-auto">
-                <div class="sm:-mx-6 lg:-mx-8">
-                  <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
-                    <div class="overflow-x-auto"></div>
+              <div className="flex w-full flex-col overflow-x-auto">
+                <div className="sm:-mx-6 lg:-mx-8">
+                  <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+                    <div className="overflow-x-auto"></div>
                     <table className="min-w-full bg-white border">
                       <thead className="bg-gray-800 text-white border">
                         <tr>
