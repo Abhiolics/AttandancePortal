@@ -121,7 +121,7 @@ export default function Home() {
                 <input required type="password" className="input input-bordered" value={password} onChange={(e) => setPassword(e.target.value)} />
               </div>
               <div className="form-control mt-6">
-                <button type="submit" className={`btn btn-primary text-[20px] text-white rounded hover:bg-blue-700 hover:shadow-xl`}>
+                <button disabled={effect} type="submit" className={`btn btn-primary text-[20px] text-white rounded hover:bg-blue-700 hover:shadow-xl`}>
                   <div className={`${effect && "loading loading-ring loading-xs"} inline-block`}></div>
                   Submit
                 </button>
