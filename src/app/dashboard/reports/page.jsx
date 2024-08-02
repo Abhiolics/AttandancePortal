@@ -29,7 +29,8 @@ const AttendanceReport = () => {
 
       let data = JSON.stringify({
         fromDate: selectedDates.fromDate,
-        toDate: selectedDates.toDate,
+        // toDate: selectedDates.toDate,
+        toDate: selectedDates.toDate.add(1, "day"),
       });
 
       let config = {
@@ -60,6 +61,8 @@ const AttendanceReport = () => {
   const handleDateChange = (dates) => {
     if (dates && dates.length === 2) {
       const [startDate, endDate] = dates;
+      // make endDate 1 day ahead
+      // endDate.add(1, "day");
       if (dayjs.isDayjs(startDate) && dayjs.isDayjs(endDate)) {
         setSelectedDates({
           fromDate: startDate,
@@ -132,14 +135,14 @@ const AttendanceReport = () => {
   };
 
   const formatedTime = (time) => {
-    const cutTime = time.split("T")[1];
-    const cutTime2 = cutTime.split(".")[0];
-    const hours = cutTime2.split(":")[0];
-    const minutes = cutTime2.split(":")[1];
-    const period = hours >= 12 ? "PM" : "AM";
-    const formattedHours = hours % 12 || 12;
-    const formattedTime = `${formattedHours}:${minutes} ${period}`;
-    return formattedTime;
+    const options = {
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      hour12: true,
+  };
+  const date = new Date(time);
+  return date.toLocaleString('en-US', options);
   }
 
   const exportToExcel = () => {
@@ -196,7 +199,7 @@ const AttendanceReport = () => {
                     onClick={exportToExcel}
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                   >
-                    View Report
+                    Export Report
                   </button>
                 </div>
                 <div className="flex flex-col overflow-x-auto">

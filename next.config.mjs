@@ -2,7 +2,8 @@
 const nextConfig = {
     reactStrictMode: true,
     distDir: 'dist',
-    output: 'export'
+    output: 'export',
+    // assetPrefix: './' // This is the line added to show css and js
 };
 
 export default nextConfig;
