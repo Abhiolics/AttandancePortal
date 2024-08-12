@@ -14,6 +14,9 @@ const AdminPage = () => {
   const [newPassword, setNewPassword] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [showChangePassword, setShowChangePassword] = useState(false);
+  const [token, setToken] = useState(() => {
+    return localStorage.getItem("token") || "";
+  });
 
   useEffect(() => {
     const fetchAdminData = async () => {
@@ -23,7 +26,7 @@ const AdminPage = () => {
         url: `${BASE_URL}/admin/get-admin`,
         headers: {
           Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE",
+            "Bearer " + token,
         },
       };
 

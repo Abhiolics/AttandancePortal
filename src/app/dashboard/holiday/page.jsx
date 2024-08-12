@@ -25,6 +25,9 @@ export default function HolidayPage() {
     },
     status: 'Inactive',
   });
+  const [token, setToken] = useState(() => {
+    return localStorage.getItem("token") || "";
+  });
 
   const handleDateChange = (e, field) => {
     const formattedDate = e.target.value;
@@ -52,7 +55,7 @@ export default function HolidayPage() {
     try {
       const response = await axios.get(`${BASE_URL}/holiday/get-holidays`, {
         headers: {
-          Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
+          Authorization:             "Bearer " + token,
         },
       });
       setHolidays(response.data.data);
@@ -120,7 +123,7 @@ export default function HolidayPage() {
           : `${BASE_URL}/holiday/add-holiday`,
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
+          Authorization:             "Bearer " + token,
         },
         data: JSON.stringify({
           accessType: currentHoliday.accessType,

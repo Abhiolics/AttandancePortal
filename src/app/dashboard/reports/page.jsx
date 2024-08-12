@@ -20,6 +20,9 @@ const AttendanceReport = () => {
     toDate: dayjs(),
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [token, setToken] = useState(() => {
+    return localStorage.getItem("token") || "";
+  });
 
   const dateFormat = "YYYY/MM/DD";
 
@@ -40,7 +43,7 @@ const AttendanceReport = () => {
         headers: {
           "Content-Type": "application/json",
           Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzIxMDIwNTMxfQ.2v7_7trTAsXB9PW-v7AOYS4GRUZkc0fCKef7KWAUVlQ",
+            "Bearer " + token,
         },
         data: data,
       };

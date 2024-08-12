@@ -52,6 +52,9 @@ export default function EmployeePage() {
     department: [],
     designation: [],
   });
+  const [token, setToken] = useState(() => {
+    return localStorage.getItem("token") || "";
+  });
 
   useEffect(() => {
     if (searchTerm === "") {
@@ -71,11 +74,11 @@ export default function EmployeePage() {
   }, [searchTerm]);
 
   const fetchEmployees = async () => {
+    console.log(token);
     try {
       const response = await axios.get(`${BASE_URL}/employee/get-employees`, {
         headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE",
+          "Authorization": `Bearer ${token}`,
         },
       });
       setEmployees(response.data.data);
@@ -91,8 +94,7 @@ export default function EmployeePage() {
     try {
       const response = await axios.get(url, {
         headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE",
+          Authorization: "Bearer " + token,
         },
       });
       setOptions((prev) => ({ ...prev, [key]: response.data.data }));
@@ -123,8 +125,7 @@ export default function EmployeePage() {
           `${BASE_URL}/department/get-department/${value}`,
           {
             headers: {
-              Authorization:
-                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE",
+              Authorization: "Bearer " + token,
             },
           }
         );
@@ -132,8 +133,7 @@ export default function EmployeePage() {
           `${BASE_URL}/designation/get-designation/${value}`,
           {
             headers: {
-              Authorization:
-                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE",
+              Authorization: "Bearer " + token,
             },
           }
         );
@@ -163,8 +163,7 @@ export default function EmployeePage() {
           `${BASE_URL}/department/get-department/${value}`,
           {
             headers: {
-              Authorization:
-                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE",
+              Authorization: "Bearer " + token,
             },
           }
         );
@@ -172,8 +171,7 @@ export default function EmployeePage() {
           `${BASE_URL}/designation/get-designation/${value}`,
           {
             headers: {
-              Authorization:
-                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE",
+              Authorization: "Bearer " + token,
             },
           }
         );

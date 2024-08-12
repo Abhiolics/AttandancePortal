@@ -25,6 +25,9 @@ const RecognitionPage = () => {
     remarks: '',
     status: 0,
   });
+  const [token, setToken] = useState(() => {
+    return localStorage.getItem("token") || "";
+  });
 
   useEffect(() => {
     fetchRecognitions();
@@ -39,7 +42,7 @@ const RecognitionPage = () => {
         maxBodyLength: Infinity,
         url: `${BASE_URL}/recognition/get-employees`,
         headers: {
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE'
+          'Authorization': 'Bearer ' + token
         }
       };
       const response = await axios.request(config);
@@ -59,7 +62,7 @@ const RecognitionPage = () => {
         maxBodyLength: Infinity,
         url: `${BASE_URL}/company/get-companies`,
         headers: {
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE'
+          'Authorization':             "Bearer " + token,
         }
       };
       const response = await axios.request(config);
@@ -77,7 +80,7 @@ const RecognitionPage = () => {
         maxBodyLength: Infinity,
         url: `${BASE_URL}/employee/get-employees`,
         headers: {
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE'
+          'Authorization':             "Bearer " + token,
         }
       };
       const response = await axios.request(config);
@@ -131,7 +134,7 @@ const RecognitionPage = () => {
           : `${BASE_URL}/recognition/add-employee`,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE'
+          'Authorization':             "Bearer " + token,
         },
         data: JSON.stringify(currentRecognition)
       };

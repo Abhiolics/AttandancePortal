@@ -24,6 +24,9 @@ export default function ItemsPage() {
     tags: '',
     status: 1,
   });
+  const [token, setToken] = useState(() => {
+    return localStorage.getItem("token") || "";
+  });
 
   useEffect(() => {
     fetchItems();
@@ -37,7 +40,7 @@ export default function ItemsPage() {
         url: `${BASE_URL}/menu/get-items`,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
+          'Authorization': 'Bearer ' + token,
         },
       });
       setItems(response.data.data);
@@ -59,7 +62,7 @@ export default function ItemsPage() {
           `${BASE_URL}/menu/update-item/${formData.id}`,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
+          'Authorization':             "Bearer " + token,
         },
         data: formData,
       };
@@ -87,7 +90,7 @@ export default function ItemsPage() {
         url: `${BASE_URL}/menu/delete-item/${id}`,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
+          'Authorization':             "Bearer " + token,
         },
       });
       toast.success('Item deleted successfully');

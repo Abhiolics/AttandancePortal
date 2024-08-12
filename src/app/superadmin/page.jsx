@@ -16,6 +16,9 @@ export default function SuperAdminPage() {
   const [updateAdmin, setUpdateAdmin] = useState({ id: '', name: '', email: '', role: 'admin', status: 1 });
   const [showUpdateAdminModal, setShowUpdateAdminModal] = useState(false);
   const router = useRouter();
+    const [token, setToken] = useState(() => {
+    return localStorage.getItem("token") || "";
+  });
 
   const handleAddAdmin = async () => {
     const data = JSON.stringify(newAdmin);
@@ -47,7 +50,7 @@ export default function SuperAdminPage() {
       maxBodyLength: Infinity,
       url: `${BASE_URL}/admin/get-all-admin`,
       headers: { 
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzIwMDkzNzMxfQ.stSh8jSWVCzRmlpe6ilyU3F1lZbhRbtB6w5HFNspyiQ'
+        'Authorization': 'Bearer ' + token
       }
     };
 
@@ -70,7 +73,7 @@ export default function SuperAdminPage() {
       url:`${BASE_URL}/admin/update-admin/${updateAdmin.id}`,
       headers: { 
         'Content-Type': 'application/json', 
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzIwMDkzNzMxfQ.stSh8jSWVCzRmlpe6ilyU3F1lZbhRbtB6w5HFNspyiQ'
+        'Authorization': 'Bearer ' + token
       },
       data: data
     };
@@ -93,7 +96,7 @@ export default function SuperAdminPage() {
       maxBodyLength: Infinity,
       url: `${BASE_URL}/admin/logout`,
       headers: { 
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzIwNzY2NzQxfQ.S__q-oS5K2Vn0yDfdrZAuO6sQMssCTB1rs923-JZdKA'
+        'Authorization': 'Bearer ' + token
       }
     };
 

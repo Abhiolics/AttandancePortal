@@ -20,6 +20,9 @@ const VisitorPage = () => {
   const [status, setStatus] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const [token, setToken] = useState(() => {
+    return localStorage.getItem("token") || "";
+  });
 
   useEffect(() => {
     fetchVisitors();
@@ -32,7 +35,7 @@ const VisitorPage = () => {
         maxBodyLength: Infinity,
         url: `${BASE_URL}/recognition/get-visitors`,
         headers: { 
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE'
+          'Authorization': `Bearer ${token}`
         }
       };
       const response = await axios.request(config);
@@ -76,7 +79,7 @@ const VisitorPage = () => {
         url: `${BASE_URL}/recognition/add-visitor`,
         headers: { 
           'Content-Type': 'application/json', 
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE'
+          'Authorization':             "Bearer " + token,
         },
         data: JSON.stringify(newVisitor)
       };

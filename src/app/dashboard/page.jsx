@@ -69,7 +69,7 @@ const Page = () => {
     try {
       const config = {
         headers: {
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzIwNzkwNTgzfQ.C1mvfVqoxrnn8pcGPV_w5awEk4ltrcnr3JKxh3yQNKs`,
+          Authorization: `Bearer ${token}`,
         },
       };
 
@@ -98,7 +98,7 @@ const Page = () => {
       maxBodyLength: Infinity,
       url: `${BASE_URL}/admin/logout`,
       headers: { 
-        'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzIwNzkwNTgzfQ.C1mvfVqoxrnn8pcGPV_w5awEk4ltrcnr3JKxh3yQNKs`
+        'Authorization': `Bearer ${token}`
       }
     };
 
@@ -106,6 +106,7 @@ const Page = () => {
       .then((response) => {
         console.log(JSON.stringify(response.data));
         localStorage.clear();
+        sessionStorage.clear();
         router.push('/');
       })
       .catch((error) => {

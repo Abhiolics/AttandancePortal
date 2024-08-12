@@ -27,6 +27,9 @@ export default function LocationPage() {
     accessLevel: '',
     status: "0",
   });
+  const [token, setToken] = useState(() => {
+    return localStorage.getItem("token") || "";
+  });
 
   useEffect(() => {
     fetchLocations();
@@ -36,7 +39,7 @@ export default function LocationPage() {
     try {
       const response = await axios.get(`${BASE_URL}/location/get-locations`, {
         headers: {
-          Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
+          Authorization: 'Bearer ' + token,
         },
       });
       setLocations(response.data.data);
@@ -100,7 +103,7 @@ export default function LocationPage() {
           : `${BASE_URL}/location/add-location`,
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
+          Authorization:             "Bearer " + token,
         },
         data: JSON.stringify({
           "category": currentLocation.category,

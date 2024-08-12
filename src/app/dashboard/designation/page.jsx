@@ -21,6 +21,9 @@ export default function Designations() {
     status: 1,
   });
   const [companies, setCompanies] = useState([]);
+  const [token, setToken] = useState(() => {
+    return localStorage.getItem("token") || "";
+  });
 
   useEffect(() => {
     fetchDesignations();
@@ -31,7 +34,7 @@ export default function Designations() {
     try {
       const response = await axios.get(`${BASE_URL}/designation/get-designations`, {
         headers: {
-          Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
+          Authorization:             "Bearer " + token,
         },
       });
       setDesignations(response.data.data);
@@ -46,7 +49,7 @@ export default function Designations() {
     try {
       const response = await axios.get(`${BASE_URL}/company/get-companies`, {
         headers: {
-          Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
+          Authorization:             "Bearer " + token,
         },
       });
       setCompanies(response.data.data);
@@ -96,7 +99,7 @@ export default function Designations() {
           : `${BASE_URL}/designation/add-designation`,
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
+          Authorization:             "Bearer " + token,
         },
         data: JSON.stringify(currentDesignation),
       };

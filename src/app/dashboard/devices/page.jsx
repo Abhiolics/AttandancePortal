@@ -21,6 +21,9 @@ const DevicesPage = () => {
     type: '',
     status: 1,
   });
+  const [token, setToken] = useState(() => {
+    return localStorage.getItem("token") || "";
+  });
 
   useEffect(() => {
     fetchDevices();
@@ -33,7 +36,7 @@ const DevicesPage = () => {
         {
           headers: {
             Authorization:
-              'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
+                          "Bearer " + token,
           },
         }
       );
@@ -82,7 +85,7 @@ const DevicesPage = () => {
           headers: {
             'Content-Type': 'application/json',
             Authorization:
-              'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
+                          "Bearer " + token,
           },
           data: JSON.stringify(currentDevice),
         };
@@ -94,7 +97,7 @@ const DevicesPage = () => {
           headers: {
             'Content-Type': 'application/json',
             Authorization:
-              'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE4MTc1MjQ5fQ.4tkKagEZzmMrKsAqfUQV2dl6UivUXjrh6sb5w0Mg_FE',
+                          "Bearer " + token,
           },
           data: JSON.stringify(currentDevice),
         };
