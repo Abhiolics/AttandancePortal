@@ -26,12 +26,19 @@ import { MdGroups } from "react-icons/md";
 import { IoFastFoodOutline } from "react-icons/io5";
 import { TbReportAnalytics } from "react-icons/tb";
 import { BASE_URL } from "../../../../../config";
-import { Button, Drawer } from 'antd';
+import { Button, Drawer } from "antd";
+import { deleteCookie, getCookie } from "cookies-next";
 
 const Sidebar = () => {
-  const [name, setName] = useState("");
-  const [isAuth, setIsAuth] = useState(null);
-  const [token, setToken] = useState("");
+  const [name, setName] = useState(() => {
+    return getCookie("name") || "";
+  });
+  const [isAuth, setIsAuth] = useState(() => {
+    return getCookie("auth") || "";
+  });
+  const [token, setToken] = useState(() => {
+    return getCookie("token") || "";
+  });
   const [open, setOpen] = useState(false);
 
   const showDrawer = () => {
@@ -43,27 +50,8 @@ const Sidebar = () => {
 
   const router = useRouter();
 
-  const checkAdmin = () => {
-    const checkAuth = localStorage.getItem("auth");
-    console.log("LocalStorage auth value:", checkAuth);
-    const isAuthenticated = checkAuth === "true";
-    setIsAuth(isAuthenticated);
-    console.log("isAuthenticated", isAuthenticated);
-  };
-
-  const checkToken = () => {
-    const checkTokenValue = localStorage.getItem("token");
-    setToken(checkTokenValue);
-  };
-
   useEffect(() => {
-    checkAdmin();
-
-    checkToken();
-  }, []);
-
-  useEffect(() => {
-    console.log("isAuth", isAuth);
+    console.log("isAuth from sidebar", isAuth);
     if (isAuth === false) {
       router.push("/");
     }
@@ -83,20 +71,15 @@ const Sidebar = () => {
       .request(config)
       .then((response) => {
         console.log(JSON.stringify(response.data));
-        localStorage.clear();
+        deleteCookie("token");
+        deleteCookie("auth");
+        deleteCookie("name");
         router.push("/");
       })
       .catch((error) => {
         console.log(error);
       });
   }
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const username = localStorage.getItem("name");
-      setName(username);
-    }
-  }, []);
 
   return (
     <div className={styles.container}>
@@ -113,86 +96,97 @@ const Sidebar = () => {
           <span className={styles.userTitle}>{name}</span>
         </div>
         <Button className="block md:hidden" type="primary" onClick={showDrawer}>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 9h16.5m-16.5 6.75h16.5" />
-</svg>
-      </Button>
-      <Drawer title={null} onClose={onClose} open={open}>
-      <ul className="menu bg-[#1a294f] rounded-box min-h-screen">
-        <li>
-          <Link href="/dashboard">
-            <MdDashboard size={20} />
-            Dashboard
-          </Link>
-        </li>
-        <li>
-          <Link href="/dashboard/employees">
-            <MdGroups size={22} />
-            Employees
-          </Link>
-        </li>
-        <li>
-          <Link href="/dashboard/view-company">
-            <CgOrganisation size={20} />
-            View Company
-          </Link>
-        </li>
-        <li>
-          <Link href="/dashboard/reports">
-            <TbReportAnalytics size={25} />
-            Reports
-          </Link>
-        </li>
-        <li>
-          <details>
-            <summary>
-              <BsClipboardData size={20} />
-              Master Data
-            </summary>
-            <ul>
-              <li>
-                <Link href="/dashboard/designation">
-                  <TfiIdBadge size={22} /> Designation
-                </Link>
-              </li>
-              <li>
-                <Link href="/dashboard/department">
-                  <AiOutlineAppstoreAdd size={22} />
-                  Department
-                </Link>
-              </li>
-              <li>
-                <Link href="/dashboard/view-location">
-                  <MdOutlineAddLocationAlt size={22} /> Location
-                </Link>
-              </li>
-              <li>
-                <Link href="/dashboard/holiday">
-                  <SlCalender size={22} />
-                  Holiday
-                </Link>
-              </li>
-            </ul>
-          </details>
-        </li>
-        <li>
-          <Link href="/dashboard/schedule">
-            <AiOutlineSchedule size={22} /> Schedule{" "}
-          </Link>
-        </li>
-        <li>
-          <Link href="/dashboard/items">
-            <IoFastFoodOutline size={22} /> Items
-          </Link>
-        </li>
-        <li>
-          <Link href="/dashboard/devices">
-            <MdDevices size={22} />
-            Devices
-          </Link>
-        </li>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="size-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M3.75 9h16.5m-16.5 6.75h16.5"
+            />
+          </svg>
+        </Button>
+        <Drawer title={null} onClose={onClose} open={open}>
+          <ul className="menu bg-[#1a294f] rounded-box min-h-screen">
+            <li>
+              <Link href="/dashboard">
+                <MdDashboard size={20} />
+                Dashboard
+              </Link>
+            </li>
+            <li>
+              <Link href="/dashboard/employees">
+                <MdGroups size={22} />
+                Employees
+              </Link>
+            </li>
+            <li>
+              <Link href="/dashboard/view-company">
+                <CgOrganisation size={20} />
+                View Company
+              </Link>
+            </li>
+            <li>
+              <Link href="/dashboard/reports">
+                <TbReportAnalytics size={25} />
+                Reports
+              </Link>
+            </li>
+            <li>
+              <details>
+                <summary>
+                  <BsClipboardData size={20} />
+                  Master Data
+                </summary>
+                <ul>
+                  <li>
+                    <Link href="/dashboard/designation">
+                      <TfiIdBadge size={22} /> Designation
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/dashboard/department">
+                      <AiOutlineAppstoreAdd size={22} />
+                      Department
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/dashboard/view-location">
+                      <MdOutlineAddLocationAlt size={22} /> Location
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/dashboard/holiday">
+                      <SlCalender size={22} />
+                      Holiday
+                    </Link>
+                  </li>
+                </ul>
+              </details>
+            </li>
+            <li>
+              <Link href="/dashboard/schedule">
+                <AiOutlineSchedule size={22} /> Schedule{" "}
+              </Link>
+            </li>
+            <li>
+              <Link href="/dashboard/items">
+                <IoFastFoodOutline size={22} /> Items
+              </Link>
+            </li>
+            <li>
+              <Link href="/dashboard/devices">
+                <MdDevices size={22} />
+                Devices
+              </Link>
+            </li>
 
-        {/* <li>
+            {/* <li>
           <details >
             <summary><RiVoiceRecognitionLine  size={22}/>Recognitions</summary>
             <ul>
@@ -203,17 +197,17 @@ const Sidebar = () => {
           </details>
         </li> */}
 
-        <button className={styles.logout} onClick={() => logOut()}>
-          {" "}
-          <LuLogOut /> Logout
-        </button>
-        <img
-          className="rounded-lg p-2 bottom-5 flex items-center justify-end  "
-          src="/download.png"
-          alt=""
-        />
-      </ul>
-      </Drawer>
+            <button className={styles.logout} onClick={() => logOut()}>
+              {" "}
+              <LuLogOut /> Logout
+            </button>
+            <img
+              className="rounded-lg p-2 bottom-5 flex items-center justify-end  "
+              src="/download.png"
+              alt=""
+            />
+          </ul>
+        </Drawer>
       </div>
 
       <ul className="menu hidden md:block bg-[#1a294f] w-56 rounded-box min-h-screen">

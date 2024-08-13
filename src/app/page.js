@@ -6,6 +6,8 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { BASE_URL } from "../../config";
+import { setCookie } from 'cookies-next';
+import { getCookie } from 'cookies-next';
 
 export default function Home() {
   const [email, setEmail] = useState("");
@@ -13,54 +15,16 @@ export default function Home() {
   const [message, setMessage] = useState("");
   const [effect, setEffect] = useState(false);
 
-  const [isAuth, setIsAuth] = useState(null);
-  const [token, setToken] = useState("");
+  const [isAuth, setIsAuth] = useState(() => {
+    return getCookie("auth") || "";
+  });
 
   const router = useRouter();
-
-  const checkAdmin = () => {
-    const checkAuth = localStorage.getItem("auth");
-    console.log("LocalStorage auth value:", checkAuth);
-    const isAuthenticated = checkAuth === "true";
-    setIsAuth(isAuthenticated);
-    console.log("isAuthenticated", isAuthenticated);
-  };
-
-  const checkToken = () => {
-    const checkTokenValue = localStorage.getItem("token");
-    setToken(checkTokenValue);
-  };
-
-  useEffect(() => {
-    checkAdmin();
-    checkToken();
-  }, []);
-
-  useEffect(() => {
-    console.log("isAuth", isAuth);
-  }, [isAuth]);
 
   function getData(e) {
     e.preventDefault();
     setEffect(true);
     setMessage("");
-
-    // if (email === "papayacoders@gmail.com" && password === "123456") {
-    //   localStorage.setItem("auth", "true");
-    //   localStorage.setItem("auth", "true");
-    //   localStorage.setItem("token", "superadmin-token");
-    //   router.push("/superadmin");
-    //   setEffect(false);
-    //   return;
-    // }
-
-    // if (email === "admin@gmail.com" && password === "123") {
-    //   localStorage.setItem("auth", "true");
-    //   localStorage.setItem("token", "admin-token");
-    //   router.push("/dashboard");
-    //   setEffect(false);
-    //   return;
-    // }
 
     let data = {
       email: email,
@@ -77,16 +41,16 @@ export default function Home() {
       .request(config)
       .then((response) => {
         if (response.data.role === "superadmin") {
-          localStorage.setItem("token", response.data.token);
-          localStorage.setItem("auth", response.data.auth);
-          localStorage.setItem("name", response.data.name);
+          setCookie("token", response.data.token);
+          setCookie("auth", response.data.auth);
+          setCookie("name", response.data.name);
           setMessage("User successfully logged in");
           setEffect(false);
           router.push("/superadmin");
         } else {
-          localStorage.setItem("token", response.data.token);
-          localStorage.setItem("auth", response.data.auth);
-          localStorage.setItem("name", response.data.name);
+          setCookie("token", response.data.token);
+          setCookie("auth", response.data.auth);
+          setCookie("name", response.data.name);
           setMessage("User successfully logged in");
           setEffect(false);
           router.push("/dashboard");

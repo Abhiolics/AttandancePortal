@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import citiesData from './cities.json';
 import Footer from '../../ui/dashboard/footer/footer';
 import {BASE_URL} from "../../../../config";
+import { getCookie } from 'cookies-next';
 
 export default function LocationPage() {
   const [locations, setLocations] = useState([]);
@@ -27,8 +28,9 @@ export default function LocationPage() {
     accessLevel: '',
     status: "0",
   });
-  const [token, setToken] = useState(() => {
-    return localStorage.getItem("token") || "";
+  
+    const [token, setToken] = useState(() => {
+    return getCookie("token") || "";
   });
 
   useEffect(() => {

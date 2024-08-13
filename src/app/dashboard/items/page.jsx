@@ -5,7 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Footer from '../../ui/dashboard/footer/footer';
 import {BASE_URL} from "../../../../config";
-
+import { getCookie } from 'cookies-next';
 export default function ItemsPage() {
   const [items, setItems] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
@@ -24,8 +24,9 @@ export default function ItemsPage() {
     tags: '',
     status: 1,
   });
-  const [token, setToken] = useState(() => {
-    return localStorage.getItem("token") || "";
+  
+    const [token, setToken] = useState(() => {
+    return getCookie("token") || "";
   });
 
   useEffect(() => {

@@ -7,6 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter }  from 'next/navigation';
 import { BASE_URL } from '../../../config';
+import { getCookie } from 'cookies-next';
 
 export default function SuperAdminPage() {
   const [showAddAdminModal, setShowAddAdminModal] = useState(false);
@@ -17,7 +18,7 @@ export default function SuperAdminPage() {
   const [showUpdateAdminModal, setShowUpdateAdminModal] = useState(false);
   const router = useRouter();
     const [token, setToken] = useState(() => {
-    return localStorage.getItem("token") || "";
+    return getCookie("token") || "";
   });
 
   const handleAddAdmin = async () => {

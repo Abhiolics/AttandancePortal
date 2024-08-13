@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "./admin.module.css"; // Import CSS for flip animation
 import Footer from "../../ui/dashboard/footer/footer";
 import { BASE_URL } from "../../../../config";
+import { getCookie } from 'cookies-next';
 
 const AdminPage = () => {
   const [adminData, setAdminData] = useState({});
@@ -14,8 +15,9 @@ const AdminPage = () => {
   const [newPassword, setNewPassword] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [showChangePassword, setShowChangePassword] = useState(false);
-  const [token, setToken] = useState(() => {
-    return localStorage.getItem("token") || "";
+  
+    const [token, setToken] = useState(() => {
+    return getCookie("token") || "";
   });
 
   useEffect(() => {

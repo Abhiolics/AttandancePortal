@@ -5,7 +5,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Footer from '../../ui/dashboard/footer/footer';
 import {BASE_URL} from "../../../../config";
-
+import { getCookie } from 'cookies-next';
 export default function HolidayPage() {
   const [holidays, setHolidays] = useState([]);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -25,8 +25,9 @@ export default function HolidayPage() {
     },
     status: 'Inactive',
   });
-  const [token, setToken] = useState(() => {
-    return localStorage.getItem("token") || "";
+  
+    const [token, setToken] = useState(() => {
+    return getCookie("token") || "";
   });
 
   const handleDateChange = (e, field) => {

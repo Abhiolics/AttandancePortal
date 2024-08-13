@@ -5,7 +5,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Footer from '../../ui/dashboard/footer/footer';
 import {BASE_URL} from "../../../../config";
-
+import { getCookie } from 'cookies-next';
 export default function Designations() {
   const [designations, setDesignations] = useState([]);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -21,8 +21,9 @@ export default function Designations() {
     status: 1,
   });
   const [companies, setCompanies] = useState([]);
-  const [token, setToken] = useState(() => {
-    return localStorage.getItem("token") || "";
+  
+    const [token, setToken] = useState(() => {
+    return getCookie("token") || "";
   });
 
   useEffect(() => {

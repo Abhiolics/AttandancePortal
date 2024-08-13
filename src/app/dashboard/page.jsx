@@ -9,6 +9,7 @@ import Chart from "../ui/dashboard/chart/Chart";
 import styles from '../ui/dashboard/dashboard.module.css';
 import Footer from "../ui/dashboard/footer/footer";
 import {BASE_URL} from "../../../config";
+import { getCookie } from 'cookies-next';
 
 const Card = ({ title, count }) => (
   <div className="flex c items-center hover:shadow-lg py-8 p-7 bg-[#293755] text-white rounded h-48 shadow-lg w-full">
@@ -25,36 +26,29 @@ const Page = () => {
   const [departmentsCount, setDepartmentsCount] = useState(0);
   const [visitorsCount, setVisitorsCount] = useState(0);
   const [holidaysCount, setHolidaysCount] = useState(0);
-  const [isAuth, setIsAuth] = useState(null);
-  const [token, setToken] = useState("");
+  const [isAuth, setIsAuth] = useState(() => {
+    return getCookie("auth") || "";
+  });
+    const [token, setToken] = useState(() => {
+    return getCookie("token") || "";
+  });
   const router = useRouter();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      checkAdmin();
-      checkToken();
       loadLottieScript();
     }
   }, []);
 
   useEffect(() => {
     if (isAuth === false) {
-      router.push("/login");
-    } else if (isAuth === true) {
+      router.push("/");
+      console.log('this block is running');
+    } else {
       fetchCounts();
+      console.log('this block 2 is running');
     }
-  }, [isAuth]);
-
-  const checkAdmin = () => {
-    const checkAuth = localStorage.getItem("auth");
-    const isAuthenticated = checkAuth === "true";
-    setIsAuth(isAuthenticated);
-  };
-
-  const checkToken = () => {
-    const checkTokenValue = localStorage.getItem("token");
-    setToken(checkTokenValue);
-  };
+  }, []);
 
   const loadLottieScript = () => {
     if (!document.querySelector('script[src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"]')) {
@@ -90,28 +84,6 @@ const Page = () => {
       console.error(error);
       toast.error("Failed to fetch data");
     }
-  };
-
-  const logOut = () => {
-    let config = {
-      method: 'post',
-      maxBodyLength: Infinity,
-      url: `${BASE_URL}/admin/logout`,
-      headers: { 
-        'Authorization': `Bearer ${token}`
-      }
-    };
-
-    axios.request(config)
-      .then((response) => {
-        console.log(JSON.stringify(response.data));
-        localStorage.clear();
-        sessionStorage.clear();
-        router.push('/');
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   };
 
   return (

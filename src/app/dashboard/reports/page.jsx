@@ -12,6 +12,7 @@ import { BASE_URL } from "../../../../config";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { parseISO, differenceInMinutes, format } from "date-fns";
 dayjs.extend(customParseFormat);
+import { getCookie } from 'cookies-next';
 
 const AttendanceReport = () => {
   const [data, setData] = useState([]);
@@ -20,8 +21,9 @@ const AttendanceReport = () => {
     toDate: dayjs(),
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [token, setToken] = useState(() => {
-    return localStorage.getItem("token") || "";
+  
+    const [token, setToken] = useState(() => {
+    return getCookie("token") || "";
   });
 
   const dateFormat = "YYYY/MM/DD";

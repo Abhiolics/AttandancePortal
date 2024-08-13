@@ -6,7 +6,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Footer from '../../ui/dashboard/footer/footer';
 import {BASE_URL} from "../../../../config";
-
+import { getCookie } from 'cookies-next';
 const RecognitionPage = () => {
   const [recognitions, setRecognitions] = useState([]);
   const [companies, setCompanies] = useState([]);
@@ -25,8 +25,9 @@ const RecognitionPage = () => {
     remarks: '',
     status: 0,
   });
-  const [token, setToken] = useState(() => {
-    return localStorage.getItem("token") || "";
+  
+    const [token, setToken] = useState(() => {
+    return getCookie("token") || "";
   });
 
   useEffect(() => {

@@ -8,6 +8,7 @@ import Footer from "../../ui/dashboard/footer/footer";
 import { format, parseISO } from "date-fns";
 import { BASE_URL } from "../../../../config";
 import Fuse from "fuse.js";
+import { getCookie } from 'cookies-next';
 
 export default function EmployeePage() {
   const [employees, setEmployees] = useState([]);
@@ -52,8 +53,9 @@ export default function EmployeePage() {
     department: [],
     designation: [],
   });
-  const [token, setToken] = useState(() => {
-    return localStorage.getItem("token") || "";
+  
+    const [token, setToken] = useState(() => {
+    return getCookie("token") || "";
   });
 
   useEffect(() => {

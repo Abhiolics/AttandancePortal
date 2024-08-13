@@ -9,9 +9,6 @@ const UpdatePasswordPage = () => {
   const [newPassword, setNewPassword] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
-  const [token, setToken] = useState(() => {
-    return localStorage.getItem("token") || "";
-  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();

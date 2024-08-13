@@ -5,6 +5,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Footer from '../../ui/dashboard/footer/footer';
 import {BASE_URL} from "../../../../config";
+import { getCookie } from 'cookies-next';
 
 const VisitorPage = () => {
   const [visitors, setVisitors] = useState([]);
@@ -20,8 +21,8 @@ const VisitorPage = () => {
   const [status, setStatus] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-  const [token, setToken] = useState(() => {
-    return localStorage.getItem("token") || "";
+    const [token, setToken] = useState(() => {
+    return getCookie("token") || "";
   });
 
   useEffect(() => {

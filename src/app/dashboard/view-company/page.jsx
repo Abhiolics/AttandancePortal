@@ -5,6 +5,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Footer from '../../ui/dashboard/footer/footer';
 import {BASE_URL} from "../../../../config";
+import { getCookie } from 'cookies-next';
 
 export default function CompanyManagement() {
   const [companies, setCompanies] = useState([]);
@@ -19,8 +20,8 @@ export default function CompanyManagement() {
     companyId: '',
     status: 1,
   });
-  const [token, setToken] = useState(() => {
-    return localStorage.getItem("token") || "";
+    const [token, setToken] = useState(() => {
+    return getCookie("token") || "";
   });
 
   useEffect(() => {

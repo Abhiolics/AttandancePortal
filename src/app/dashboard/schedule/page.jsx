@@ -7,6 +7,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Footer from "../../ui/dashboard/footer/footer";
 import {BASE_URL} from "../../../../config";
+import { getCookie } from 'cookies-next';
 
 export default function SchedulePage() {
   const [schedules, setSchedules] = useState([]);
@@ -22,8 +23,8 @@ export default function SchedulePage() {
     endTime: "",
     status: 1,
   });
-  const [token, setToken] = useState(() => {
-    return localStorage.getItem("token") || "";
+    const [token, setToken] = useState(() => {
+    return getCookie("token") || "";
   });
 
   useEffect(() => {
