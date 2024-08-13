@@ -27,7 +27,7 @@ const Page = () => {
   const [visitorsCount, setVisitorsCount] = useState(0);
   const [holidaysCount, setHolidaysCount] = useState(0);
   const [isAuth, setIsAuth] = useState(() => {
-    return getCookie("auth") || "";
+    return getCookie("auth") || false;
   });
     const [token, setToken] = useState(() => {
     return getCookie("token") || "";
@@ -44,6 +44,7 @@ const Page = () => {
     if (isAuth === false) {
       router.push("/");
       console.log('this block is running');
+
     } else {
       fetchCounts();
       console.log('this block 2 is running');

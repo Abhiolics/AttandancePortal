@@ -7,18 +7,12 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { BASE_URL } from "../../config";
 import { setCookie } from 'cookies-next';
-import { getCookie } from 'cookies-next';
 
 export default function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [effect, setEffect] = useState(false);
-
-  const [isAuth, setIsAuth] = useState(() => {
-    return getCookie("auth") || "";
-  });
-
   const router = useRouter();
 
   function getData(e) {

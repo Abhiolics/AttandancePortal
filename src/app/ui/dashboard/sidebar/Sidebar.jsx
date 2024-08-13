@@ -34,7 +34,7 @@ const Sidebar = () => {
     return getCookie("name") || "";
   });
   const [isAuth, setIsAuth] = useState(() => {
-    return getCookie("auth") || "";
+    return getCookie("auth") || false;
   });
   const [token, setToken] = useState(() => {
     return getCookie("token") || "";
